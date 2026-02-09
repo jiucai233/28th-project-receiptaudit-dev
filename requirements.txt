@@ -1,0 +1,12 @@
+# Project dependencies
+paddleocr
+paddlepaddle
+langchain
+openai
+fastapi
+uvicorn
+pydantic
+python-multipart
+pdfkit
+streamlit
+uv
