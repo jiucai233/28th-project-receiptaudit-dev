@@ -10,3 +10,6 @@ python-multipart
 pdfkit
 streamlit
 uv
+pandas
+requests
+pillow
