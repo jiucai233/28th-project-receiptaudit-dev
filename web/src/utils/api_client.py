@@ -185,7 +185,12 @@ class MockOCRClient(OCRClient):
         """Return mock data instead of calling real API"""
         import time
         time.sleep(1)  # Simulate processing time
-        st.info("🔧 Mock 모드: 실제 OCR 대신 샘플 데이터를 반환합니다")
+
+        if uploaded_file is None:
+            st.success("🎯 Mock 모드: 샘플 영수증 데이터를 불러왔습니다")
+        else:
+            st.info("🔧 Mock 모드: 업로드된 이미지 대신 샘플 데이터를 반환합니다")
+
         return MOCK_OCR_RESPONSE
 
 

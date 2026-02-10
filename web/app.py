@@ -95,6 +95,27 @@ def main():
         st.header("Step 1: 영수증 업로드")
         st.markdown("영수증 이미지를 업로드하면 자동으로 텍스트를 추출합니다.")
 
+        # Mock mode shortcut
+        if OCRClient.__name__ == "MockOCRClient":
+            st.info("🔧 **Mock 모드 활성화**: 이미지 없이도 샘플 데이터로 바로 테스트할 수 있습니다!")
+
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                if st.button("🎯 샘플 데이터로 시작", type="primary", use_container_width=True):
+                    with st.spinner("🔍 샘플 데이터 로딩 중..."):
+                        ocr_client = OCRClient()
+                        # Pass None for mock mode
+                        receipt_data = ocr_client.extract(None)
+
+                        if receipt_data:
+                            st.session_state.receipt_data = receipt_data
+                            st.session_state.current_step = 2
+                            st.success("✅ 샘플 데이터 로드 완료! '데이터 편집 & 감사' 탭으로 이동하세요.")
+                            st.rerun()
+
+            st.markdown("---")
+            st.markdown("**또는** 아래에서 이미지를 업로드할 수도 있습니다 (Mock 모드에서는 이미지 내용은 무시됩니다)")
+
         # Upload component
         uploaded_file = render_upload_section()
 
