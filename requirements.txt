@@ -1,0 +1,21 @@
+# Core Web Application
+streamlit
+pandas
+requests
+python-dotenv
+Pillow
+
+# LangChain and RAG Engine
+langchain
+langchain-core
+langchain-community
+langchain-upstage
+langchain-text-splitters
+langchain-chroma
+pypdf
+chromadb
+
+# OCR Engine (Future implementation)
+paddlepaddle
+paddleocr
+opencv-python

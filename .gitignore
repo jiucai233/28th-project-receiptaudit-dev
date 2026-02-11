@@ -14,10 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-<<<<<<< HEAD
 lib/
-=======
->>>>>>> 5bee486 (initialized repo)
 lib64/
 parts/
 sdist/
@@ -100,12 +97,16 @@ celerybeat.pid
 
 # Environments
 .env
+.env.local
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Streamlit
+.streamlit/secrets.toml
 
 # Spyder project settings
 .spyderproject
@@ -136,4 +137,13 @@ dmypy.json
 .DS_Store
 Thumbs.db
 
+# Project Specific
+data/raw/*
+!data/raw/.gitkeep
+data/intermediate/*
+!data/intermediate/__init__.py
+data/output/*
+!data/output/__init__.py
+data/vector_store/*
+!data/vector_store/__init__.py
 auto_update.sh
