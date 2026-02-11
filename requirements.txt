@@ -4,6 +4,9 @@ pandas
 requests
 python-dotenv
 Pillow
+reportlab
+datasets
+huggingface_hub
 
 # LangChain and RAG Engine
 langchain
