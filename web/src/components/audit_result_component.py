@@ -37,7 +37,6 @@ def render_audit_results(audit_result: Dict[str, Any], compact: bool = False):
         # Decision banner
         if decision == "Pass":
             st.success(f"### ✅ {decision}")
-            st.balloons()
         elif decision == "Anomaly Detected":
             st.error(f"### ❌ {decision}")
         else:
