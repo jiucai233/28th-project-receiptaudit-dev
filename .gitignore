@@ -135,3 +135,5 @@ dmypy.json
 # OS
 .DS_Store
 Thumbs.db
+
+auto_update.sh
