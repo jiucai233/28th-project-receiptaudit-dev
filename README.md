@@ -63,11 +63,16 @@ cd web
 streamlit run app.py
 ```
 
-#### 백엔드 (FastAPI) - 개발 예정
+#### 백엔드 (FastAPI)
 ```bash
-# server 디렉토리에서
-# uvicorn main:app --reload
+uvicorn server.routes.app:app --reload
 ```
+
+백엔드 기본 엔드포인트:
+- `GET /health`
+- `POST /api/v1/ocr/extract`
+- `POST /api/v1/audit/check`
+- `POST /api/v1/audit/confirm`
 
 ## 📝 주요 기능 흐름
 1. **영수증 업로드**: 사용자가 영수증 이미지를 웹 UI에 업로드.
@@ -81,7 +86,7 @@ streamlit run app.py
 
 ## 🛠 기술 스택
 - **Frontend**: Streamlit, Pandas
-- **Backend**: FastAPI (TBD)
+- **Backend**: FastAPI
 - **AI/LLM**: LangChain, Upstage (Solar LLM), ChromaDB
 - **OCR**: PaddleOCR
 - **Language**: Python
