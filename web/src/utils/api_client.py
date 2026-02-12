@@ -2,6 +2,7 @@
 API Client for communicating with FastAPI backend
 """
 
+import base64
 import requests
 import streamlit as st
 from typing import Dict, Any, List, Optional
@@ -12,7 +13,84 @@ import sys
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from config import API_ENDPOINTS, API_TIMEOUT
-from core.report_engine.generator import AuditReportGenerator
+
+
+# ──────────────────────────────────────────────
+# Real API Clients (for backend integration)
+# ──────────────────────────────────────────────
+
+class OCRClient:
+    """Real OCR client - calls POST /api/v1/ocr/extract"""
+
+    def extract(self, uploaded_file) -> Optional[Dict[str, Any]]:
+        try:
+            files = {
+                'file': (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)
+            }
+            response = requests.post(
+                API_ENDPOINTS['ocr_extract'],
+                files=files,
+                timeout=API_TIMEOUT
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.ConnectionError:
+            st.error("❌ 서버에 연결할 수 없습니다. 백엔드 서버가 실행 중인지 확인하세요.")
+            return None
+        except Exception as e:
+            st.error(f"❌ OCR 처리 중 오류: {e}")
+            return None
+
+
+class AuditClient:
+    """Real Audit client - calls POST /api/v1/audit/check and /confirm"""
+
+    def check(self, receipt_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        try:
+            response = requests.post(
+                API_ENDPOINTS['audit_check'],
+                json=receipt_data,
+                timeout=API_TIMEOUT
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.ConnectionError:
+            st.error("❌ 서버에 연결할 수 없습니다.")
+            return None
+        except Exception as e:
+            st.error(f"❌ 감사 처리 중 오류: {e}")
+            return None
+
+    def confirm(self, receipt_data: Dict[str, Any], audit_result: Dict[str, Any]) -> Dict[str, Any]:
+        try:
+            payload = {
+                "receipt_data": receipt_data,
+                "audit_result": audit_result
+            }
+            response = requests.post(
+                API_ENDPOINTS['audit_confirm'],
+                json=payload,
+                timeout=API_TIMEOUT
+            )
+            response.raise_for_status()
+            result = response.json()
+
+            # Backend returns base64-encoded pdf_data -> decode to bytes for download
+            if "pdf_data" in result:
+                result["pdf_data"] = base64.b64decode(result["pdf_data"])
+
+            # Extract filename from pdf_url for download button
+            pdf_url = result.get("pdf_url", "")
+            result["filename"] = Path(pdf_url).name if pdf_url else "audit_report.pdf"
+
+            return result
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+
+# ──────────────────────────────────────────────
+# Mock Data & Clients (for testing without backend)
+# ──────────────────────────────────────────────
 
 # --- Scenario Data ---
 MOCK_RECEIPTS = {
@@ -65,7 +143,7 @@ class MockAuditClient:
         date_str = receipt_data.get("date", "")
         if "23:" in date_str or "00:" in date_str:
              violations.append({
-                "item_id": "Time",
+                "item_id": 0,
                 "reason": "Suspicious transaction time (Late Night)",
                 "policy_reference": "Article 7: Midnight expenses require justification"
             })
@@ -88,8 +166,8 @@ class MockAuditClient:
     def confirm(self, receipt_data: Dict[str, Any], audit_result: Dict[str, Any]) -> Dict[str, Any]:
         """Actually trigger the PDF generator and return file path"""
         try:
+            from core.report_engine.generator import AuditReportGenerator
             generator = AuditReportGenerator()
-            # This saves to web/cache by default as we implemented earlier
             pdf_path = generator.generate(receipt_data, audit_result)
             
             with open(pdf_path, "rb") as f:
