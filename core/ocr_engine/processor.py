@@ -773,6 +773,8 @@ class ReceiptProcessor:
         items = [item for item in items if abs(item["price"]) <= 10_000_000]
         for i, item in enumerate(items):
             item["id"] = i + 1
+            if item["count"] < 1:
+                item["count"] = 1
         return items
 
     def _parse_price_line(self, text: str) -> tuple[int, int, int] | None:
