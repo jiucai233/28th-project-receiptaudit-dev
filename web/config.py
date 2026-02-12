@@ -24,7 +24,7 @@ API_TIMEOUT = 60  # seconds
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 
 # Supported image formats
-SUPPORTED_IMAGE_FORMATS = ["jpg", "jpeg", "png", "bmp"]
+SUPPORTED_IMAGE_FORMATS = ["jpg", "jpeg", "png", "bmp", "webp"]
 
 # UI Configuration
 APP_TITLE = "Transparent-Audit"
