@@ -3,6 +3,8 @@ from langchain_upstage import ChatUpstage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from .prompt_templates import AUDIT_SYSTEM_PROMPT
+from core.rag_engine.vector_db import VectorDBManager
+from core.rag_engine.embedder import RegulationEmbedder
 
 class AuditReasoning:
     def __init__(self):
@@ -10,9 +12,23 @@ class AuditReasoning:
         # JsonOutputParser를 통해 LLM의 출력문 중에서 JSON 형식의 텍스트만 골라내서 딕셔너리 객체로 변환합니다.
         self.llm = ChatUpstage(model="solar-1-mini-chat")
         self.parser = JsonOutputParser()
+        self.db_manager = VectorDBManager()
+        self.embedder = RegulationEmbedder()
 
-    def analyze(self, receipt_json, retrieved_rules):
+    # 백엔드에서 retrieved_rules를 전달 받지 못하는 경우 대비한 코드 수정
+    def analyze(self, receipt_json, retrieved_rules=None):
         
+        if retrieved_rules is None:
+            query_item = receipt_json['items'][0]['name']
+
+            docs = self.db_manager.search_rules(
+                query=query_item,
+                embedding_model=self.embedder.get_embedding_model(),
+                agent_llm=self.llm
+            )
+
+            retrieved_rules = "\n".join([doc.page_content for doc in docs])
+
         # "system"이랑 "human"으로 구분하였습니다. system은 사전에 작성한 프롬프트 양식을 입력하고, human은 유사 규정과 영수증 json을 입력하게 됩니다.
         prompt = ChatPromptTemplate.from_messages([
             ("system", AUDIT_SYSTEM_PROMPT),
@@ -46,7 +62,7 @@ class AuditReasoning:
 #         "receipt_id": "uuid-1234",
 #         "store_name": "GS25 연세점",
 #         "items": [
-#             {"id": 1, "name": "참이슬", "unit_price": 1800, "count": 2, "price": 3600},
+#             {"id": 1, "name": "참미술", "unit_price": 1800, "count": 2, "price": 3600},
 #             {"id": 2, "name": "삼각김밥", "unit_price": 1200, "count": 1, "price": 1200}
 #         ]
 #     }
