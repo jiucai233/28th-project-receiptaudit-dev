@@ -7,9 +7,11 @@ Pillow
 reportlab
 datasets
 huggingface_hub
+fastapi
+uvicorn
 
 # LangChain and RAG Engine
-langchain
+langchain=0.3.27
 langchain-core
 langchain-community
 langchain-upstage
@@ -17,8 +19,13 @@ langchain-text-splitters
 langchain-chroma
 pypdf
 chromadb
+python-multipart
 
-# OCR Engine (Future implementation)
-paddlepaddle
+# OCR Engine
+paddlepaddle==3.2.1
 paddleocr
+shapely
+pyclipper
+imgaug
+lmdb
 opencv-python

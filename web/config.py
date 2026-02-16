@@ -20,7 +20,7 @@ API_ENDPOINTS = {
 }
 
 # API Configuration
-API_TIMEOUT = 60  # seconds
+API_TIMEOUT = 300  # seconds
 MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
 
 # Supported image formats

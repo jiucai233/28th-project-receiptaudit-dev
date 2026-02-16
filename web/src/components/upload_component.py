@@ -29,37 +29,26 @@ def render_upload_section():
     """)
 
     # File uploader
-    uploaded_file = st.file_uploader(
+    uploaded_files = st.file_uploader(
         "영수증 이미지를 선택하세요",
         type=SUPPORTED_IMAGE_FORMATS,
-        help="지원 형식: JPG, JPEG, PNG, BMP (최대 10MB)"
+        help="지원 형식: JPG, JPEG, PNG, BMP (최대 10MB)",
+        accept_multiple_files=True
     )
 
-    if uploaded_file is not None:
-        # Check file size
-        file_size = len(uploaded_file.getvalue())
-        if file_size > MAX_UPLOAD_SIZE:
-            st.error(f"❌ 파일 크기가 너무 큽니다. (현재: {file_size / 1024 / 1024:.2f}MB, 최대: {MAX_UPLOAD_SIZE / 1024 / 1024}MB)")
-            return None
+    if uploaded_files:
+        st.success(f"✅ {len(uploaded_files)}개의 이미지가 선택되었습니다.")
+        
+        # Display a small preview of the first few
+        cols = st.columns(min(len(uploaded_files), 4))
+        for i, file in enumerate(uploaded_files[:4]):
+            with cols[i]:
+                st.image(file, caption=f"File {i+1}", use_container_width=True)
+        
+        if len(uploaded_files) > 4:
+            st.write(f"...외 {len(uploaded_files)-4}개")
 
-        # Display image preview
-        col1, col2 = st.columns([2, 1])
-
-        with col1:
-            st.image(uploaded_file, caption=f"업로드된 이미지: {uploaded_file.name}", use_container_width=True)
-
-        with col2:
-            st.info(f"""
-            **파일 정보**
-            - 이름: {uploaded_file.name}
-            - 크기: {file_size / 1024:.2f} KB
-            - 형식: {uploaded_file.type}
-            """)
-
-        st.markdown("---")
-        st.success("✅ 이미지 업로드 완료! 아래 버튼을 눌러 OCR을 시작하세요.")
-
-        return uploaded_file
+        return uploaded_files
 
     else:
         # Show sample instructions
