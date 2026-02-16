@@ -143,70 +143,26 @@ MOCK_RECEIPTS = {
     }
 }
 
-class MockAuditClient:
-    """Smart Mock Client that reacts to data edits"""
-
-    def check(self, receipt_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Dynamically check for violations in edited data"""
-        import time
-        time.sleep(1)
-        
-        violations = []
-        items = receipt_data.get("items", [])
-        
-        # 1. Check for Alcohol keywords
-        alcohol_keywords = ["soju", "beer", "wine", "whisky", "소주", "맥주", "주류"]
-        for item in items:
-            name_lower = item.get("name", "").lower()
-            if any(kw in name_lower for kw in alcohol_keywords):
-                violations.append({
-                    "item_id": item.get("id"),
-                    "reason": f"Prohibited item detected: {item.get('name')}",
-                    "policy_reference": "Financial Regulation Article 3 (Prohibition of Alcohol)"
-                })
-        
-        # 2. Check for suspicious time (if edited)
-        date_str = receipt_data.get("date", "")
-        if "23:" in date_str or "00:" in date_str:
-             violations.append({
-                "item_id": 0,
-                "reason": "Suspicious transaction time (Late Night)",
-                "policy_reference": "Article 7: Midnight expenses require justification"
-            })
-
-        if not violations:
-            return {
-                "audit_decision": "Pass",
-                "violation_score": 0.05,
-                "violations": [],
-                "reasoning": "No policy violations found in the provided data."
-            }
-        else:
-            return {
-                "audit_decision": "Anomaly Detected",
-                "violation_score": 0.9,
-                "violations": violations,
-                "reasoning": f"Audit failed due to {len(violations)} potential policy violations."
-            }
-
-    def confirm(self, receipt_data: Dict[str, Any], audit_result: Dict[str, Any]) -> Dict[str, Any]:
-        """Actually trigger the PDF generator and return file path"""
+class OCRClient:
+    """Real OCR Client for backend communication"""
+    def extract(self, uploaded_file) -> Optional[Dict[str, Any]]:
         try:
-            from core.report_engine.generator import AuditReportGenerator
-            generator = AuditReportGenerator()
-            pdf_path = generator.generate(receipt_data, audit_result)
-            
-            with open(pdf_path, "rb") as f:
-                pdf_bytes = f.read()
-                
-            return {
-                "status": "success",
-                "pdf_path": pdf_path,
-                "pdf_data": pdf_bytes,
-                "filename": Path(pdf_path).name
-            }
+            files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+            response = requests.post(
+                API_ENDPOINTS['ocr_extract'],
+                files=files,
+                timeout=API_TIMEOUT
+            )
+            response.raise_for_status()
+            result = response.json()
+            # Construct full image URL if relative path is returned
+            if result.get("image_url") and result["image_url"].startswith("/"):
+                 from config import API_BASE_URL
+                 result["full_image_url"] = f"{API_BASE_URL}{result['image_url']}"
+            return result
         except Exception as e:
-            return {"status": "error", "message": str(e)}
+            st.error(f"OCR Request failed: {str(e)}")
+            return None
 
 class MockOCRClient:
     def extract(self, scenario_name: str) -> Optional[Dict[str, Any]]:
