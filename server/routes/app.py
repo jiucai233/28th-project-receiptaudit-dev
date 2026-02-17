@@ -26,9 +26,13 @@ data_raw_path = Path(__file__).resolve().parents[2] / "data" / "raw"
 data_raw_path.mkdir(parents=True, exist_ok=True)
 app.mount("/data/raw", StaticFiles(directory=str(data_raw_path)), name="raw_data")
 
+# CORS configuration
+frontend_url = os.getenv("FRONTEND_URL", "*")
+origins = [url.strip() for url in frontend_url.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
