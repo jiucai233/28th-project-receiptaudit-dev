@@ -1,2 +1,0 @@
-# System dependencies for Streamlit Cloud deployment
-# Add system packages needed by your app here
