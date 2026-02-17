@@ -1,3 +1,4 @@
+from __future__ import annotations
 import os
 
 os.environ["PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK"] = "True"

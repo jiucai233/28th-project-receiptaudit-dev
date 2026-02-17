@@ -14,11 +14,8 @@ import { DataEditor } from './components/DataEditor';
 import { AuditResults } from './components/AuditResults';
 import { useReceipt } from './hooks/useReceipt';
 import { ocrAPI, auditAPI } from './services/api';
-import { MOCK_RECEIPTS, mockAuditCheck } from './services/mockData';
+import { MOCK_RECEIPTS } from './services/mockData';
 import type { ReceiptData } from './types';
-
-// Toggle this for mock mode
-const USE_MOCK_MODE = true;
 
 /** Subtle ripple on button click */
 function createRipple(e: React.MouseEvent<HTMLButtonElement>) {
@@ -66,20 +63,11 @@ function App() {
     setError(null);
 
     try {
-      if (USE_MOCK_MODE) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const mockData = Object.values(MOCK_RECEIPTS)[0];
-        setReceiptData(mockData);
-        setCurrentStep(2);
-        setActiveTab(1);
-        return mockData;
-      } else {
-        const data = await ocrAPI.extract(file);
-        setReceiptData(data);
-        setCurrentStep(2);
-        setActiveTab(1);
-        return data;
-      }
+      const data = await ocrAPI.extract(file);
+      setReceiptData(data);
+      setCurrentStep(2);
+      setActiveTab(1);
+      return data;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'OCR 처리 실패';
       setError(message);
@@ -97,16 +85,9 @@ function App() {
     setError(null);
 
     try {
-      if (USE_MOCK_MODE) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        const result = mockAuditCheck(receiptData);
-        setAuditResult(result);
-        setCurrentStep(3);
-      } else {
-        const result = await auditAPI.check(receiptData);
-        setAuditResult(result);
-        setCurrentStep(3);
-      }
+      const result = await auditAPI.check(receiptData);
+      setAuditResult(result);
+      setCurrentStep(3);
     } catch (err) {
       const message = err instanceof Error ? err.message : '감사 실패';
       setError(message);
@@ -123,11 +104,6 @@ function App() {
     setError(null);
 
     try {
-      if (USE_MOCK_MODE) {
-        alert('Mock 모드: PDF 생성 기능은 백엔드 연동 후 사용 가능합니다');
-        return;
-      }
-
       const response = await auditAPI.confirm(receiptData, auditResult);
 
       if (response.status === 'success' && response.pdf_data) {
@@ -198,11 +174,6 @@ function App() {
             </div>
 
             <div className="flex items-center gap-3">
-              {USE_MOCK_MODE && (
-                <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300 px-3 py-1.5 rounded-full font-medium">
-                  Demo Mode
-                </span>
-              )}
               <button
                 onClick={() => setDark(!dark)}
                 onMouseDown={createRipple}
