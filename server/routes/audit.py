@@ -79,7 +79,12 @@ def confirm(payload: AuditConfirmRequest) -> dict:
     response_data = AuditConfirmResponse(status="success", pdf_url=str(pdf_path)).model_dump()
     response_data["pdf_data"] = base64.b64encode(pdf_bytes).decode("ascii")
 
-    db_service.upsert_report(receipt_data["receipt_id"], str(pdf_path), response_data)
+    db_service.upsert_report(
+        receipt_data["receipt_id"],
+        str(pdf_path),
+        response_data,
+        pdf_blob=pdf_bytes,
+    )
     return response_data
 
 

@@ -66,7 +66,12 @@ async def extract(file: UploadFile = File(...)) -> OCRExtractResponse:
         receipt["image_url"] = f"/data/raw/{image_path.name}"
         
         storage_service.save_json(receipt, f"{receipt_id}_ocr.json")
-        db_service.upsert_receipt(receipt_id, receipt, str(image_path))
+        db_service.upsert_receipt(
+            receipt_id,
+            receipt,
+            str(image_path),
+            image_blob=content,
+        )
 
         logger.info(f"OCR extraction successful for {receipt_id}")
         return OCRExtractResponse(**receipt)
