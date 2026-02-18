@@ -1,5 +1,6 @@
 services:
   backend:
+    image: ${DOCKER_USERNAME:-jiucai233}/transparent-audit-backend:latest
     build:
       context: .
       dockerfile: backend.Dockerfile
@@ -9,12 +10,12 @@ services:
       - .env
     volumes:
       - ./data:/app/data
-      - ./GEMINI.md:/app/GEMINI.md
     restart: always
     networks:
       - audit-network
 
   frontend:
+    image: ${DOCKER_USERNAME:-jiucai233}/transparent-audit-frontend:latest
     build:
       context: .
       dockerfile: frontend.Dockerfile
