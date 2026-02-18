@@ -45,7 +45,7 @@ fi
 echo "🔥 Starting Backend FastAPI (Port: $BACKEND_PORT)..."
 export PYTHONPATH=$PYTHONPATH:$(pwd)
 # Using 'uv run' ensures we use the correct venv and dependencies
-uv run uvicorn server.routes.app:app --host 0.0.0.0 --port $BACKEND_PORT > backend.log 2>&1 &
+uv run uvicorn server.routes.app:app --host 0.0.0.0 --port $BACKEND_PORT --reload > backend.log 2>&1 &
 BACKEND_PID=$!
 
 # 4. Start Frontend (Background)

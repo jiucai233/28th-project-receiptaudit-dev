@@ -79,6 +79,23 @@ export const auditAPI = {
       return handleError(error);
     }
   },
+
+  uploadRules: async (file?: File, text?: string): Promise<{ status: string; message: string }> => {
+    try {
+      const formData = new FormData();
+      if (file) formData.append('file', file);
+      if (text) formData.append('text', text);
+
+      const response = await api.post<{ status: string; message: string }>('/api/v1/audit/upload-rules', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
 };
 
 /**

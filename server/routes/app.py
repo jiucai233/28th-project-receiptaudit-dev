@@ -4,11 +4,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+from dotenv import load_dotenv
 
 from server.routes.audit import router as audit_router
 from server.routes.health import router as health_router
 from server.routes.ocr import router as ocr_router
 from server.services import DBService
+
+load_dotenv()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

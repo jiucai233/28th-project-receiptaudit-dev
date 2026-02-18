@@ -1,8 +1,11 @@
 import json
+from dotenv import load_dotenv
 from langchain_upstage import ChatUpstage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from .prompt_templates import AUDIT_SYSTEM_PROMPT
+
+load_dotenv()
 
 class AuditReasoning:
     def __init__(self):
