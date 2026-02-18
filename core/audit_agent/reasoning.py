@@ -18,21 +18,34 @@ class AuditReasoning:
     # 백엔드에서 retrieved_rules를 전달 받지 못하는 경우 대비한 코드 수정
     def analyze(self, receipt_json, retrieved_rules=None):
         
+        store_name = receipt_json.get('store_name', '')
+        items = receipt_json.get('items', [])
+
         if retrieved_rules is None:
-            query_item = receipt_json['items'][0]['name']
+            all_relevant_docs = []
+            unique_contents = set()
 
-            docs = self.db_manager.search_rules(
-                query=query_item,
-                embedding_model=self.embedder.get_embedding_model(),
-                agent_llm=self.llm
-            )
+            for item in items:
+                item_name = item.get('name', '')
+                combined_query = f"가게: {store_name}, 품목: {item_name}"
 
-            retrieved_rules = "\n".join([doc.page_content for doc in docs])
+                docs = self.db_manager.search_rules(
+                    query=combined_query,
+                    embedding_model=self.embedder.get_embedding_model(),
+                    agent_llm=self.llm
+                )
+
+                for doc in docs:
+                    if doc.page_content not in unique_contents:
+                        all_relevant_docs.append(doc.page_content)
+                        unique_contents.add(doc.page_content)
+
+            retrieved_rules = "\n".join(all_relevant_docs)
 
         # "system"이랑 "human"으로 구분하였습니다. system은 사전에 작성한 프롬프트 양식을 입력하고, human은 유사 규정과 영수증 json을 입력하게 됩니다.
         prompt = ChatPromptTemplate.from_messages([
             ("system", AUDIT_SYSTEM_PROMPT),
-            ("human", "규정: {rules}\n\n영수증: {receipt}")
+            ("human", "상호명: {store_name}\n규정: {rules}\n\n영수증: {receipt}")
         ])
         
         # langchain 구성입니다.
