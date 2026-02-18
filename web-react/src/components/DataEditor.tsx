@@ -74,7 +74,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange }) => {
         <h3 className="font-semibold text-lg mb-4 text-gray-700 dark:text-gray-300 flex items-center gap-2">
           <PenLine className="w-5 h-5 text-primary-500" /> 기본 정보
         </h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">영수증 ID</label>
             <input
@@ -90,15 +90,6 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange }) => {
               type="text"
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
-              className="input-field"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">날짜 및 시간</label>
-            <input
-              type="text"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
               className="input-field"
             />
           </div>
