@@ -3,28 +3,63 @@
  * Equivalent to Streamlit's session_state
  */
 
-import { useState } from 'react';
-import type { ReceiptData, AuditResult } from '@/types';
+import { useState, useCallback } from 'react';
+import type { ReceiptData, AuditResult, ReceiptItemState, ReceiptStatus } from '@/types';
 
 export const useReceipt = () => {
-  const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
-  const [auditResult, setAuditResult] = useState<AuditResult | null>(null);
+  const [receipts, setReceipts] = useState<ReceiptItemState[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const addReceipts = useCallback((newFiles: File[]) => {
+    const newItems: ReceiptItemState[] = newFiles.map((file) => ({
+      id: Math.random().toString(36).substring(2, 9),
+      file,
+      receiptData: null,
+      auditResult: null,
+      status: 'pending',
+      error: null,
+    }));
+
+    setReceipts((prev) => [...prev, ...newItems]);
+
+    // Generate previews
+    newItems.forEach((item) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setReceipts((prev) =>
+          prev.map((r) =>
+            r.id === item.id ? { ...r, preview: e.target?.result as string } : r
+          )
+        );
+      };
+      if (item.file) reader.readAsDataURL(item.file);
+    });
+  }, []);
+
+  const updateReceipt = useCallback((id: string, updates: Partial<ReceiptItemState>) => {
+    setReceipts((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, ...updates } : r))
+    );
+  }, []);
+
+  const removeReceipt = useCallback((id: string) => {
+    setReceipts((prev) => prev.filter((r) => r.id !== id));
+  }, []);
+
   const reset = () => {
-    setReceiptData(null);
-    setAuditResult(null);
+    setReceipts([]);
     setCurrentStep(1);
     setError(null);
   };
 
   return {
-    receiptData,
-    setReceiptData,
-    auditResult,
-    setAuditResult,
+    receipts,
+    setReceipts,
+    addReceipts,
+    updateReceipt,
+    removeReceipt,
     currentStep,
     setCurrentStep,
     isLoading,

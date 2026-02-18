@@ -44,6 +44,18 @@ export interface ConfirmResponse {
   filename?: string;
 }
 
+export type ReceiptStatus = 'pending' | 'extracting' | 'extracted' | 'auditing' | 'audited' | 'error';
+
+export interface ReceiptItemState {
+  id: string;
+  file?: File;
+  preview?: string;
+  receiptData: ReceiptData | null;
+  auditResult: AuditResult | null;
+  status: ReceiptStatus;
+  error: string | null;
+}
+
 // Mock scenarios (matching web/src/utils/api_client.py)
 export interface MockScenario {
   [key: string]: ReceiptData;
