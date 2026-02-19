@@ -30,6 +30,7 @@ class DBService:
                     receipt_id TEXT PRIMARY KEY,
                     payload_json TEXT NOT NULL,
                     image_path TEXT,
+                    image_blob BLOB,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL
                 );
@@ -45,6 +46,7 @@ class DBService:
                 CREATE TABLE IF NOT EXISTS reports (
                     receipt_id TEXT PRIMARY KEY,
                     pdf_path TEXT NOT NULL,
+                    pdf_blob BLOB,
                     payload_json TEXT NOT NULL,
                     created_at TEXT NOT NULL,
                     updated_at TEXT NOT NULL,
@@ -52,24 +54,51 @@ class DBService:
                 );
                 """
             )
+            # Backward-compatible migration for existing sqlite files.
+            self._ensure_column(conn, "receipts", "image_blob", "BLOB")
+            self._ensure_column(conn, "reports", "pdf_blob", "BLOB")
+
+    def _ensure_column(
+        self, conn: sqlite3.Connection, table: str, column: str, column_type: str
+    ) -> None:
+        rows = conn.execute(f"PRAGMA table_info({table})").fetchall()
+        existing = {row["name"] for row in rows}
+        if column not in existing:
+            conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
 
     def _ensure(self) -> None:
         self.init_db()
 
-    def upsert_receipt(self, receipt_id: str, payload: dict, image_path: str) -> None:
+    def upsert_receipt(
+        self,
+        receipt_id: str,
+        payload: dict,
+        image_path: str,
+        image_blob: bytes | None = None,
+    ) -> None:
         self._ensure()
         now = self._now()
         with self._conn() as conn:
             conn.execute(
                 """
-                INSERT INTO receipts (receipt_id, payload_json, image_path, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO receipts (
+                    receipt_id, payload_json, image_path, image_blob, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
                 ON CONFLICT(receipt_id) DO UPDATE SET
                     payload_json=excluded.payload_json,
                     image_path=excluded.image_path,
+                    image_blob=excluded.image_blob,
                     updated_at=excluded.updated_at
                 """,
-                (receipt_id, json.dumps(payload, ensure_ascii=False), image_path, now, now),
+                (
+                    receipt_id,
+                    json.dumps(payload, ensure_ascii=False),
+                    image_path,
+                    image_blob,
+                    now,
+                    now,
+                ),
             )
 
     def upsert_audit(self, receipt_id: str, payload: dict) -> None:
@@ -87,18 +116,34 @@ class DBService:
                 (receipt_id, json.dumps(payload, ensure_ascii=False), now, now),
             )
 
-    def upsert_report(self, receipt_id: str, pdf_path: str, payload: dict) -> None:
+    def upsert_report(
+        self,
+        receipt_id: str,
+        pdf_path: str,
+        payload: dict,
+        pdf_blob: bytes | None = None,
+    ) -> None:
         self._ensure()
         now = self._now()
         with self._conn() as conn:
             conn.execute(
                 """
-                INSERT INTO reports (receipt_id, pdf_path, payload_json, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO reports (
+                    receipt_id, pdf_path, pdf_blob, payload_json, created_at, updated_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
                 ON CONFLICT(receipt_id) DO UPDATE SET
                     pdf_path=excluded.pdf_path,
+                    pdf_blob=excluded.pdf_blob,
                     payload_json=excluded.payload_json,
                     updated_at=excluded.updated_at
                 """,
-                (receipt_id, pdf_path, json.dumps(payload, ensure_ascii=False), now, now),
+                (
+                    receipt_id,
+                    pdf_path,
+                    pdf_blob,
+                    json.dumps(payload, ensure_ascii=False),
+                    now,
+                    now,
+                ),
             )
