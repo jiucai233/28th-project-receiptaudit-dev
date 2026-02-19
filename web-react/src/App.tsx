@@ -108,7 +108,7 @@ function App() {
     if (successCount < pendingReceipts.length) {
       setError(`${pendingReceipts.length - successCount}개의 영수증 처리에 실패했습니다.`);
     }
-    
+
     setIsLoading(false);
   };
 
@@ -441,10 +441,10 @@ function App() {
                         </div>
                         <div className="card overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-primary-100 dark:border-primary-900/30 shadow-soft">
                           {selectedReceipt.preview ? (
-                            <img 
-                              src={selectedReceipt.preview} 
-                              alt="Selected Receipt" 
-                              className="w-full h-auto max-h-[70vh] object-contain mx-auto" 
+                            <img
+                              src={selectedReceipt.preview}
+                              alt="Selected Receipt"
+                              className="w-full h-auto max-h-[70vh] object-contain mx-auto"
                             />
                           ) : (
                             <div className="flex flex-col items-center justify-center py-20 text-gray-400">
@@ -522,10 +522,10 @@ function App() {
                     <div className="lg:col-span-4">
                       <div className="sticky top-28">
                         <div className="card overflow-hidden bg-slate-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700">
-                          <img 
-                            src={selectedReceipt.preview} 
-                            alt="Receipt" 
-                            className="w-full h-auto object-contain" 
+                          <img
+                            src={selectedReceipt.preview}
+                            alt="Receipt"
+                            className="w-full h-auto object-contain"
                           />
                         </div>
                       </div>

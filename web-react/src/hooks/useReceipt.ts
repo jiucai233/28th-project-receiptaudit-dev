@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import type { ReceiptData, AuditResult, ReceiptItemState, ReceiptStatus } from '@/types';
+import type { ReceiptItemState } from '@/types';
 
 export const useReceipt = () => {
   const [receipts, setReceipts] = useState<ReceiptItemState[]>([]);

@@ -3,7 +3,7 @@
  * Equivalent to web/src/components/data_editor_component.py
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PenLine, Plus, Trash2, Lightbulb, ShoppingCart } from 'lucide-react';
 import type { ReceiptData, ReceiptItem } from '@/types';
 
@@ -16,6 +16,17 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange }) => {
   const [storeName, setStoreName] = useState(data.store_name);
   const [date, setDate] = useState(data.date);
   const [items, setItems] = useState<ReceiptItem[]>(data.items);
+
+  // 다른 영수증 선택 시 내부 상태 재초기화
+  const prevReceiptId = useRef(data.receipt_id);
+  useEffect(() => {
+    if (data.receipt_id !== prevReceiptId.current) {
+      prevReceiptId.current = data.receipt_id;
+      setStoreName(data.store_name);
+      setDate(data.date);
+      setItems(data.items);
+    }
+  }, [data.receipt_id, data.store_name, data.date, data.items]);
 
   // Update parent when local state changes
   useEffect(() => {
