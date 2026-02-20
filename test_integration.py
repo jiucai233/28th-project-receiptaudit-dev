@@ -41,7 +41,7 @@ def run_test():
                 "store_address": "부산 동래구 안락로 27 (안락동) 1층", # [NEW] 주소 추가
                 "items": [
                     {"id": 1, "name": "숯불소금구이", "unit_price": 10000, "count": 1, "price": 10000},
-                    {"id": 2, "name": "소추", "unit_price": 4500, "count": 3, "price": 13500},
+                    {"id": 2, "name": "참미술", "unit_price": 4500, "count": 3, "price": 13500},
                     {"id": 3, "name": "햇반", "unit_price": 2000, "count": 3, "price": 6000}
                 ]
             },
@@ -60,14 +60,16 @@ def run_test():
             "expected": "Pass" # 통과 나와야 함
         },
         {
-            "name": "CASE 3: 정상 구매 (처음처럼 in 문구점)",
+            "name": "CASE 3: 정상 구매",
             "receipt": {
                 "receipt_id": "TEST-002",
-                "store_name": "유니클로",
-                "store_address": "서울 강남구 영동대로 513 코엑스몰 D112", # [NEW] 주소 추가
+                "store_name": "청년다방(선릉역점)",
+                "store_address": "서울특별시 강남구 선릉로86길 31 1층", # [NEW] 주소 추가
                 "items": [
-                    {"id": 1, "name": "유니클로(과세)", "unit_price": 60000, "count": 1, "price": 60000},
-                    {"id": 2, "name": "처음처렴", "unit_price": 30000, "count": 1, "price": 30000}
+                    {"id": 1, "name": "불향차돌떡볶이", "unit_price": 17500, "count": 1, "price": 17500},
+                    {"id": 2, "name": "찰순대", "unit_price": 4000, "count": 1, "price": 4000},
+                    {"id": 3, "name": "쫄면사리", "unit_price": 2000, "count": 1, "price": 2000},
+                    {"id": 4, "name": "콜라", "unit_price": 2000, "count": 1, "price": 2000}
                 ]
             },
             "expected": "Pass" # 통과 나와야 함
