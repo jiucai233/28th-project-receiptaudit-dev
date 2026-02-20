@@ -137,6 +137,14 @@ dmypy.json
 .DS_Store
 Thumbs.db
 
+# Node.js (web-react)
+web-react/node_modules/
+web-react/dist/
+web-react/dist-ssr/
+web-react/*.log
+web-react/.env.production
+web-react/.env.local
+
 # Project Specific
 data/raw/*
 !data/raw/.gitkeep
@@ -147,3 +155,5 @@ data/output/*
 data/vector_store/*
 !data/vector_store/__init__.py
 auto_update.sh
+.env.example
+Transparent-Audit.pem

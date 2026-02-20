@@ -1,0 +1,36 @@
+services:
+  backend:
+    image: ${DOCKER_USERNAME:-jiucai233}/transparent-audit-backend:latest
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    restart: always
+    networks:
+      - audit-network
+
+  frontend:
+    image: ${DOCKER_USERNAME:-jiucai233}/transparent-audit-frontend:latest
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+      args:
+        # For production (AWS), this should be the public IP or domain
+        # For local docker-compose testing, use http://localhost:8000 or http://backend:8000 (if server-side rendered)
+        # Note: Since this is a Client-Side React app, 'backend' hostname only works if accessed within the container network.
+        # Browser needs to reach the backend via IP/Domain.
+        - VITE_API_BASE_URL=${API_URL:-http://localhost:8000}
+    ports:
+      - "80:80"
+    restart: always
+    networks:
+      - audit-network
+
+networks:
+  audit-network:
+    driver: bridge

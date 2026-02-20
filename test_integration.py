@@ -1,12 +1,16 @@
 import os
 import json
 import time
+from dotenv import load_dotenv
 
 # 우리가 만든 모듈들 불러오기
 from core.rag_engine.ingest import run_ingestion
 from core.audit_agent.reasoning import AuditReasoning
 
 def run_test():
+    # 환경변수 로드 (.env 파일에서 네이버 API 키를 가져오기 위함)
+    load_dotenv()
+
     print("🚀 [1단계] 지식 베이스 구축 (Real-time Ingestion)")
     pdf_path = "data/raw/organization_policy.pdf"
     
@@ -27,27 +31,43 @@ def run_test():
         print(f"❌ 에이전트 로딩 실패: {e}")
         return
 
-    # --- 테스트 케이스 정의 ---
+    # --- 테스트 케이스 정의 (store_address 추가!) ---
     test_cases = [
         {
-            "name": "CASE 1: 오타 공격 (참미술)",
+            "name": "CASE 1: 규정 위반",
             "receipt": {
                 "receipt_id": "TEST-001",
-                "store_name": "청춘포차 연세대점",
+                "store_name": "참숯닭갈비구이",
+                "store_address": "부산 동래구 안락로 27 (안락동) 1층", # [NEW] 주소 추가
                 "items": [
-                    {"id": 1, "name": "카쓰", "unit_price": 4500, "count": 2, "price": 9000},
-                    {"id": 2, "name": "오뎅탕", "unit_price": 12000, "count": 1, "price": 12000}
+                    {"id": 1, "name": "숯불소금구이", "unit_price": 10000, "count": 1, "price": 10000},
+                    {"id": 2, "name": "소추", "unit_price": 4500, "count": 3, "price": 13500},
+                    {"id": 3, "name": "햇반", "unit_price": 2000, "count": 3, "price": 6000}
                 ]
             },
             "expected": "Anomaly Detected" # 위반 나와야 함
         },
         {
-            "name": "CASE 2: 정상 구매 (붓, 물감)",
+            "name": "CASE 2: 정상 구매",
             "receipt": {
                 "receipt_id": "TEST-002",
-                "store_name": "알파문구",
+                "store_name": "롯데리아 상암점",
+                "store_address": "마포구 상암동 1601번지 KGIT센터 1층 150호", # [NEW] 주소 추가
                 "items": [
-                    {"id": 1, "name": "처음처럼", "unit_price": 3000, "count": 1, "price": 3000}
+                    {"id": 1, "name": "치킨버거", "unit_price": 5000, "count": 1, "price": 5000}
+                ]
+            },
+            "expected": "Pass" # 통과 나와야 함
+        },
+        {
+            "name": "CASE 3: 정상 구매 (처음처럼 in 문구점)",
+            "receipt": {
+                "receipt_id": "TEST-002",
+                "store_name": "유니클로",
+                "store_address": "서울 강남구 영동대로 513 코엑스몰 D112", # [NEW] 주소 추가
+                "items": [
+                    {"id": 1, "name": "유니클로(과세)", "unit_price": 60000, "count": 1, "price": 60000},
+                    {"id": 2, "name": "처음처렴", "unit_price": 30000, "count": 1, "price": 30000}
                 ]
             },
             "expected": "Pass" # 통과 나와야 함
@@ -59,8 +79,7 @@ def run_test():
     for case in test_cases:
         print(f"\n>>> 실행 중: {case['name']}")
         
-        # reasoning.py의 analyze 함수 호출 (규정을 안 넘겨서 스스로 리랭킹하게 만듦!)
-        # agent_llm=self.llm 로직이 내부에서 돌아감
+        # reasoning.py의 analyze 함수 호출
         result = agent.analyze(case['receipt'])
         
         print(f"   [결과] 판정: {result.get('audit_decision')} | 점수: {result.get('violation_score')}")

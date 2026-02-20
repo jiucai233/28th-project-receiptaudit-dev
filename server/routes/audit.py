@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import base64
+import os
+import shutil
+from typing import Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, File, UploadFile, Form
 from pydantic import BaseModel, Field
 
 from server.services import AuditService, DBService, ReportService, StorageService
+from core.rag_engine.embedder import RegulationEmbedder
+from core.rag_engine.vector_db import VectorDBManager
 
 router = APIRouter(prefix="/api/v1/audit", tags=["audit"])
 
@@ -71,8 +76,47 @@ def confirm(payload: AuditConfirmRequest) -> dict:
     pdf_bytes = report_service.build_pdf(receipt_data, audit_result)
     pdf_path = storage_service.save_pdf(receipt_data["receipt_id"], pdf_bytes)
 
-    response = AuditConfirmResponse(status="success", pdf_url=str(pdf_path)).model_dump()
-    response["pdf_data"] = base64.b64encode(pdf_bytes).decode("ascii")
+    response_data = AuditConfirmResponse(status="success", pdf_url=str(pdf_path)).model_dump()
+    response_data["pdf_data"] = base64.b64encode(pdf_bytes).decode("ascii")
 
-    db_service.upsert_report(receipt_data["receipt_id"], str(pdf_path), response)
-    return response
+    db_service.upsert_report(
+        receipt_data["receipt_id"],
+        str(pdf_path),
+        response_data,
+        pdf_blob=pdf_bytes,
+    )
+    return response_data
+
+
+@router.post("/upload-rules")
+async def upload_rules(
+    file: Optional[UploadFile] = File(None),
+    text: Optional[str] = Form(None)
+) -> dict:
+    embedder = RegulationEmbedder()
+    db_manager = VectorDBManager()
+    
+    docs = []
+    if file:
+        # Save temp file
+        os.makedirs("data/intermediate", exist_ok=True)
+        temp_path = f"data/intermediate/{file.filename}"
+        with open(temp_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        try:
+            docs = embedder.split_documents(temp_path)
+            db_manager.add_documents(docs, embedder.get_embedding_model())
+        finally:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+                
+    if text:
+        text_docs = embedder.get_chunks(text)
+        db_manager.add_documents(text_docs, embedder.get_embedding_model())
+        docs.extend(text_docs)
+
+    if not docs:
+        return {"status": "error", "message": "No content provided"}
+
+    return {"status": "success", "message": f"Processed {len(docs)} chunks"}

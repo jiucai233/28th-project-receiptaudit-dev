@@ -1,3 +1,4 @@
+from __future__ import annotations
 import re
 import uuid
 from datetime import datetime
@@ -8,6 +9,10 @@ class ReceiptProcessor:
 
     # 날짜+시간 패턴 (시간 포함 패턴을 먼저 매칭)
     DATE_PATTERNS = [
+        # "2026/01/12(월) 12:44" — 요일 괄호 사이에 시간
+        r"(\d{4}[-/.]\d{1,2}[-/.]\d{1,2})\([월화수목금토일]+\)\s*(\d{1,2}:\d{2})",
+        # "2024/11/17/17:23" — 슬래시로 날짜+시간 연결
+        r"(\d{4}[-/.]\d{1,2}[-/.]\d{1,2})/(\d{1,2}:\d{2})",
         # "2025-10-03 16:47" — 4자리 연도 + 시간 (공백)
         r"(\d{4}[-/.]\d{1,2}[-/.]\d{1,2})\s+(\d{1,2}:\d{2})",
         # "2025-10-0316:47" — 4자리 연도 + 시간 (붙어있음)
@@ -24,12 +29,12 @@ class ReceiptProcessor:
 
     # 날짜 컨텍스트 키워드 (우선순위순)
     DATE_CONTEXT_KEYWORDS = [
-        "거래일시", "계산일자", "발행일시", "승인일시", "결제일시",
-        "판매일자", "일시", "일자", "날짜",
+        "거래일시", "거래일", "계산일자", "발행일시", "승인일시", "결제일시",
+        "판매일자", "판매시간", "일시", "일자", "날짜",
     ]
 
     TOTAL_KEYWORDS = [
-        "합계", "총액", "총합", "결제금액", "총결제",
+        "합계", "합제", "총액", "총합", "결제금액", "총결제",
         "카드결제", "total", "Total", "TOTAL",
     ]
 
@@ -80,13 +85,39 @@ class ReceiptProcessor:
         "공급가", "급가",
         # 메뉴 옵션/선택 (품목이 아닌 수식어)
         "선택안함",
+        # OCR 가비지 (소계/부가세/총구매액 오인식)
+        "손계", "구매액", "부가",
     ]
 
     # 가게명이 아닌 줄을 걸러내기 위한 키워드
     STORE_SKIP_KEYWORDS = [
         "사업자", "등록번호", "대표", "전화", "주소", "TEL",
-        "픽업번호", "주문번호", "거래",
+        "픽업번호", "주문번호", "주문변호", "거래",
         "영수", "고객", "재발행", "대기번호", "매장식사",
+        "소비자중심경영", "인증기업", "CCM",
+        "제품명", "교환", "환불",
+        "판매시간", "POS", "P0S",
+    ]
+
+    # 주소 레이블 패턴 (OCR 오류 포함, 콜론 없는 경우 포함)
+    ADDRESS_LABEL_PATTERNS = [
+        r"주\s*소\s*[:：]\s*(.+)",           # "주소:", "주 소:"
+        r"\[주\s*소\]\s*(.+)",               # "[주소]서울..." (대괄호 포맷)
+        r"주[\s\-]+소\s*[:：\s]\s*(.+)",     # "[주-소" 하이픈/공백 포함 패턴
+        r"추\s*도?\s*소\s*[:：]\s*(.+)",      # OCR 오류: "추 도소:"
+        r"주\s*조\s*[:：]\s*(.+)",            # OCR 오류: "주 조:"
+        r"주\s*소\s+([가-힣\d].{3,})",        # "주소 서울..." (콜론 없음)
+        r"(?<![가-힣])소\s*[:：]\s*([가-힣][가-힣\d\s,\-]{4,})",  # "소:경기..." (앞줄에 주 잘림)
+    ]
+
+    # 시도명 (주소 탐색용)
+    SIDO_NAMES = [
+        "서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종",
+        "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주",
+        "서울특별시", "부산광역시", "대구광역시", "인천광역시", "광주광역시",
+        "대전광역시", "울산광역시", "세종특별자치시", "경기도", "강원도",
+        "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도",
+        "제주특별자치도",
     ]
 
     def process(self, ocr_lines: list[dict]) -> dict:
@@ -102,6 +133,7 @@ class ReceiptProcessor:
         texts = [line["text"] for line in ocr_lines]
 
         store_name = self._extract_store_name(texts)
+        store_address = self._extract_address(texts)
         date = self._extract_date(texts)
         items = self._extract_items(texts)
         total_price = self._extract_total(texts)
@@ -112,6 +144,7 @@ class ReceiptProcessor:
         return {
             "receipt_id": str(uuid.uuid4()),
             "store_name": store_name or "",
+            "store_address": store_address or "",
             "date": date or "",
             "items": items,
             "total_price": total_price or 0,
@@ -130,15 +163,21 @@ class ReceiptProcessor:
             name = re.sub(r'^#\d+\s*', '', name)
             name = re.sub(r'^직영\s*', '', name)
             name = name.strip('"\'\\')
-            # 사업자등록번호 패턴 제거 (예: /238-85-00709, 475-02-03767)
-            name = re.sub(r'\s*/?\d{3}-\d{2}-\d{5}$', '', name)
+            # 사업자등록번호 패턴 제거 (예: /238-85-00709, /748-14-00040/허지은)
+            name = re.sub(r'\s*/?\d{3}-\d{2}-\d{5}(?:/.*)?$', '', name)
+            # 영수증번호 접미사 제거 (예: "영수증번호:251004-0103-0051-01")
+            name = re.sub(r'\s*영수증\s*번호\s*[:：].*$', '', name)
+            # 슬래시 이후 사업자번호/대표자명 제거 (예: "/6055800636/허지은")
+            name = re.sub(r'/\d{8,}(?:/.*)?$', '', name)
             return name.strip()
 
         # 1단계: 전체 텍스트에서 명시적 레이블 패턴 검색
         store_label_patterns = [
-            r"매장\s*명?\s*[:：\[\]]\s*(.+)",
+            r"매\s*장\s*명?\s*[:：\[\]]\s*(.+)",    # "매장명:", "매 장 명:"
+            r"\[매장명\]\s*(.+)",
             r"상\s*호\s*명?\s*[:：]\s*(.+)",
             r"주문\s*매장\s*[:：]\s*(.+)",
+            r"점\s*포\s*['\"]?\s*명?\s*[:：]\s*(.+)",  # "점포명:", "점포'명:"
         ]
         for text in texts:
             for pattern in store_label_patterns:
@@ -159,10 +198,41 @@ class ReceiptProcessor:
                 continue
             if len(text) < 2:
                 continue
+            # collapse_spaces 후 영수증 관련 키워드 체크 (예: "영 수 증", "영 수층")
+            collapsed = self._collapse_spaces(text)
+            if "영수" in collapsed:
+                continue
+            if any(kw in collapsed for kw in ["합계", "총합", "부가세"]):
+                continue
             if any(kw in text for kw in self.STORE_SKIP_KEYWORDS):
                 continue
-            # 전화번호 패턴 스킵 (02-xxx, 0xx-xxx-xxxx, 070-xxxx)
+            # 전화번호 패턴 스킵 (02-xxx, 0xx-xxx-xxxx, 070-xxxx, 1xxx-xxxx)
             if re.match(r"^[\d\-()]{7,}$", text.replace(" ", "")):
+                continue
+            if re.match(r"^0\d{1,2}[-\s]\d{3,4}[-\s]\d{4}", text):
+                continue
+            # 사업자번호로 시작하는 줄 스킵 (xxx-xx-xxxxx)
+            if re.match(r"^\d{3}-\d{2}-\d{5}", text.replace(" ", "")):
+                continue
+            # 대표번호 패턴 스킵 (1577-xxxx, 1588-xxxx 등)
+            if re.match(r"^1\d{3}[-\s]?\d{4}", text.replace(" ", "")):
+                continue
+            # 주소 패턴 포함 줄 스킵 ([시구군] + [로길동])
+            if re.search(r"[시구군]\s+\S+[로길동]|[시구군]\s+\d+[로길동]", text):
+                continue
+            # 주소 패턴 (시도명으로 시작 + 구/군/동/로/길, 공백 없는 경우)
+            collapsed_text = text.replace(" ", "")
+            if any(collapsed_text.startswith(sido) for sido in self.SIDO_NAMES):
+                if re.search(r"[구군]\S*[로길동읍면]|[동로길]\d", collapsed_text):
+                    continue
+            # 층수만 있는 줄 스킵 (예: "3층", "B1층")
+            if re.match(r"^[B]?\d+층\s*$", text.strip()):
+                continue
+            # 가격 패턴으로 끝나는 줄 스킵 (품목+가격, 예: "우삼겹 폴케볼 1 9,400")
+            if re.search(r"\d+,\d{3}\s*$", text):
+                continue
+            # POS/레지스터 관련 줄 스킵 (POS, PoS, P0S 등)
+            if re.search(r"P[oO0][sS]", text):
                 continue
             # 영수증/카드전표/기타 메타 키워드 스킵
             if any(kw in text for kw in [
@@ -177,6 +247,162 @@ class ReceiptProcessor:
             if len(cleaned) >= 2:
                 return cleaned
         return None
+
+    def _extract_address(self, texts: list[str]) -> str | None:
+        """영수증에서 가게 주소 추출
+
+        우선순위:
+        1) '주소:' 레이블이 있는 줄에서 추출 (OCR 오류 패턴 포함)
+        2) 시도명으로 시작하는 주소 패턴 탐색
+        3) 시/구/군이 포함된 주소 패턴 탐색 (선행 가비지 제거)
+        4) 동/로/길로 시작하는 주소 패턴 탐색
+        """
+
+        def is_valid_address(addr: str) -> bool:
+            """주소 유효성 검증"""
+            if len(addr) < 5:
+                return False
+            # 주소 구성요소 확인 (시/구/군/동/로/길 중 하나 이상)
+            if not re.search(r"[시구군]|[동로길읍면리]|번지", addr):
+                return False
+            # 너무 짧은 주소 제외 (공백 제거 기준, 5자 미만)
+            if len(addr.replace(" ", "")) < 5:
+                return False
+            # 전화번호만 있는 경우 제외
+            if re.match(r"^[\d\-\s()]+$", addr):
+                return False
+            return True
+
+        def clean_and_merge(addr: str, next_lines: list[str]) -> str:
+            """주소 정리 및 다음 줄과 병합"""
+            # TEL/전화 이후 제거
+            addr = re.split(r"\s*(?:TEL|Tel|tel|전화|T\.|대표)", addr)[0].strip()
+
+            # 다음 줄들을 확인하여 주소 연장 부분 병합
+            for next_line in next_lines[:2]:
+                next_line = next_line.strip()
+                # 날짜/POS/주문 정보 포함 줄은 병합 중단
+                if re.search(
+                    r"\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|P0S|POS|BILL|테이블번호|주문담당자|레이블번호",
+                    next_line, re.IGNORECASE
+                ):
+                    break
+                # 주소 구성요소가 있고, 메타정보가 아닌 경우 병합
+                if re.search(r"[동로길읍면리층호]|번지|\d+층|[\(,]\w+[\)]", next_line):
+                    if not any(kw in next_line for kw in [
+                        "TEL", "전화", "대표", "사업자", "등록", "TID"
+                    ]):
+                        next_cleaned = re.split(
+                            r"\s*(?:TEL|Tel|tel|전화|T\.|대표)", next_line
+                        )[0].strip()
+                        addr = addr + " " + next_cleaned
+                else:
+                    break
+
+            return self._clean_address(addr)
+
+        # 1단계: 주소 레이블 패턴 (콜론 없는 경우, OCR 오류 포함)
+        for i, text in enumerate(texts):
+            for pattern in self.ADDRESS_LABEL_PATTERNS:
+                match = re.search(pattern, text)
+                if match:
+                    addr = match.group(1).strip()
+                    addr = clean_and_merge(addr, texts[i+1:])
+                    if is_valid_address(addr):
+                        return addr
+
+        # 2단계: 상단 25줄에서 시도명으로 시작하는 주소 탐색
+        for i, text in enumerate(texts[:25]):
+            text_stripped = text.strip()
+            for sido in self.SIDO_NAMES:
+                if text_stripped.startswith(sido):
+                    if re.search(r"[시구군]|[동로길읍면리]|번지", text_stripped):
+                        addr = clean_and_merge(text_stripped, texts[i+1:])
+                        if is_valid_address(addr):
+                            return addr
+
+        # 3단계: 시/구/군이 포함된 주소 패턴 탐색 (매칭 시작 위치부터 추출)
+        for i, text in enumerate(texts[:25]):
+            text_stripped = text.strip()
+            match = re.search(
+                r"[가-힣]+[시]\s+[가-힣]+[구군]|[가-힣]+[구]\s+[가-힣\d]+[동로길]",
+                text_stripped
+            )
+            if match:
+                # 선행 가비지(사업자번호 등) 제거: 매칭 시작 위치부터 추출
+                addr = text_stripped[match.start():]
+                addr = clean_and_merge(addr, texts[i+1:])
+                if is_valid_address(addr):
+                    if not any(kw in addr for kw in ["사업자", "등록번호", "대표자", "TEL"]):
+                        return addr
+
+        # 4단계: 동/로/길로 시작하는 주소 (덜 엄격한 매칭)
+        for i, text in enumerate(texts[:25]):
+            text_stripped = text.strip()
+            if re.match(r"[가-힣]+[동로길]\s+[\d가-힣]", text_stripped):
+                addr = clean_and_merge(text_stripped, texts[i+1:])
+                if is_valid_address(addr) and len(addr) >= 10:
+                    if re.search(r"\d+", addr):
+                        return addr
+
+        return None
+
+    def _clean_address(self, addr: str) -> str:
+        """주소 정리"""
+        # 날짜 패턴 이후 내용 제거 (예: "2025-10-01 18:58", "2017년12월16일")
+        addr = re.sub(r"\s+\d{4}[-/.]\d{1,2}[-/.]\d{1,2}.*", "", addr)
+        addr = re.sub(r"\s+\d{4}년\s*\d{1,2}월.*", "", addr)
+
+        # POS/BILL 이후 내용 제거 (예: "P0S:01BILL:000005", "POS:02 BILL:000024")
+        addr = re.sub(r"\s+(?:P0S|POS|BILL)[:：]?.*", "", addr, flags=re.IGNORECASE)
+
+        # 주문/테이블/판매/카드 관련 키워드 이후 내용 제거
+        addr = re.sub(
+            r"\s+(?:테이블번호|주문담당자|레이블번호|영수번호|판매시간|주문번호|호출기|계산일자|카드종|개월할부|할부).*",
+            "", addr
+        )
+
+        # 방향 수식어 이후 내용 제거 (예: "1층왼쪽 (망원동)" → "1층")
+        addr = re.sub(r"\s+(?:왼쪽|오른쪽|앞|뒤)\b.*$", "", addr)
+
+        # 대표자명, 사업자번호 등 접미사 제거
+        addr = re.sub(r"\s+(?:대표|사업자번호|TEL|Tel|전화|T\.).*$", "", addr).strip()
+
+        # 끝의 특수문자 정리
+        addr = addr.rstrip(".,;:(")
+
+        # 열린 괄호가 닫히지 않은 경우: 내용이 너무 짧으면 제거, 길면 닫기
+        if addr.count("(") > addr.count(")"):
+            last_open = addr.rfind("(")
+            content_after = addr[last_open + 1:]
+            if len(content_after) <= 3:
+                addr = addr[:last_open].rstrip(" ,")
+            else:
+                addr = addr + ")"
+
+        # 괄호 뒤에 번지 없이 텍스트가 이어지면 제거 (반복 텍스트 패턴)
+        # 예: "(행신동) 세신웨미리타" → "(행신동)"
+        addr = re.sub(r"(\([가-힣]+(?:동|구|읍|면|리)\))\s+[가-힣]+$", r"\1", addr)
+
+        # 연속 공백 정리
+        addr = re.sub(r"\s+", " ", addr)
+
+        # OCR 오류 보정
+        addr = addr.replace("서올", "서울")
+        addr = addr.replace("서을", "서울")    # "서을강남구" → "서울강남구"
+        addr = addr.replace("서물", "서울")    # "서물특별시" → "서울특별시"
+        addr = addr.replace("감남구", "강남구")  # "서울감남구" → "서울강남구"
+        addr = addr.replace("선름로", "선릉로")
+        addr = addr.replace("선롱로", "선릉로")
+        addr = addr.replace("테혜란로", "테헤란로")
+        addr = addr.replace("발천구덕", "금천구")
+        addr = addr.replace("금천구덕", "금천구")
+
+        # 구두점/특수문자 정리
+        addr = addr.replace("'", " ").replace("`", " ").replace("_", " ")
+        addr = re.sub(r"\s+", " ", addr)
+
+        return addr.strip()
 
     def _is_valid_date(self, date_str: str) -> bool:
         """날짜 문자열이 유효한지 검증 (사업자번호 등 제외)"""
@@ -209,11 +435,21 @@ class ReceiptProcessor:
         """날짜/시간 추출 및 정규화
 
         처리 순서:
+        0) YYYYMMDD.HH:MM 형식 처리 (구분자 없는 8자리 날짜)
         1) 날짜 컨텍스트 키워드가 있는 줄 우선 탐색
         2) 같은 줄에 날짜+시간이 있는 경우
         3) '계산일자:', '시간:' 등으로 분리된 경우 병합
         4) 한국어 오전/오후 시간 처리
         """
+        # 0단계: YYYYMMDD.HH:MM 형식 (예: "20251001.18:49:58")
+        for text in texts:
+            m = re.search(r"(\d{4})(\d{2})(\d{2})[.](\d{1,2}:\d{2})", text)
+            if m:
+                date_str = f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+                time_str = m.group(4)
+                if self._is_valid_date(date_str):
+                    return self._normalize_date(date_str, time_str)
+
         found_date = None
         found_time = None
         found_date_line_idx = None
@@ -246,6 +482,13 @@ class ReceiptProcessor:
                 # 날짜를 찾았으면 시간 탐색 후 반환
                 if found_date:
                     if not found_time:
+                        # 같은 줄에 "시간: HH:MM" 패턴이 있는 경우 (예: "계산일자:2024-11-10 시간:13:49")
+                        same_line_time = re.search(
+                            r"시간\s*[:：]\s*(\d{1,2}:\d{2})", texts[found_date_line_idx]
+                        )
+                        if same_line_time:
+                            found_time = same_line_time.group(1)
+                    if not found_time:
                         found_time = self._search_time_nearby(
                             texts, found_date_line_idx
                         )
@@ -273,8 +516,15 @@ class ReceiptProcessor:
                         found_date = date_part
                         found_date_line_idx = i
 
-                        # 인접 줄에서 시간 탐색
-                        found_time = self._search_time_nearby(texts, i)
+                        # 같은 줄에 "시간: HH:MM" 패턴이 있는 경우
+                        same_line_time = re.search(
+                            r"시간\s*[:：]\s*(\d{1,2}:\d{2})", text
+                        )
+                        if same_line_time:
+                            found_time = same_line_time.group(1)
+                        else:
+                            # 인접 줄에서 시간 탐색
+                            found_time = self._search_time_nearby(texts, i)
 
                     break  # 이미 이 줄에서 날짜 패턴 찾음
 
@@ -863,6 +1113,15 @@ class ReceiptProcessor:
                     continue
                 price = self._extract_price_from_context(texts, i)
                 if price is not None and 100 <= abs(price) <= MAX_TOTAL:
+                    return price
+
+        # 3단계: "계 = 금액" 특수 패턴 (예: 공차 스타일 "계 = 12,000")
+        for text in texts:
+            collapsed = self._collapse_spaces(text)
+            m = re.match(r"^\s*계\s*=\s*([\d,]+)", collapsed)
+            if m:
+                price = self._parse_price(m.group(1))
+                if price is not None and 100 <= price <= MAX_TOTAL:
                     return price
 
         return None

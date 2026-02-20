@@ -92,7 +92,7 @@ class AuditReportGenerator:
         """
         # Default path to web/cache if not provided
         if output_path is None:
-            cache_dir = self.project_root / "web" / "cache"
+            cache_dir = self.project_root / "web-react" / "cache"
             cache_dir.mkdir(parents=True, exist_ok=True)
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"audit_report_{receipt_data.get('receipt_id', 'unknown')}_{timestamp}.pdf"

@@ -1,0 +1,107 @@
+[
+  {
+    "condition": "original",
+    "label": "원본 (Baseline)",
+    "field_accuracy": {
+      "store_name": 52.6,
+      "date": 97.5,
+      "items": 65.5,
+      "total_price": 90.0
+    },
+    "receipt_accuracy": 5.0,
+    "overall_field_accuracy": 76.4,
+    "perfect_count": 1,
+    "total_count": 20,
+    "time_seconds": 349.2
+  },
+  {
+    "condition": "bright_up",
+    "label": "밝기 +50%",
+    "field_accuracy": {
+      "store_name": 38.9,
+      "date": 77.5,
+      "items": 42.3,
+      "total_price": 65.0
+    },
+    "receipt_accuracy": 0.0,
+    "overall_field_accuracy": 55.9,
+    "perfect_count": 0,
+    "total_count": 20,
+    "time_seconds": 320.0
+  },
+  {
+    "condition": "bright_down",
+    "label": "밝기 -50%",
+    "field_accuracy": {
+      "store_name": 49.1,
+      "date": 92.5,
+      "items": 55.6,
+      "total_price": 95.0
+    },
+    "receipt_accuracy": 5.0,
+    "overall_field_accuracy": 73.1,
+    "perfect_count": 1,
+    "total_count": 20,
+    "time_seconds": 379.6
+  },
+  {
+    "condition": "low_res",
+    "label": "해상도 50% 축소",
+    "field_accuracy": {
+      "store_name": 46.0,
+      "date": 80.0,
+      "items": 49.2,
+      "total_price": 70.0
+    },
+    "receipt_accuracy": 0.0,
+    "overall_field_accuracy": 61.3,
+    "perfect_count": 0,
+    "total_count": 20,
+    "time_seconds": 378.7
+  },
+  {
+    "condition": "rotate_15",
+    "label": "15° 회전",
+    "field_accuracy": {
+      "store_name": 26.9,
+      "date": 82.5,
+      "items": 47.1,
+      "total_price": 70.0
+    },
+    "receipt_accuracy": 0.0,
+    "overall_field_accuracy": 56.6,
+    "perfect_count": 0,
+    "total_count": 20,
+    "time_seconds": 346.5
+  },
+  {
+    "condition": "rotate_30",
+    "label": "30° 회전",
+    "field_accuracy": {
+      "store_name": 34.1,
+      "date": 85.0,
+      "items": 45.1,
+      "total_price": 65.0
+    },
+    "receipt_accuracy": 0.0,
+    "overall_field_accuracy": 57.3,
+    "perfect_count": 0,
+    "total_count": 20,
+    "time_seconds": 372.7
+  },
+  {
+    "condition": "rotate_45",
+    "label": "45° 회전",
+    "field_accuracy": {
+      "store_name": 34.2,
+      "date": 87.5,
+      "items": 51.8,
+      "total_price": 60.0
+    },
+    "receipt_accuracy": 5.0,
+    "overall_field_accuracy": 58.4,
+    "perfect_count": 1,
+    "total_count": 20,
+    "time_seconds": 381.0
+  }
+]
