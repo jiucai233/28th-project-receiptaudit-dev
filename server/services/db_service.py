@@ -1,70 +1,78 @@
 from __future__ import annotations
 
+import os
 import json
-import sqlite3
-from datetime import datetime
-from pathlib import Path
+from datetime import datetime, timezone
 
-BASE_DIR = Path(__file__).resolve().parents[2]
-DB_PATH = BASE_DIR / "data" / "intermediate" / "transparent_audit.db"
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 
 class DBService:
-    def __init__(self, db_path: Path | None = None):
-        self.db_path = str(db_path or DB_PATH)
-        Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
+    def __init__(self, dsn: str | None = None):
+        # Example:
+        # postgresql://username:password@host:5432/dbname
+        self.dsn = dsn or os.getenv("DATABASE_URL", "").strip()
+        if not self.dsn:
+            raise ValueError("DATABASE_URL is required for PostgreSQL DBService")
 
-    def _conn(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
-        return conn
+    def _conn(self):
+        return psycopg2.connect(self.dsn, cursor_factory=RealDictCursor)
 
-    def _now(self) -> str:
-        return datetime.utcnow().isoformat(timespec="seconds") + "Z"
+    def _now(self) -> datetime:
+        return datetime.now(timezone.utc)
 
     def init_db(self) -> None:
         with self._conn() as conn:
-            conn.executescript(
+            with conn.cursor() as cur:
+                cur.execute(
                 """
                 CREATE TABLE IF NOT EXISTS receipts (
                     receipt_id TEXT PRIMARY KEY,
                     payload_json TEXT NOT NULL,
                     image_path TEXT,
-                    image_blob BLOB,
-                    created_at TEXT NOT NULL,
-                    updated_at TEXT NOT NULL
+                    image_blob BYTEA,
+                    created_at TIMESTAMPTZ NOT NULL,
+                    updated_at TIMESTAMPTZ NOT NULL
                 );
 
                 CREATE TABLE IF NOT EXISTS audits (
                     receipt_id TEXT PRIMARY KEY,
                     payload_json TEXT NOT NULL,
-                    created_at TEXT NOT NULL,
-                    updated_at TEXT NOT NULL,
+                    created_at TIMESTAMPTZ NOT NULL,
+                    updated_at TIMESTAMPTZ NOT NULL,
                     FOREIGN KEY(receipt_id) REFERENCES receipts(receipt_id)
                 );
 
                 CREATE TABLE IF NOT EXISTS reports (
                     receipt_id TEXT PRIMARY KEY,
                     pdf_path TEXT NOT NULL,
-                    pdf_blob BLOB,
+                    pdf_blob BYTEA,
                     payload_json TEXT NOT NULL,
-                    created_at TEXT NOT NULL,
-                    updated_at TEXT NOT NULL,
+                    created_at TIMESTAMPTZ NOT NULL,
+                    updated_at TIMESTAMPTZ NOT NULL,
                     FOREIGN KEY(receipt_id) REFERENCES receipts(receipt_id)
                 );
                 """
-            )
-            # Backward-compatible migration for existing sqlite files.
-            self._ensure_column(conn, "receipts", "image_blob", "BLOB")
-            self._ensure_column(conn, "reports", "pdf_blob", "BLOB")
+                )
+            # Backward-compatible migration for existing PostgreSQL tables.
+            self._ensure_column(conn, "receipts", "image_blob", "BYTEA")
+            self._ensure_column(conn, "reports", "pdf_blob", "BYTEA")
 
     def _ensure_column(
-        self, conn: sqlite3.Connection, table: str, column: str, column_type: str
+        self, conn, table: str, column: str, column_type: str
     ) -> None:
-        rows = conn.execute(f"PRAGMA table_info({table})").fetchall()
-        existing = {row["name"] for row in rows}
-        if column not in existing:
-            conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT 1
+                FROM information_schema.columns
+                WHERE table_name = %s AND column_name = %s
+                """,
+                (table, column),
+            )
+            if cur.fetchone() is None:
+                cur.execute(f"ALTER TABLE {table} ADD COLUMN {column} {column_type}")
 
     def _ensure(self) -> None:
         self.init_db()
@@ -79,17 +87,18 @@ class DBService:
         self._ensure()
         now = self._now()
         with self._conn() as conn:
-            conn.execute(
+            with conn.cursor() as cur:
+                cur.execute(
                 """
                 INSERT INTO receipts (
                     receipt_id, payload_json, image_path, image_blob, created_at, updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 ON CONFLICT(receipt_id) DO UPDATE SET
-                    payload_json=excluded.payload_json,
-                    image_path=excluded.image_path,
-                    image_blob=excluded.image_blob,
-                    updated_at=excluded.updated_at
+                    payload_json=EXCLUDED.payload_json,
+                    image_path=EXCLUDED.image_path,
+                    image_blob=EXCLUDED.image_blob,
+                    updated_at=EXCLUDED.updated_at
                 """,
                 (
                     receipt_id,
@@ -105,13 +114,14 @@ class DBService:
         self._ensure()
         now = self._now()
         with self._conn() as conn:
-            conn.execute(
+            with conn.cursor() as cur:
+                cur.execute(
                 """
                 INSERT INTO audits (receipt_id, payload_json, created_at, updated_at)
-                VALUES (?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s)
                 ON CONFLICT(receipt_id) DO UPDATE SET
-                    payload_json=excluded.payload_json,
-                    updated_at=excluded.updated_at
+                    payload_json=EXCLUDED.payload_json,
+                    updated_at=EXCLUDED.updated_at
                 """,
                 (receipt_id, json.dumps(payload, ensure_ascii=False), now, now),
             )
@@ -126,17 +136,18 @@ class DBService:
         self._ensure()
         now = self._now()
         with self._conn() as conn:
-            conn.execute(
+            with conn.cursor() as cur:
+                cur.execute(
                 """
                 INSERT INTO reports (
                     receipt_id, pdf_path, pdf_blob, payload_json, created_at, updated_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 ON CONFLICT(receipt_id) DO UPDATE SET
-                    pdf_path=excluded.pdf_path,
-                    pdf_blob=excluded.pdf_blob,
-                    payload_json=excluded.payload_json,
-                    updated_at=excluded.updated_at
+                    pdf_path=EXCLUDED.pdf_path,
+                    pdf_blob=EXCLUDED.pdf_blob,
+                    payload_json=EXCLUDED.payload_json,
+                    updated_at=EXCLUDED.updated_at
                 """,
                 (
                     receipt_id,
