@@ -27,13 +27,35 @@ class VectorDBManager:
         return db
 
     # query를 통해 영수증 JSON을 입력받고, embedding_model(규정집 벡터화 시 사용한 모델과 동일해야함!)을 통해 벡터화하고, 영수증과 유사한 규정 탐색
-    def search_rules(self, query, embedding_model, k=3):
-        if not os.path.exists(self.persist_path) or not os.listdir(self.persist_path):
-            return []
-            
-        db = Chroma(
-            persist_directory=self.persist_path,
-            embedding_function=embedding_model
-        )
-        # Chroma 내장함수. 유사도 검색 함수입니다.
-        return db.similarity_search(query, k=k)
+    # TODO k: 끌어올 유사 조항 개수(여러 번 해보면서 조정해보면 될 것 같아요!)
+    def search_rules(self, query, embedding_model, k=3, agent_llm=None):
+        db = Chroma(persist_directory=self.persist_path, embedding_function=embedding_model)
+        initial_docs = db.similarity_search(query, k=k if agent_llm is None else k*3) # 리랭킹 시 후보를 더 많이 뽑음
+
+        # Re-ranking 로직
+        if agent_llm and initial_docs:
+            try:
+                context = "\n".join([f"[{i+1}] {doc.page_content}" for i, doc in enumerate(initial_docs)])
+                rerank_prompt = f"""
+                당신은 감사 전문 리랭커(Re-ranker)입니다. 
+                다음 [영수증 품목]과 [후보 규정]들의 연관성을 단계별로 생각하여 가장 적합한 규정 순서대로 나열하세요.
+
+                [분석 단계]
+                1. 영수증 품목의 잠재적 의미(오타, 동의어, 상위 카테고리 등)를 파악하세요. (예: 참미술 -> 참이슬 -> 주류)
+                2. 각 규정 조항이 해당 품목을 금지하거나 제한하는지 논리적으로 따져보세요.
+                3. 가장 직접적으로 연관된 규정부터 내림차순으로 정렬하세요.
+
+                영수증 품목: {query}
+                후보 규정:
+                {context}
+
+                최종 결과는 반드시 조항 번호만 쉼표로 구분하여 출력하세요 (예: 2, 1, 4).
+                """
+                response = agent_llm.invoke(rerank_prompt)
+                indices = [int(idx.strip()) - 1 for idx in response.content.split(',') if idx.strip().isdigit()]
+                return [initial_docs[i] for i in indices if i < len(initial_docs)][:k]
+            except Exception as e:
+                print(f"Reranking failed, returning base results: {e}")
+                return initial_docs[:k]
+        
+        return initial_docs

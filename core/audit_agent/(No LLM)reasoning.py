@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from langchain_upstage import ChatUpstage
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import JsonOutputParser, StrOutputParser # [NEW] 문자열 파서 추가
+from langchain_core.output_parsers import JsonOutputParser
 from .prompt_templates import AUDIT_SYSTEM_PROMPT
 from .naver_verifier import NaverStoreVerifier
 from core.rag_engine.vector_db import VectorDBManager
@@ -22,41 +22,14 @@ class AuditReasoning:
             client_secret=os.getenv("NAVER_CLIENT_SECRET", "")
         )
 
-    def _correct_store_name(self, store_name):
-        if not store_name:
-            return ""
-            
-        correction_prompt = ChatPromptTemplate.from_messages([
-            ("system", """
-            당신은 한국어 영수증 OCR 오타 교정기입니다. 
-            주어진 상호명과 상품명을 고려하여 상호명이 유명 프랜차이즈나 널리 알려진 브랜드의 명백한 오타로 판단되는 경우에만 올바르게 수정하세요.
-            동네 개인 가게 이름이거나 확신할 수 없다면 절대 원본을 수정하지 마세요. (과교정 금지)
-            출력은 오직 '교정된 상호명' 문자열만 반환해야 하며, 다른 설명은 절대 붙이지 마세요.
-            """),
-            ("human", "상호명: {store_name}")
-        ])
-        
-        chain = correction_prompt | self.llm | StrOutputParser()
-        
-        try:
-            corrected_name = chain.invoke({"store_name": store_name}).strip()
-            return corrected_name
-        except Exception as e:
-            print(f"상호명 교정 중 오류 발생: {e}")
-            return store_name
-
     def analyze(self, receipt_json, retrieved_rules=None):
-        raw_store_name = receipt_json.get('store_name', '')
+        store_name = receipt_json.get('store_name', '')
         store_address = receipt_json.get('store_address', '')
         items = receipt_json.get('items', [])
-
-        print(f"1차 LLM: 상호명 오타 점검 중... 원본[{raw_store_name}]")
-        store_name = self._correct_store_name(raw_store_name)
-        if raw_store_name != store_name:
-            print(f"교정 완료: [{raw_store_name}] ➡️ [{store_name}]")
-
-        print(f"네이버 가맹점 검증 중: [{store_name}]")
-        store_info = self.verifier.get_store_category(store_name, store_address)
+        region_name = store_address.split()[0] if store_address else ""
+        search_query = f"{region_name} {store_name}".strip()
+        print(f"네이버 가맹점 검증 중: [{search_query}]")
+        store_info = self.verifier.get_store_category(search_query)
 
         if retrieved_rules is None:
             all_relevant_docs = []
