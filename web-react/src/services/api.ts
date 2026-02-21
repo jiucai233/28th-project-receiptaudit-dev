@@ -89,6 +89,22 @@ export const auditAPI = {
     }
   },
 
+  batchConfirm: async (receipts: { receiptData: ReceiptData; auditResult: AuditResult }[]): Promise<ConfirmResponse> => {
+    try {
+      const payload = {
+        receipts: receipts.map(r => ({
+          receipt_data: r.receiptData,
+          audit_result: r.auditResult,
+        }))
+      };
+
+      const response = await api.post<ConfirmResponse>('/api/v1/audit/batch-confirm', payload);
+      return response.data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
   uploadRules: async (file?: File, text?: string): Promise<{ status: string; message: string }> => {
     try {
       const formData = new FormData();

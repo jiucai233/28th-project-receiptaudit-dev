@@ -221,15 +221,42 @@ function App() {
 
   // Batch PDF Confirm handler
   const handleBatchConfirm = async () => {
-    const auditedReceipts = receipts.filter(r => r.status === 'audited');
+    const auditedReceipts = receipts.filter(r => r.status === 'audited' && r.receiptData && r.auditResult);
     if (auditedReceipts.length === 0) return;
 
     setIsLoading(true);
+    setError(null);
+
     try {
-      for (const receipt of auditedReceipts) {
-        await handleConfirm(receipt.id);
+      const batchPayload = auditedReceipts.map(r => ({
+        receiptData: r.receiptData!,
+        auditResult: r.auditResult!
+      }));
+
+      const response = await auditAPI.batchConfirm(batchPayload);
+
+      if (response.status === 'success' && response.pdf_data) {
+        const byteCharacters = atob(response.pdf_data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = response.filename || `batch_audit_report.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
       }
-      alert('모든 PDF 보고서 다운로드 완료!');
+      // alert('모든 영수증 통합 PDF 보고서 다운로드 완료!');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '통합 PDF 생성 실패';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
