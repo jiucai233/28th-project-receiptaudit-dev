@@ -10,6 +10,7 @@ huggingface_hub
 fastapi
 uvicorn
 psycopg2-binary
+boto3
 
 # LangChain and RAG Engine
 langchain==0.3.27
