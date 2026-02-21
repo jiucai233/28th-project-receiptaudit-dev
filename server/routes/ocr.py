@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
@@ -58,12 +60,21 @@ async def extract(file: UploadFile = File(...)) -> OCRExtractResponse:
         receipt_id = storage_service.new_receipt_id()
         logger.info(f"Assigned receipt_id: {receipt_id}")
         image_path = await storage_service.save_upload(file, receipt_id)
+        suffix = Path(file.filename or "receipt.jpg").suffix or ".jpg"
+        s3_result = storage_service.upload_image_to_s3(
+            receipt_id=receipt_id,
+            image_bytes=content,
+            suffix=suffix,
+            content_type=file.content_type,
+        )
+        image_s3_key = s3_result[0] if s3_result else None
+        image_s3_url = s3_result[1] if s3_result else None
 
         # Call OCR service
         receipt = ocr_service.extract(image_path, receipt_id)
         
         # Add image_url for frontend preview
-        receipt["image_url"] = f"/data/raw/{image_path.name}"
+        receipt["image_url"] = image_s3_url or f"/data/raw/{image_path.name}"
         
         storage_service.save_json(receipt, f"{receipt_id}_ocr.json")
         db_service.upsert_receipt(
@@ -71,6 +82,8 @@ async def extract(file: UploadFile = File(...)) -> OCRExtractResponse:
             receipt,
             str(image_path),
             image_blob=content,
+            image_s3_key=image_s3_key,
+            image_s3_url=image_s3_url,
         )
 
         logger.info(f"OCR extraction successful for {receipt_id}")

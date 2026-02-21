@@ -75,8 +75,13 @@ def confirm(payload: AuditConfirmRequest) -> dict:
 
     pdf_bytes = report_service.build_pdf(receipt_data, audit_result)
     pdf_path = storage_service.save_pdf(receipt_data["receipt_id"], pdf_bytes)
+    s3_result = storage_service.upload_pdf_to_s3(receipt_data["receipt_id"], pdf_bytes)
+    pdf_s3_key = s3_result[0] if s3_result else None
+    pdf_s3_url = s3_result[1] if s3_result else None
 
-    response_data = AuditConfirmResponse(status="success", pdf_url=str(pdf_path)).model_dump()
+    response_data = AuditConfirmResponse(
+        status="success", pdf_url=pdf_s3_url or str(pdf_path)
+    ).model_dump()
     response_data["pdf_data"] = base64.b64encode(pdf_bytes).decode("ascii")
 
     db_service.upsert_report(
@@ -84,6 +89,8 @@ def confirm(payload: AuditConfirmRequest) -> dict:
         str(pdf_path),
         response_data,
         pdf_blob=pdf_bytes,
+        pdf_s3_key=pdf_s3_key,
+        pdf_s3_url=pdf_s3_url,
     )
     return response_data
 
