@@ -66,3 +66,14 @@ export interface APIError {
   detail?: string;
   message?: string;
 }
+
+export interface RulesEntry {
+  title: string;
+  content: string;
+}
+
+export interface RulesResponse {
+  mode: 'rag' | 'fallback';
+  total_chunks?: number;
+  rules: RulesEntry[];
+}

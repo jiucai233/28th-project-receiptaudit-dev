@@ -4,7 +4,7 @@
  */
 
 import axios, { AxiosError } from 'axios';
-import type { ReceiptData, AuditResult, ConfirmPayload, ConfirmResponse, APIError } from '@/types';
+import type { ReceiptData, AuditResult, ConfirmPayload, ConfirmResponse, APIError, RulesResponse } from '@/types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -74,6 +74,15 @@ export const auditAPI = {
 
       // Backend returns base64 pdf_data, filename extracted from pdf_url
       // (백엔드가 이미 처리해서 보내므로 프론트엔드에서는 그대로 사용)
+      return response.data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  getRules: async (): Promise<RulesResponse> => {
+    try {
+      const response = await api.get<RulesResponse>('/api/v1/audit/rules');
       return response.data;
     } catch (error) {
       return handleError(error);
