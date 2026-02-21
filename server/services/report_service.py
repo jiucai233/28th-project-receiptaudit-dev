@@ -63,3 +63,15 @@ class ReportService:
             return Path(path).read_bytes()
         except Exception:
             return self._fallback_pdf(receipt_data, audit_result)
+
+    def build_batch_pdf(self, batch_data: list[tuple[dict, dict]]) -> bytes:
+        try:
+            from pathlib import Path
+            from core.report_engine.generator import AuditReportGenerator
+
+            path = AuditReportGenerator().generate_batch(batch_data)
+            return Path(path).read_bytes()
+        except Exception as e:
+            # Fallback to building multiple PDFs and returning the first if batch fails,
+            # or ideally combine them. For simplicity, if batch fails we raise exception.
+            raise Exception(f"Failed to generate batch PDF: {e}")
