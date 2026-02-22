@@ -1,0 +1,1274 @@
+[
+  {
+    "receipt_id": "uuid-0001",
+    "store_name": "유니클로",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.8,
+        "violations": [
+          {
+            "item_id": 1,
+            "reason": "의류 및 잡화 구매",
+            "policy_reference": "제6조 2항 사적 목적 지출 및 물품 구매 금지 규정"
+          }
+        ],
+        "reasoning": "영수증 내역 확인 결과, 유니클로에서 의류 및 잡화 구매가 이루어졌습니다. 이는 조직 규정 제6조 2항에서 금지하는 품목에 해당합니다. 네이버 검색 결과에 따르면 유니클로는 '쇼핑,유통>캐주얼웨어' 업종으로 의류매장에 해당합니다. 따라서 이는 규정 위반에 해당합니다. 결제 시간은 오후 4시 47분으로 심야 및 새벽 결제 기준에는 해당하지 않습니다. 그러나 업종 위반이 명확하므로 'Anomaly Detected'로 판정합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.8,
+        "violations": [
+          {
+            "item_id": 0,
+            "reason": "규정 제6조 2항 위반 (의류 및 잡화 구매)",
+            "policy_reference": "제6조 2항 사적 목적 지출 및 물품 구매 금지"
+          }
+        ],
+        "reasoning": "본 영수증은 유니클로에서 60,000원의 폴라폴리스 야상을 구매한 내역입니다. 규정의 제6조 2항에 따르면, 구성원의 개인적인 목적을 위한 의류 및 잡화 구매는 엄격히 금지되어 있습니다. 따라서 이는 사적 지출로 간주되어 위반(Anomaly Detected)으로 판정됩니다. 규정 점수는 0.8점으로 책정되며, 이는 명백한 사적 지출로 간주되는 위반 사항 때문입니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0002",
+    "store_name": "주식회사 엠에이치앤코 버터코엑",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증의 결제 시간은 16:59로 오전 8시 이전의 심야 및 새벽 결제에 해당하지 않으므로, 규정을 준수하였습니다. 또한, 결제 내역인 '아이팝 가방에 쏙 포켓 물티슈 8개입 SET'은 규정 제6조 2항에서 금지하는 품목(의류 및 잡화, 화장품, 미용 용품 등)에 해당하지 않습니다. 네이버 검색 결과에서도 검색 오류가 발생하여 업종 정보를 확인할 수 없었으나, 품목명과 결제 시간을 고려할 때 규정 위반의 정황은 없습니다. 따라서 이 영수증은 조직 규정을 완벽히 준수하였습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 '에스터'라는 상호명의 가게에서 2025년 10월 3일 오후 4시 59분에 3900원을 결제한 내역입니다. 먼저, 결제 시간이 오전 8시 이전이 아니므로 심야 및 새벽 결제 규정을 위반하지 않았습니다. 또한, 네이버 검색을 통해 '에스터'는 '음식점>카페,디저트' 업종에 해당함을 확인할 수 있습니다. 규정에 금지된 업종(주점, 의류매장 등)이 아니므로 업종 관련 규정도 위반하지 않았습니다.\n\n품목명을 살펴보면 'DY1025001 001)아이팝가방에싹켓들물티슈8개입 SET'라는 이름이 확인됩니다. 이는 물티슈 8개입 세트로 보이는데, 이는 규정에 금지된 의류 및 잡화(의복, 신발, 악세서리 등)나 개인 미용 목적의 물품(화장품, 미용 용품 등)에 해당하지 않습니다. 따라서 지출 항목 제한 규정도 위반하지 않았습니다.\n\n따라서 이 영수증은 규정 위반이 없으며, 정상(Pass) 영수증으로 판정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0003",
+    "store_name": "현대백화점 무역센터점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 현대백화점 무역센터점에서 발행되었으며, 가맹점 업종은 '쇼핑,유통>백화점'으로 확인됩니다. 이는 규정에 따라 주류 판매를 주 목적으로 하는 가맹점이 아니므로 규정을 준수하고 있습니다. 또한 영수증 내역에는 주류나 금지된 품목이 포함되어 있지 않으며, 결제 시간도 평일 업무 시간인 오후 3시 26분으로 규정된 시간 내에 문제가 없습니다. 따라서 해당 영수증은 제7조 주류 및 유흥 목적 지출의 전면 금지 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "본 영수증의 상호명은 '현*대백화점 무역센터점'으로, 네이버 검색 결과에 따르면 업태가 '백화점'입니다. 규정 제7조 2항에 따르면, 주류 판매를 주 목적으로 하는 가맹점에서의 결제는 금지되지만, 백화점은 이에 해당하지 않습니다. 따라서 점수의 합계는 0.0이며, 위반이 없습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0004",
+    "store_name": "",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증에는 우삼겹 포케볼, 우삼겹메밀면 누들볼, 튜나 치아바타 샌드위치, 단호박 크림스프, 포장비 등 식사와 관련된 품목들만 기재되어 있습니다. 상호명 정보는 누락되어 있지만, 영수증의 결제 시간(2025-10-02 18:18)은 규정이 정한 '해당 학과 수업 시간(평일 9시부터 18시까지)' 내에 해당하며, 품목명에서 주류와 관련된 내용이 확인되지 않습니다. 따라서 이 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "이 영수증은 2025년 10월 2일 오후 6시 18분에 발생한 거래로, 규정에 명시된 심야 및 새벽 결제(오전 8시 이전)에 해당하지 않습니다. 따라서 시간 관련 규정을 위반하지 않았습니다. 또한, '포케볼(기본) 1 0'이라는 상호명은 명확한 업종을 파악하기 어렵지만, 영수증에 기재된 품목명들은 모두 음식 관련 품목으로 규정에서 금지하는 의류 및 잡화, 화장품, 미용 용품 등의 사적 목적 품목이 아닙니다. 따라서 이 영수증은 조직 규정을 준수하고 있습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0005",
+    "store_name": "(주)신세계 SSG도곡",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 오전 8시 이전(00:00 포함)에 이루어진 심야 및 새벽 결제가 아니므로, 제1장 제1조(심야 및 새벽 결제 금지)를 위반하지 않았습니다. 또한, 가맹점 업종에 대한 네이버 검색 결과가 없으나, 상호명 및 품목명에서 의류, 잡화, 화장품 등 규정에서 금지하는 물품 구매가 확인되지 않았습니다. 따라서, 제3장 제6조(사적 목적 지출 및 물품 구매 금지)를 위반하지 않았습니다. 영수증의 결제 시간, 가맹점 업종, 품목명 등을 종합적으로 고려할 때 규정을 완벽히 준수했으므로 'Pass'로 결정합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 신세계백화점 강남점에서 발생한 것으로, 네이버 검색 결과에 따르면 쇼핑, 유통 업종에 해당합니다. 규정에 따르면 백화점은 명시적으로 금지된 업종이 아닙니다. 결제 시간은 오전 8시 이후인 13시 46분으로, 심야 및 새벽 결제 제한 규정을 위반하지 않았습니다. 품목명 '해인 꽃 농원'은 규정에서 금지하는 주류, 의류, 화장품 등이 아니며, 꽃과 관련된 것으로 보입니다. 따라서 본 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0006",
+    "store_name": "청년다방(선릉역점)",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증은 오후 6시 49분에 결제된 것으로, 오전 8시 이전(00:00 포함) 심야 및 새벽 결제 금지 규정을 위반하지 않았습니다. 따라서 전액 불인정 및 환수 조치의 대상이 아닙니다. (규정 제1장 제1항)\n\n가게 업종은 네이버 API 검색 결과 '음식점>분식'으로 확인되며, 분식 업종은 규정 제6조(사적 목적 지출 및 물품 구매 금지)에 명시된 금지 업종(의류 및 잡화, 화장품 등)에 해당하지 않습니다. 따라서 지출은 업무 연관성이 있는 것으로 판단됩니다. (규정 제3장 제5조, 제6조)\n\n지출 품목인 '불향차돌떡볶이', '찰순대', '쫄면사리', '콜라'는 규정에서 명시적으로 금지된 품목(의류, 잡화, 화장품 등)에 해당하지 않으며, 음식점에서 일반적으로 판매하는 품목들로 보입니다. 따라서 사적 목적 지출 및 회계 부정으로 간주할 근거가 없습니다. (규정 제3장 제6조)\n\n총 결제 금액은 25,500원으로, 영수증에 기재된 품목들이 식비로 보이며, 이는 공식적인 회의, 행사 준비 및 진행에 수반되는 식비로 추정됩니다. 따라서 편성된 예산의 범위 내에서 실비로 지급된 것으로 판단되며, 과도한 지출로 간주할 근거가 없습니다. (규정 제3장 제5조)\n\n상호명, 주소, 결제 시간 등 영수증 데이터에 결측치가 없으며, 모두 명확히 확인 가능합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.8,
+        "violations": [
+          {
+            "item_id": 0,
+            "reason": "결제 시간 위반",
+            "policy_reference": "규정 제1조"
+          }
+        ],
+        "reasoning": "해당 영수증의 결제 시간은 2025-10-01 00:00로, 규정 제1조에 의거하여 오전 8시 이전(00:00 포함)에 이루어진 심야 및 새벽 결제는 원칙적으로 전액 불인정 및 환수 조치된다. 단, 야간 행사가 불가피하여 사전에 대의원회의 승인을 득한 기안서가 존재하는 경우에 한하여 예외를 인정할 수 있다. 하지만 본 영수증에는 그러한 승인 기록이 존재하지 않으므로 시간 위반으로 판단한다. 상호명 '청년다방(선릉역점)'의 네이버 검색 결과를 통해 음식점>분식 업종임을 확인하였으며, 결제 품목들은 규정 제6조에서 금지하는 의류, 잡화, 화장품 등이 아니므로 업종 및 품목 위반은 없다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0007",
+    "store_name": "공차 선릉중앙점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 카페, 디저트 업종인 공차 선릉중앙점에서 발생한 것으로, 네이버 검색 결과를 통해 확인되었습니다. 품목명은 '미니펄 망고 밀크 + 리얼망고 L'로, 규정 제7조에서 금지하는 주류나 유흥업소와 관련된 내용이 아닙니다. 결제 시간(18:58)도 규정에 위배되지 않으며, 영수증에 주류 구매 내역이 포함되어 있지 않습니다. 따라서 이 영수증은 조직 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 '공차 선릉중앙점'에서 발생한 거래로, 네이버 API 검색 결과에 따르면 '카페,디저트' 업종에 속합니다. 제7조 2항에서는 주류 판매를 주 목적으로 하는 가맹점에서의 결제를 금지하고 있으나, '공차'는 카페/디저트 업종이므로 해당 규정을 위반하지 않습니다. 또한, 영수증 내역에는 주류로 의심되는 품목이 없으며, 제7조 1항 및 3항에도 해당되지 않습니다. 따라서 본 영수증은 규정 위반 사항이 없으므로 'Pass'로 판정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0008",
+    "store_name": "공차 선릉중앙점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증에 따르면, '공차 선릉중앙점'에서 '미니펄 망고 크러쉬'와 '미니펄 망고 밀크 + 리얼망고 L'을 구매하였습니다. 규정에 따르면, 주류를 구매하는 것은 엄격히 금지되어 있습니다. 그러나 구매 품목에 주류는 포함되어 있지 않으며, 해당 가맹점의 업종은 '카페, 디저트'로 규정에서 금지하는 주점이나 유흥업소가 아닙니다. 따라서 이 영수증은 규정을 완벽히 준수하고 있으며, 위반 사유가 없습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증에 기재된 상호명 '공차 선릉중앙점'과 네이버 API를 통해 조회가 된 가맹점 업종 '카페,디저트>차'를 대조하였을 때, 규정에 명시된 금지 업종(주점, 호프집, 유흥업소 등 주류 판매를 주 목적으로 하는 가맹점)에 해당하지 않습니다. 또한 영수증 내역에는 주류와 관련된 품목이 포함되어 있지 않으며, 결제 시간도 규정에 어긋나지 않는 시간대입니다. 따라서 본 영수증은 조직의 재정 세칙을 완벽히 준수하였습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0009",
+    "store_name": "이마트에브리데이 서초내곡점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "주류 및 유흥 목적 지출 금지에 대한 위반 여부를 확인하기 위해 가맹점 업종 정보와 영수증 내역을 검토했습니다.\n1. 가맹점 업종 정보: '쇼핑,유통>슈퍼,마트'로 확인되어 제7조 2항에서 금지하는 주점, 호프집, 유흥업소 등의 업종이 아닙니다.\n2. 영수증 내역: 떡붕어싸만코, 샌드류, 월드콘 등의 식료품 및 간식류를 구매하였으며, 소주, 맥주, 양주, 와인, 막걸리 등 모든 형태의 주류가 포함되어 있지 않습니다.\n따라서, 영수증 내역 및 가맹점 업종 정보 모두 규정을 준수하고 있으며, 위반 사항은 발견되지 않았습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 데이터에 따르면, 결제 가맹점은 '이마트 에브리데이 서초내곡점'이며, 네이버 API 검색 결과에 따라 '쇼핑,유통>슈퍼,마트' 업종으로 확인됨. 규정에 따르면 주점, 호프집, 유흥업소 등 주류 판매를 주 목적으로 하는 가맹점에서의 결제는 금지되지만, 해당 가맹점은 슈퍼마켓으로 주류를 주된 목적으로 판매하지 않음. 영수증 내역에서도 주류(소주, 맥주, 양주, 와인, 막걸리 등)가 구매된 내역이 없음. 따라서 규정을 완벽히 준수하였으므로 위반으로 간주하지 않음."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0010",
+    "store_name": "153구포국수(선릉역점)",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 153구포국수 선릉역점에서 발행되었으며, 네이버 API 검색 결과 '음식점 > 한식 > 국수'로 분류되는 음식점으로 확인됩니다. 영수증 내역에는 '참치마요김밥'과 '쫄면'이 포함되어 있으며, 결제 시간도 20:59로 일반적인 영업 시간 내에 해당합니다. 영수증 내역에 주류나 유흥 관련 품목은 포함되어 있지 않으며, 결제한 음식점은 주점이나 유흥업소가 아닌 한식 전문점으로 확인되었습니다. 따라서 규정을 위반한 정황이 없습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "상호명 '153구포국수(선릉역점)'과 함께 네이버 API를 통해 검색한 결과, 이 가게는 '한식' 음식점임을 확인할 수 있습니다. 영수증 내역에는 '쫄면'이라는 품목만 기재되어 있으며, 영수증에 주류나 유흥 관련 품목이 포함되어 있지 않습니다. 따라서 제7조(주류 및 유흥 목적 지출의 전면 금지)를 위반하지 않은 것으로 판단됩니다. 결제 시간 또한 저녁 8시 59분으로, 제4조(결제 시간)에 대한 특별한 제한이 없으므로 문제가 없습니다. 이에 따라 이 영수증은 규정을 완벽히 준수하였으므로 'Pass'로 처리합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0011",
+    "store_name": "CJ올리브영(주) 코엑스몰점",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 데이터에 따르면, 구매 품목은 '바세린 립 테라피 오리지널 미니자 듀오'로, 이는 화장품에 해당합니다. 조직 규정에 따르면, 개인 미용 목적의 물품 구매는 허용되어 있습니다. (규정 2조 참조) 또한, 영수증에 기재된 가맹점 업종에 대한 네이버 검색 결과가 없는 상황이지만, 상호명인 'CJ올리브영'은 H&B 스토어로 잘 알려진 브랜드로, 규정에 의해 허용된 업종에 해당합니다. 결제 시간은 오후 4시 34분으로, 조직의 근무 시간 내에 해당합니다. 따라서, 본 영수증은 조직의 재정 규정을 완벽히 준수하고 있으며, 위반 사항은 발견되지 않았습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증의 상호명은 'OLIVE YOUNG'이며, 네이버 API를 통해 검색한 결과 '올리브영N 성수'라는 가맹점의 업종은 '쇼핑,유통>드럭스토어'로 확인됩니다. 이는 규정에 명시된 허용된 업종(H&B 스토어)에 해당합니다. 품목명은 '바세린 립 테라피 오리지널 미니 립 듀오'이며, 이는 화장품에 해당하여 규정 제2조 2항에 명시된 개인 미용 목적의 물품에 해당합니다. 따라서 이 영수증은 조직의 재정 규정을 완벽히 준수하고 있으며, 규정에 위반되는 사항은 발견되지 않았습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0012",
+    "store_name": "호시타코야끼 대치점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "주류 및 유흥 목적 지출의 전면 금지를 규정한 제7조를 검토하였습니다. 영수증에 기재된 상호명인 '호시타코야끼 대치점'을 네이버 지역검색 API로 조회한 결과, 해당 가맹점은 '음식점>일식>일식당'으로 분류되어 주점, 호프집, 유흥업소 등 주류 판매를 주 목적으로 하는 업종에 해당하지 않습니다. 영수증 내역에는 '네기 타코 야키 8알', '정통 타코 야키 8알', '까르보불닭볶음면(비조리컵)' 등 식품 품목만이 포함되어 있고, 주류나 유흥 관련 품목이 기재되어 있지 않습니다. 따라서 규정 위반 사항은 없으며, 이 영수증은 정상(Pass)으로 판단됩니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 '호시타코야끼 대치점'에서 결제된 내역으로, 네이버 API를 통해 '음식점>일식>일식당'으로 검색되었습니다. 이는 규정에 명시된 금지 업종(주점, 호프집, 유흥업소 등)에 해당하지 않습니다. 영수증 내역에도 주류(소주, 맥주, 양주, 와인, 막걸리 등)가 포함되어 있지 않으며, 영수증 전체에 걸쳐 주류 구입을 의심할 만한 품목도 발견되지 않았습니다. 따라서 본 영수증은 규정을 완벽히 준수하고 있다고 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0013",
+    "store_name": "첫걸음산부인과의원",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [
+          {
+            "item_id": 0,
+            "reason": "결제 시간 및 규정 준수",
+            "policy_reference": "제7조 1항 심야 및 새벽 결제 원칙 불인정"
+          }
+        ],
+        "reasoning": "해당 영수증의 결제 시간은 2025년 10월 1일 11시 08분으로, 조직 규정에서 명시한 오전 8시(00:00 포함) 이전의 심야 및 새벽 결제에 해당하지 않습니다. 따라서 규정 위반 사유가 발견되지 않아 정상(Pass)으로 판정합니다. 또한, 가맹점 업종은 '산부인과'로 규정에서 금지하는 업종(주점, 의류매장 등)에 속하지 않으며, 품목명에는 정보가 없지만 결제 시간 및 업종을 고려할 때 사적 목적 지출 및 물품 구매 금지에 해당하는 위반 사항도 없습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "본 영수증은 첫걸음산부인과의원에서 발행한 것으로, 네이버 API를 통해 조회한 결과 병원,의원 중 산부인과 업종에 해당합니다. 규정에 따르면 산부인과는 금지 업종이 아니므로 해당 항목은 위반에 해당하지 않습니다.\n결제 시간은 11:08으로 오전 8시 이전(00:00 포함) 심야 및 새벽 결제에 해당하지 않으므로 전액 불인정 및 환수 조치 규정을 위반하지 않았습니다.\n품목명은 비어있고 총 결제 금액은 17,300원입니다. 영수증에 명시된 품목명이 없어 구체적인 지출 내역을 확인할 수 없으나, 산부인과는 의료 서비스 제공 업종의 특성상 식비 및 다과비나 사적 목적 지출 및 물품 구매 금지 규정 위반이 발생할 가능성이 낮습니다.\n따라서, 현재 존재하는 데이터 내에서 규정 위반이 입증되지 않으므로 정상(Pass)으로 판정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0014",
+    "store_name": "현대코엑스점",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.8,
+        "violations": [
+          {
+            "item_id": 1,
+            "reason": "주류 판매가 주된 업종인 가맹점에서 결제가 이루어졌음",
+            "policy_reference": "제7조 2항 주점, 호프집, 유흥업소 등 주류 판매를 주 목적으로 하는 가맹점에서의 결제 금지"
+          }
+        ],
+        "reasoning": "영수증 데이터에 포함된 '네이버 검색 결과'에 따르면 가맹점명은 '샤넬뷰티 현대백화점무역센터점'이며, 업종은 '쇼핑,유통>화장품,향수'로 확인됩니다. 하지만 규정에서 금지하는 업종인 '주점, 호프집, 유흥업소 등 주류 판매를 주 목적으로 하는 가맹점'에 해당하는지 여부를 판단해야 합니다. 이 경우, 상호명과 네이버 검색 결과를 고려할 때, 주로 화장품을 판매하는 가맹점으로 판단되나, '샤넬뷰티'라는 상호명에서 유추할 수 있는 주류 판매 가능성과 가맹점 위치(현대백화점 무역센터점)의 일반적인 특성을 고려할 때, 주류 판매가 이루어질 가능성이 있는 곳입니다. 따라서 규정 제7조 2항에 따라 위반으로 간주합니다. 추가적인 정보가 없어 0.8의 점수로 처리합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증의 결제 시간은 오전 8시 이후(15:47)이므로, 심야 및 새벽 결제 규정은 적용되지 않습니다. 또한, 상호명 'COS'는 네이버 검색 결과 '패션>캐주얼웨어' 업종으로 확인되어 규정에서 금지하는 의류 및 잡화 매장에 해당합니다. 그러나 품목명이 비어있고 구체적인 구매 내역이 없으므로, 실제 구매 품목이 의류인지 확인할 수 없습니다. 따라서 규정 위반을 입증할 수 있는 명확한 증거가 없는 경우 'Pass'로 처리합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0015",
+    "store_name": "UNIQLO 스타필드 코엑스몰점",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 1.0,
+        "violations": [
+          {
+            "item_id": 1,
+            "reason": "의류 및 잡화 구매 (유니클로)",
+            "policy_reference": "제6조 2항"
+          },
+          {
+            "item_id": 2,
+            "reason": "Shopping bag 구매",
+            "policy_reference": "제6조 2항"
+          }
+        ],
+        "reasoning": "영수증 정보에 따르면, UNIQLO 스타필드 코엑스몰점에서 '수플레얀스탠드칼라가디건'과 'Shopping bag'을 구매하였습니다. 해당 상호명은 유니클로로, 규정 제6조 2항에 명시된 '의복, 신발, 악세서리 등 의류 및 잡화'에 해당하는 업종입니다. 따라서 이러한 구매는 업무 연관성이 없는 사적 지출로 간주되어 명백한 회계 부정으로 간주됩니다. 규정에 따라 이러한 결제는 반려되어야 합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.9,
+        "violations": [
+          {
+            "item_id": 0,
+            "reason": "금지된 의류 및 잡화 구매",
+            "policy_reference": "제6조 1항 의류 및 잡화 구매 금지"
+          }
+        ],
+        "reasoning": "영수증에 따르면 '유니클로(UNI)'에서 '수플레 야앤스탠드 칼라 가디건'과 '쇼풍 백'을 구매하였습니다. 네이버 검색 결과를 통해 해당 가게는 '쇼핑,유통>캐주얼웨어' 업종에 해당하며, 이는 규정 제6조 1항에서 명시하는 '의복, 신발, 악세서리 등 의류 및 잡화'에 해당합니다. 따라서 이는 명백한 사적 지출 및 회계 부정으로 간주되며, 규정 위반에 해당합니다. 결제 시간 및 장소는 규정 위반과 직접적인 관련이 없으므로 확인하지 않았습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0016",
+    "store_name": "COS 현대 무역센터점",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.8,
+        "violations": [
+          {
+            "item_id": 1,
+            "reason": "의류 구매",
+            "policy_reference": "제6조 2항 1호 의류 및 잡화 구매 금지"
+          }
+        ],
+        "reasoning": "해당 영수증은 COS 현대 무역센터점에서 발생한 의류 구매 내역입니다. 규정 제6조 2항 1호에 따라 의복, 신발, 악세서리 등 의류 및 잡화 구매는 금지되어 있습니다. '져지' 구매는 명백한 의류로, 조직의 사적 지출 및 물품 구매 금지 규정을 위반한 것입니다. 이에 따라 'Anomaly Detected'로 판정하며, 위반 점수는 0.8을 부여합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.9,
+        "violations": [
+          {
+            "item_id": 1,
+            "reason": "의류 및 잡화 구매",
+            "policy_reference": "규정 제6조 1항 위반"
+          },
+          {
+            "item_id": 2,
+            "reason": "의류 및 잡화 구매",
+            "policy_reference": "규정 제6조 1항 위반"
+          }
+        ],
+        "reasoning": "본 영수증은 현대백화점 5층에서 2025-09-21 15:47에 발행되었습니다. 가맹점 업종 정보에 따르면 '하나은행365 현대백화점5층'으로 금융,보험 업종에 해당하며, 규정 위반 시점이 아닌 시간대에 결제되었습니다. 그러나 영수증 내역을 확인한 결과, 품목명으로 '스웻셔츠'가 두 건 존재합니다. 규정 제6조 1항에 따라 의복, 신발, 악세서리 등 의류 및 잡화 구매는 엄격히 금지되어 있습니다. 두 품목 모두 의류에 해당하므로 규정 위반에 해당합니다. COS 쇼핑백의 경우, 소액 구매로 보이며, 규정에서 명시적으로 금지하는 품목이 아니므로 위반에 해당하지 않습니다. 따라서 본 영수증은 규정 위반으로 판단하여 'Anomaly Detected'로 결정하며 위반 점수를 0.9로 책정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0017",
+    "store_name": "광화문점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "감사 대상 영수증의 가맹점 업종은 '서점'으로 확인되며, 이는 규정에서 금지하는 업종(주점, 유흥업소 등)에 해당하지 않습니다. 영수증 품목명에는 '주스'가 명시되어 있고, 규정에서 금지하는 주류 제품(소주, 맥주, 양주 등)은 확인되지 않습니다. 따라서 이 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 교보문고 광화문점에서 발생한 것으로 네이버 지역 검색 API를 통해 확인되었습니다. 교보문고는 서점으로 분류되어 있으며, 이는 규정의 제7조에서 금지하는 업종(주점, 호프집, 유흥업소 등)에 해당하지 않습니다. 또한 영수증 내역에는 리코타 샐러드, 케일청포도 주스, 케일바나나주스 등 식음료 품목만 포함되어 있고, 규정에 명시된 주류 등의 금지 품목은 존재하지 않습니다. 따라서 이 영수증은 규정을 완벽히 준수하고 있으며, 어떠한 위반 사항도 발견되지 않았습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0018",
+    "store_name": "현대백화점 압구정본점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 데이터에 따르면, 결제 시각은 2025-10-05 18:20로 오전 8시 이전(00:00 포함) 심야 및 새벽 결제에 해당하지 않으므로 전액 불인정 및 환수 조치 규정을 위반하지 않았다. 또한, 결제 업체인 '현대백화점 압구정본점'의 업종은 '쇼핑,유통>백화점'으로 규정에서 금지하는 업종(의류매장, H&B 스토어 등)에 해당하지 않는다. 결제 품목인 '꼬마김밥A'와 '고추장 떡볶이' 역시 규정에서 금지하는 품목(의류, 잡화, 화장품 등)에 해당하지 않는다. 따라서 영수증은 규정 준수(Pass)로 판단된다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "1. 가맹점 업종(네이버): 검색 결과가 없으므로 'THE 김남구알구정165 (주)점대액회철 압구정본점' 상호명을 기준으로 판단해야 합니다.\n2. 상호명에 '김밥'과 '떡볶이'라는 단어가 포함되어 있어, 이는 일반적으로 주류 판매를 주 목적으로 하는 가맹점이 아닙니다.\n3. 영수증 내역에도 '꼬마김밥A', '고추장 떡볶이' 등 음식류만 기재되어 있고, 주류나 유흥 관련 품목이 포함되어 있지 않습니다.\n4. 결제 시간(18:20)은 규정 위반 범위에 해당하지 않으며, 규정은 특정 시간대 결제만을 금지하는 내용이 없습니다.\n5. 따라서, 영수증 내역에 주류나 유흥 관련 품목이 없으며, 가맹점 업종이 주점, 호프집, 유흥업소에 해당하지 않아 규정을 완벽히 준수하는 것으로 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0019",
+    "store_name": "팀홀튼 광화문K-Twin타워점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 카페인 팀홀튼에서 발생한 식비 영수증으로 확인되며, 네이버 API를 통해 카페 업종으로 분류되는 것을 확인했습니다. 규정에 따르면 카페에서의 식비 지출은 공식적인 회의, 행사 준비 및 진행에 수반되는 경우에 한해 허용되며, 편성된 예산의 범위 내에서 실비로 지급해야 합니다. \n\n영수증의 날짜는 2025-10-05 12:39:00로 오전 8시 이전의 심야 및 새벽 결제에 해당하지 않으며, 결제 시간 기준으로 전액 불인정 및 환수 조치의 대상이 아닙니다. \n\n품목명을 살펴보면 메이플 페스타 6팩, 메이플 피칸 파이, 메이플딥 도넛, 메이플 크롤러, 로투스비스코프메이플, 브라우니 메이플 도넛, 아이스 메이플 라떼 등 음료 및 디저트 품목으로 구성되어 있습니다. 이 품목들은 의복, 신발, 악세서리 등 의류 및 잡화나 화장품, 미용 용품 등 개인 미용 목적의 물품과 같은 금지 품목에 해당하지 않습니다. 또한, 'M'과 '매장컵'은 품목명이 누락되었거나 오타로 보이며, 이 항목들에 대한 위반 여부를 판단하기 어렵습니다. \n\n따라서, 해당 영수증은 규정에 명시된 금지 업종, 결제 시간, 품목 등을 위반하지 않았으며, 규정에서 요구하는 공식적인 회의, 행사 준비 및 진행에 수반되는 식비로 판단됩니다. 영수증 원본 훼손이나 OCR 인식 한계로 인해 상호명, 주소, 결제 시간 등의 정보가 정확히 기록되지 않았으나, 현재 존재하는 데이터 내에서만 규정 위반 여부를 검토해야 하므로, 누락된 정보에 대해서는 '확인 불가'로 처리하고 전체 영수증을 규정 준수로 판단합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 카페 업종인 팀홀튼 광화문K-Twin타워점에서의 결제로 확인됩니다. 규정에서는 카페 업종 결제를 명시적으로 금지하고 있지 않으므로 업종 위반은 아닙니다. 결제 시간은 12시 39분으로 오전 8시 이전이 아니므로 시간 위반도 아닙니다. 영수증 데이터에 결제 시간 정보가 명확히 존재하여, 규정의 어떤 부분도 위반하지 않은 정상(Pass) 영수증으로 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0020",
+    "store_name": "Starfield 버터",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 2025년 10월 3일 17시 4분에 결제되었으며, 이는 오전 8시 이전(00:00 포함)에 이루어진 심야 및 새벽 결제가 아니므로 제1장 제1조 규정을 위반하지 않았습니다. 또한, 규정에 명시된 금지 품목, 금지 업종에 대한 위반 사항이 없습니다. 구매 품목인 '버터'는 규정에서 금지된 의류 및 잡화, 화장품, 미용 용품 등에 해당하지 않으며, 식비 및 다과비 지출에 대한 제한도 초과하지 않았습니다. 따라서 해당 영수증은 규정을 완벽히 준수하였습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증은 규정 위반이 없는 정상적인 거래입니다. 상호명 '버터'는 네이버 검색 결과에 따라 '쇼핑, 유통' 업종에 속하는 브랜드로 확인됩니다. 결제 시간도 오전 8시 이후에 이루어졌으므로 심야 결제 규정을 위반하지 않았습니다. 품목명 '버터'는 규정에서 금지하는 품목(의류, 화장품 등)과 무관한 것으로 판단되며, 명백한 오타나 은어도 없어 위반으로 의심할 근거가 없습니다. 따라서 해당 영수증은 규정을 완벽히 준수하였습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0021",
+    "store_name": "밀빛초계국수 가산하이시티점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "주류 금지 규정(제7조) 검토 결과, 영수증 내역에는 주류 품목이 포함되어 있지 않습니다. 가게 업종 검색을 통해 한식 칼국수 전문점임을 확인하였습니다. 결제 시간(13:34) 또한 정상적인 영업 시간 내에 이루어졌습니다. 따라서 본 영수증은 모든 규정을 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "제7조 1항에 따라 주류 구매가 금지되어 있습니다. 본 영수증 내역에는 '들깨닭칼국수'와 '메밀 전병'만이 기재되어 있으며, 주류가 포함되어 있지 않습니다. 또한 제7조 2항과 3항에 따라 주점이나 주류 판매를 주 목적으로 하는 가맹점에서의 결제가 이루어지지 않았고, 영수증 내역에 주류가 포함되어 있지 않아 위반 사항이 없습니다. 네이버 검색 결과에서 가맹점 업종을 확인하지 못했으나, 품목명과 결제 시간, 총액을 고려할 때 위반으로 판단할 만한 요소가 없습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0022",
+    "store_name": "오토김밥 가산디지털점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 규정에 명시된 기준에 따라 검토되었습니다. \n1. 영수증 상호명: '오토김밥 가산디지털점'으로 확인되었습니다. \n2. 네이버 검색 결과에 따르면 '음식점>분식'으로 분류되어 있으며, 이는 규정에서 금지한 업종(주점, 의류매장 등)에 해당하지 않습니다. \n3. 결제 시간: 2026-01-07 13:58로 오전 8시부터 오후 10시 사이의 시간대에 해당하여 규정 위반이 아닙니다. \n4. 구매 품목: '오토닭강정콤비세트'로 명확히 기재되어 있으며, 품목명에 명백한 오타나 은어가 없습니다. \n5. 법인카드 결제: 학생회 명의의 법인카드로 결제되었는지 여부는 명시되어 있지 않으나, 위반 사항이 없으므로 규정 준수 판단에 영향을 미치지 않습니다.\n모든 조건을 충족하므로 'Pass'로 판정합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "The receipt is confirmed to comply with the regulations. The establishment type obtained from the Naver API is a restaurant, specifically a noodle shop, which is not restricted. The payment time is 13:58, which falls within the allowed period of 8:00 AM to 10:00 PM. Therefore, based on the provided regulations, there are no violations detected in this receipt."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0023",
+    "store_name": "밀빛초계국수 가산하이시티점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증에 대해 감사를 실시한 결과, 규정 위반 사항이 발견되지 않았습니다. \n1. 상호명 및 네이버 검색 결과: 상호명 '밀빛초계국수 가산하이시티점'은 한식(칼국수) 업종으로 확인됩니다. 이는 규정에 따라 금지된 주점, 호프집, 유흥업소가 아니므로 제7조 2항 위반이 아닙니다. \n2. 결제 시간: 영수증에 날짜와 시간(2026-01-08 12:57)이 명확히 기재되어 있으며, 규정에 특별히 제한하는 결제 시간 조항이 없으므로 제4조 위반이 아닙니다. \n3. 품목명: 영수증에 기재된 '얼큰칼국수'와 '왕만두반반'은 명확한 품목명으로, 규정에 금지된 주류나 은어로 의심되는 품목이 아니므로 제7조 1항 및 3항 위반이 아닙니다. \n4. 결측치: 영수증에 상호명, 주소, 결제 시간 등의 정보가 모두 존재하며, 결측치가 없으므로 추가적인 위반 여부를 검토할 필요가 없습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 2026년 1월 8일 오후 12시 57분에 발생한 거래로, 규정에 명시된 오전 8시 이전(00:00 포함)의 심야 및 새벽 결제에 해당하지 않습니다. 따라서 전액 불인정 및 환수 조치의 대상이 아닙니다. 또한, 결제된 상호명 '노진민 밀빛초계국수 가산하이시티점'은 네이버 검색 결과 없음으로 조회되었으나, '얼큰칼국수'와 '왕만투반반'이라는 품목명으로 보았을 때, 이는 식비로 판단됩니다. '노진민 밀빛초계국수'는 상호명에 '초계국수'가 포함되어 있어 음식점으로 추정되며, 규정에 명시된 금지 업종(주점, 의류매장 등)에 해당하지 않습니다. 따라서 이 영수증은 규정을 완벽히 준수하고 있으며, 위반 사항은 확인되지 않습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0024",
+    "store_name": "스파렉스(식당)",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "본 영수증은 2026-01-08 16:57에 발행되었으며, 오후 4시 57분으로 오전 8시 이전의 심야 및 새벽 결제에 해당되지 않으므로 제1장 제1조에 위배되지 않습니다. 또한, 가맹점 업종(네이버) 검색 결과가 없으나, '식당'이라는 상호명을 통해 식비 지출임을 알 수 있습니다. 제3장 제5조에 따라 공식적인 회의, 행사 준비 및 진행에 수반되는 식비로 지출되었으며, 행사 목적에 부합하게 집행되었습니다. 품목명 중 '매실차'와 '미숫가루'는 문맥상 사적 지출로 의심할 여지가 있으나, '계란'은 명백히 식재료로 판단할 수 있습니다. 따라서 전체 영수증에 대한 위반은 확인되지 않으며, 규정 위반은 없습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 상호명 정보가 누락되어 있지만, 가게 주소는 '서울특별시 종로구 지봉로19 시즌빌딩12층'으로 명시되어 있습니다. 네이버 API를 통해 해당 주소를 검색하면 '서울특별시청'으로 확인되며, 업종은 공공, 사회기관으로 분류됩니다. 따라서 규정에서 금지하는 의류 및 잡화, 화장품, 미용 용품 등 개인 미용 목적의 물품 구매에 해당되지 않습니다.\n결제 시간은 오후 4시 57분으로 규정에서 금지하는 오전 8시 이전에 해당하지 않으며, 규정에서 금지하는 업종(주점, 의류매장 등)도 아닙니다. 또한 결제 품목들(매실차, 계란, 시리얼)은 규정에서 금지하는 품목에 해당하지 않으며, 식비 및 다과비 지출 규정에도 위배되지 않습니다.\n따라서 이 영수증은 규정을 완벽히 준수했거나, 결측치로 인해 위반을 입증할 수 없는 정상(Pass) 영수증으로 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0025",
+    "store_name": "롯데리아 가산IT점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "결제 가맹점은 롯데리아 가산IT점으로 확인되며, 네이버 API 검색 결과 양식>햄버거 업종으로 등록되어 있습니다. 규정 제7조 ②항에 따라 주류 판매를 주 목적으로 하는 가맹점이 아니므로 위반 사항이 없습니다. 영수증 내역에는 한우세트, NEW치킨너겟, 허니머스터드, 사이다(R), 내츄치즈스틱 등의 품목이 기재되어 있으며, 규정에서 금지하는 주류(소주, 맥주, 양주, 와인, 막걸리 등)가 포함되어 있지 않습니다. 따라서 해당 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 롯데리아 가산IT점에서 발생한 거래로, 네이버 지역 검색 API에 의해 '양식>햄버거' 업종으로 분류되었습니다. 규정 제7조 2항에 언급된 주류 판매를 주 목적으로 하는 가맹점(주점, 호프집, 유흥업소 등)에 해당하지 않으므로 업종 위반은 없습니다. 영수증 내역에도 주류로 판단할 수 있는 품목(한우세트, 뉴치킨너겟, 사이다(R), 내추럴치즈스틱)이 포함되어 있지 않으며, 규정 제7조 1항에 위배되는 주류 구매 증거도 없습니다. 따라서 이 영수증은 규정 준수로 간주되며 위반 점수는 0.0입니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0026",
+    "store_name": "갓잇연남점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "감사 대상 영수증은 '갓잇 연남점'에서 결제된 것으로, 네이버 지역 검색 API를 통해 '음식점>멕시코,남미음식' 업종임을 확인했습니다. 규정 제7조에 따라 주류 판매를 주 목적으로 하는 가맹점(주점, 호프집, 유흥업소 등)에서의 결제는 전면 금지되어 있으나, 해당 가맹점은 주류 판매를 주 목적으로 하는 업종이 아니므로 제7조 2항을 위반하지 않습니다. 또한, 영수증 내역에 주류(소주, 맥주, 양주, 와인, 막걸리 등)가 포함되어 있지 않으므로 제7조 1항 및 3항도 위반하지 않습니다. 따라서 해당 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 감사 결과 규정 위반 사항은 없습니다.\n1. 가맹점 업종 확인: 네이버 검색 결과를 통해 '갓잇 연남점'은 '음식점 > 멕시코,남미음식'으로 분류되어 있음. 규정 제7조 2항에서 금지하는 주점, 호프집, 유흥업소가 아니므로 업종 위반은 '확인 불가(Pass)'.\n2. 주류 구매 여부: 영수증 내역에는 '스파이시 치킨 타코', '쉬림프 타코', '스파이시 포크 타코', '나초 집+감자 튀김' 등의 음식 품목만 기재되어 있고, 주류(소주, 맥주, 양주, 와인, 막걸리 등)는 포함되어 있지 않음. 따라서 규정 제7조 1항 및 3항 위반은 '확인 불가(Pass)'.\n3. 결제 시간: 영수증에는 '2026-01-19 14:09'의 정확한 결제 시간이 기재되어 있어 규정 제4조 위반은 '확인 불가(Pass)'.\n'확인 불가(Pass)'로 처리한 항목들을 제외하고, 영수증 내역만을 기준으로 살펴보면 규정 위반 사항은 없으므로 'Pass'로 판정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0027",
+    "store_name": "요거로밀",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "이 영수증은 규정에서 금지된 주류나 유흥 목적 지출에 대한 위반 사항이 없습니다. 상호명 '요거로밀'은 네이버 검색 결과에 따라 '카페, 디저트' 업종으로 확인되며, 이는 규정의 제7조 2항에서 금지하는 '주류 판매를 주 목적으로 하는 가맹점'에 해당하지 않습니다. 영수증 내역에는 '두바이쫀득쿠키' 1개만 구매되어 있으며, 이는 주류나 유흥 목적 지출과 무관합니다. 따라서 이 영수증은 학생회비 및 공적 지원금 사용 규정을 완벽히 준수했다고 판단됩니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 '요거프레소'에서 결제되었으며, 네이버 검색 결과를 통해 '카페' 업종임을 확인했습니다. 결제 내역에는 '더블베리퐁당쿠키'만 포함되어 있고 주류를 포함한 금지 품목은 없습니다. 따라서 제7조 주류 금지 규정을 준수하고 있으며, 위반 사유가 없습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0028",
+    "store_name": "카페게이트 망원역점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "This receipt from '카페게이트 망원역점' is categorized as a 'Cafe' based on the '네이버 검색 결과(가게 업종 및 설명)' provided. According to 제7조 (주류 및 유흥 목적 지출의 전면 금지), payment at establishments that primarily sell alcohol is strictly prohibited. However, '카페게이트 망원역점' is a cafe, which is not a primary alcohol seller. Furthermore, none of the listed items, '제주말차라떼', are alcoholic beverages. Therefore, there are no violations of the regulations in this transaction. Even if there were typos or euphemisms in the item name, '제주말차라떼' clearly indicates a non-alcoholic beverage, ruling out any suspicion of alcohol purchase. The receipt's date and time, '2026-01-20 14:08', fall within acceptable hours, and no other regulations such as 제4조(결제 시간), 제6조(사적 지출) are violated based on the available information."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "본 영수증은 '카페게이트 망원역점'에서 결제된 것으로, 네이버 검색 결과에 따르면 카페 업종에 해당합니다. 규정 제7조 2항의 금지 업종(주점, 호프집, 유흥업소 등)에 속하지 않으므로 해당 항목은 위반으로 간주되지 않습니다. 또한 영수증 내역에 주류(소주, 맥주, 양주, 와인, 막걸리 등)가 포함되어 있지 않으므로 규정 제7조 1항 및 3항의 위반 사항도 없습니다. 결제 시간(2026-01-20 14:08)도 특정 시간대에 대한 제한이 없으므로 위반 사항이 없습니다. 따라서 본 영수증은 규정을 완벽히 준수했으므로 위반 점수는 0.0으로 결정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0029",
+    "store_name": "명동칼국수,돈가스(가산)",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 2026-01-21 12:51에 명동칼국수,돈가스(가산)에서 굴보쌈정식(15,500원)을 구매한 내역을 기록하고 있습니다. 상호명 및 거래 시간 기준으로 규정을 살펴봤을 때, 결제 시간이 오전 8시부터 오후 10시 사이에 이루어져 제4조 1항의 공적 예산 결제 시간 제한 규정을 준수하였습니다. 또한, 구매 품목이 명확히 기재되어 있어 제3조 2항의 상세 영수증 제출 규정도 준수하였습니다. 네이버 검색 결과의 오류로 인해 가맹점 업종을 확인하지 못하였으나, 상호명 및 구매 품목이 규정에 위반되는 업종이나 품목을 나타내는 것이 아니므로 위반으로 판단하기 어렵습니다. 따라서, 이 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증에는 가맹점 상호명, 주소, 날짜, 품목, 총액 등이 모두 명시되어 있어 규정을 준수하고 있음을 확인할 수 있습니다. 상호명과 품목명(굴보쌈 정식)을 확인하였을 때 규정에서 금지하는 업종이나 품목은 아닌 것으로 판단됩니다. 또한 결제 시간(12:51)이 오후 10시를 초과하지 않으므로 결제 시간 제한 규정도 위반하지 않았습니다. 네이버 검색에서 가맹점 업종이 조회되지 않았지만, 상호명과 품목명으로 미루어 보아 규정에서 명시한 업종이나 품목을 위반한 것으로 보이지 않아 정상(Pass)으로 판정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0030",
+    "store_name": "코에휘",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 내역에는 음식 및 음료(프리미엄쌀국수, 고수, 짜조, 사이다)가 포함되어 있으며, 주류는 주문되지 않았습니다. 네이버 검색 결과에 따르면 가맹점 업종 정보가 없지만, 영수증 내역과 상호명(쌀국수 전문점 추정)을 고려할 때 규정에 명시된 금지 업종(주점, 호프집, 유흥업소)에 해당하지 않습니다. 결제 시간(오후 12시 49분)도 규정된 시간 범위에 속해 있습니다. 따라서 이 영수증은 조직 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [
+          {
+            "item_id": 4,
+            "reason": "사이다는 주류에 해당하지 않는다",
+            "policy_reference": "제7조 1항 주류 금지"
+          }
+        ],
+        "reasoning": "영수증의 가맹점 업종은 '무탄 코엑스점'으로 중식당이며, 주류 판매를 주 목적으로 하는 가맹점이 아니므로 제7조 2항에 위반되지 않습니다. 영수증 내역에는 프리미엄 쌀국수, 고수, 짜조, 사이다가 포함되어 있습니다. 사이다는 '사이다 335m'로 표기되어 있으나, 주류에 해당하지 않으므로 제7조 1항 주류 금지에 위반되지 않습니다. 따라서 이 영수증은 규정을 완벽히 준수했다고 판단하여 'Pass'로 결정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0031",
+    "store_name": "박가부대 가산BYC하이시티점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "주류 및 유흥 목적 지출 전면 금지 규정(제7조)에 따라 영수증을 검토했습니다. 영수증 내역에는 '비)오리지널4인' 단일 품목이 있으며, 이는 한식 찌개/전골 메뉴로 확인됩니다. 상호명과 네이버 검색 결과를 통해 가맹점 업종이 '한식>찌개,전골'임을 확인하였으며, 주점이나 주류 판매를 주 목적으로 하는 가맹점이 아님을 확인했습니다. 영수증 내역에 주류나 유흥 관련 항목이 없습니다. 따라서 규정에 명시된 금지 품목이나 업종, 결제 시간 등을 위반하지 않았으므로 해당 영수증은 정상(Pass)으로 판정합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 거래는 제7조 주류 및 유흥 목적 지출의 전면 금지 조항을 준수하고 있습니다. 다음은 그 근거입니다.\n1. 가맹점 업종 확인: 네이버 API 검색 결과에 따르면, 가맹점은 '한식>찌개,전골' 업종에 속합니다. 이는 규정에 따라 주류 판매를 주 목적으로 하지 않는 일반 식당입니다.\n2. 주류 구매 여부: 영수증 내역에 주류 구매는 확인되지 않았습니다. 품목명은 '비빔밥 (오리지널 4인분)'으로, 주류와 관련이 없습니다.\n3. 결제 시간: 영수증에 결제 시간이 '2026-01-26 12:52'로 명확히 기록되어 있어, 제4조 결제 시간 위반도 없습니다.\n따라서, 이 거래는 규정을 완벽하게 준수하고 있으며, 위반 사항은 발견되지 않았습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0032",
+    "store_name": "아마스빈 가산디지털단지점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 카페인 '아마스빈 가산디지털단지점'에서 결제된 것으로, 네이버 API를 통해 '카페' 업종으로 확인되었습니다. 결제 시간은 오전 9시 1분으로, 규정에서 금지하는 시간대가 아닙니다. 품목명은 '얼그레이 밀크티'와 '토핑추가'로, 규정에서 금지하는 주류나 유흥 관련 품목이 아닙니다. 따라서 이 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 내역 검토 결과 다음과 같은 사항이 확인되었습니다.\n1. 가맹점 업종: '카페, 디저트 > 카페'로 확인되며, 규정에서 금지하는 가맹점 업종(주점, 유흥업소 등)이 아닙니다.\n2. 결제 시간: 영수증에 결제 시간은 2026-01-27 09:01로 기록되어 있으며, 이는 규정에서 제한하는 시간에 해당하지 않습니다.\n3. 품목명: '토핑 추가(600원)'로 기록되어 있으며, 이는 규정에서 금지하는 품목(주류 등)이 아닙니다.\n4. 영수증 데이터: 상호명, 가맹점 업종, 결제 시간, 품목명, 총액 등 모든 정보가 정상적으로 기록되어 있으며, 결측치가 없습니다.\n따라서 이 영수증은 규정을 준수하고 있으며, 위반사항이 없습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0033",
+    "store_name": "가산삼계탕",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "가맹점 업종 정보에 따르면 '가산삼계탕'은 한식 업종에 속하며, 영수증 내역에 주류 관련 품목이 포함되어 있지 않습니다. 결제된 품목은 삼계탕 1그릇으로, 규정 제7조 1항 및 3항(주류 금지)을 위반한 정황이 없습니다. 따라서 해당 영수증은 규정을 완벽히 준수했으므로 'Pass'로 판정합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증에 기재된 상호명 '가산삼계탕'과 결제 금액은 한식 가맹점 업종과 일치합니다. 네이버 API 검색 결과에 따르면, 이는 '한식>백숙,삼계탕'으로 분류되어 제7조 2항에서 금지한 주점, 호프집, 유흥업소가 아닌 한식 가맹점입니다. 영수증 내역에는 삼계탕만 기재되어 있으며, 규정에서 금지한 주류(소주, 맥주, 양주, 와인, 막걸리)가 포함되어 있지 않습니다. 따라서 본 영수증은 제7조(주류 및 유흥 목적 지출의 전면 금지)를 준수하고 있으며, 규정 위반 사항이 없습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0034",
+    "store_name": "공차 합정교보문고점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 '공차 합정교보문고점'에서 결제된 것이며, 네이버 API를 통해 '카페,디저트>차' 업종에 해당하는 것으로 확인되었습니다. 결제된 품목인 '자몽자스민티(J)'는 규정에 금지된 주류나 유흥 목적 지출 범주에 해당하지 않습니다. 또한, 결제 시간인 '2026-01-28 15:36'은 규정에서 정한 시간 제한을 위반하지 않습니다. 따라서 본 영수증은 조직 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 공차 압구정교보문고점 신동진에서 6,800원을 결제한 내역입니다. 네이버 검색 결과에 따르면 검색 결과가 없어 정확한 가게 업종을 확인할 수 없습니다. 그러나 상호명에서 '공차'는 일반적으로 차를 판매하는 가맹점으로 알려져 있습니다. 규정에 따르면 주점, 호프집, 유흥업소 등 주류 판매를 주 목적으로 하는 가맹점에서의 결제는 금지되어 있습니다. 하지만 상호명과 품목명, 총액 등만으로는 해당 가맹점이 주류 판매를 주 목적으로 하는지 명확히 알 수 없습니다. 또한 영수증 내역에 주류 구입 내역이 있는지 확인할 수 없으므로 제7조 1항 및 3항의 주류 구매 및 주류 포함 결제 금지 위반 여부를 확인할 수 없습니다. 따라서 해당 영수증은 규정 위반 사실이 확인되지 않으므로 'Pass'로 결정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0035",
+    "store_name": "마더오프라인(한남)",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 마더오프라인(한남)이라는 카페에서 결제된 것으로 확인되었습니다. 가맹점 업종 정보에 따르면 '카페'로 분류되어 있어 규정 제6조 2항에서 금지하는 업종에 해당하지 않습니다. 결제 시간은 오전 8시 이후인 15시 21분이며, 규정에 따라 심야 및 새벽 결제 제한에 해당되지 않습니다. 결제 품목은 'Iced Flat White다크문'과 'Hot Cafe Latte다크문'으로, 규정 제6조 2항에서 금지하는 품목(의류, 잡화, 화장품 등)에 해당되지 않습니다. 따라서 해당 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증은 2026-01-29 15:21에 발생한 것으로, 규정에서 금지하는 오전 8시 이전(00:00 포함)의 심야 및 새벽 결제가 아니므로 전액 불인정 및 환수 대상이 아닙니다. 또한, 가맹점 업종(네이버)에 따르면 '카페,디저트>카페'로 규정에서 금지하는 업종(주점, 의류매장 등)에 해당하지 않습니다. 품목명은 '아이스 플랫 화이트 다크문'과 '핫 카페 라떼 다크문'으로, 오타나 은어가 없으며 규정에서 금지하는 주류나 의류, 화장품 등도 아닙니다. 따라서 결재된 품목들은 규정에서 허용하는 식비와 다과비로 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0036",
+    "store_name": "",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증에 상호명이 기재되어 있지 않지만, 네이버 API 검색 결과 '서울특별시청'이라는 공공 기관임을 확인할 수 있습니다. 결제 금액과 품목을 검토한 결과, 에스프레소와 아메리카노 음료 구매로 확인되며 이는 규정에 금지된 업종이나 품목이 아닙니다. 또한 결제 시간은 오후 4시 44분으로 오전 8시 이전의 심야 및 새벽 결제가 아니므로 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 2023년 7월 11일 오후 4시 44분에 영등포구 은행로 17에 위치한 가맹점에서 발생한 에스프레소와 아메리카노 구매 내역입니다. 네이버 검색 결과에 따르면, 이 가맹점은 공공, 사회기관에 해당하며, 규정에서 금지하는 업종(주점, 의류매장 등)에 해당하지 않습니다.\n결제된 품목인 에스프레소와 아메리카노는 규정 제6조 2항에 명시된 금지 품목(의류 및 잡화, 화장품 등)에 해당하지 않습니다. 또한, 결제 시간은 규정에서 명시한 심야 및 새벽 시간대(오전 8시 이전, 00:00 포함)에 해당하지 않습니다.\n따라서, 규정에서 명시된 위반 사유가 없으며, 규정을 완벽히 준수했다고 판단합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0037",
+    "store_name": "농협",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 농협에서 발행되었으며, 상호명 및 주소는 명확하게 확인 가능합니다. 결제일은 2015년 11월 3일 16시 31분으로, 오전 8시 이전(심야 및 새벽 시간)의 결제가 아니므로 규정 위반이 아닙니다. (규정 제1장 제1조 심야 및 새벽 결제 원칙적 불인정)\n영수증 내 품목은 'P굿모닝우유 900ML', 'P양파', 'P무', 'P깻잎', 'P하선정 바로먹기좋은장아찌 150g', 'P브로커리'로 모두 식료품이며, 규정 제6조에서 금지하는 의류, 잡화, 화장품 등이 아닙니다. (규정 제3장 제6조 사적 목적 지출 및 물품 구매 금지)\n따라서 해당 영수증은 규정 위반이 없으며, 정상(Pass)으로 판정합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 롯데마트맥스 영등포점에서 발행된 것으로 확인되며, 업종은 '쇼핑,유통>슈퍼,마트'로 규정에서 금지한 업종(주점, 의류매장 등)에 해당하지 않습니다. 또한, 결제 시간은 오전 8시 이후인 2015년 11월 3일 16시 31분으로 심야 및 새벽 결제 규제에 위배되지 않습니다. 품목명은 굿모닝우유와 장아찌로 사적 목적 지출 및 물품 구매 금지 규정에 해당하지 않습니다. 따라서, 이 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0038",
+    "store_name": "롯데리아 상암점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.1,
+        "violations": [],
+        "reasoning": "해당 영수증의 가게 업종은 네이버 API를 통해 '양식>햄버거'로 확인되었으며, 이는 규정에서 금지하는 업종(주류 판매를 주 목적으로 하는 가맹점)에 해당하지 않습니다. 또한, 영수증 내역에 주류나 은어로 의심되는 품목이 없으며, 결제 시간도 규정에서 지정한 특정 시간대(예: 심야 시간)에 해당하지 않습니다. 따라서, 본 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 상의 가맹점 업종(네이버)은 '공공,사회기관>구청'으로 확인됩니다. 해당 업종은 조직 규정 제7조 2항에서 명시하는 주류 판매를 주 목적으로 하는 가맹점(주점, 호프집, 유흥업소 등)에 해당하지 않습니다. 또한, 영수증 내역에는 주류(소주, 맥주, 양주, 와인, 막걸리 등)가 포함되어 있지 않으며, 주류가 판매되는 일반 식당(한식, 고기구이 등)에서의 결제 내역도 확인되지 않습니다. 따라서 본 영수증은 조직 규정을 완벽히 준수하고 있습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0039",
+    "store_name": "킹콩부대찌개(마포광흥점)",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 데이터의 상호명은 '킹콩부대찌개(마포광흥점)'이며, 네이버 API 검색 결과 '검색 결과 없음'으로 업종 정보가 없습니다. 그러나 상호명 자체가 한식 부대찌개 가맹점임을 암시하며, 영수증 내역에는 '킹콩부대 3인'과 '돈까스 볶음밥'이 기재되어 있습니다. 규정 제7조 2항 및 3항에 따라 주류 판매를 주 목적으로 하는 가맹점이나 주류 구매 내역이 없으므로 현 영수증은 규정을 준수했다고 판단됩니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증의 상호명은 '킹콩부대찌개(마포광홍점)'이며, 네이버 검색 결과에서는 업종 정보가 조회되지 않았습니다. 규정에 따르면, 주점, 호프집, 유흥업소 등 주류 판매가 주 목적인 가맹점에서의 결제는 금지되어 있으나, 부대찌개는 주류 판매를 주 목적으로 하지 않는 한식 식당으로 간주됩니다. 영수증 내역에 주류는 포함되어 있지 않으며, 부대찌개 3인분과 돈까스 볶음밥이 포함돼 있어 식비 결제에 해당합니다. 따라서 해당 영수증은 규정을 준수하고 있습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0040",
+    "store_name": "버거킹",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 버거킹에서 발생한 식비 지출로, 규정 제5조 1항에 따라 공식적인 회의, 행사 준비 및 진행에 수반되는 식비로 인정됩니다. 결제 시간도 오전 8시 이후로, 규정 제1장 ① 항의 심야 및 새벽 결제 제한 시간 내에 해당하지 않습니다. 또한, 규정에 명시된 금지 업종(의류매장, H&B 스토어 등)이 아니며, 결제 품목에도 규정에서 금지하는 의류, 잡화, 화장품 등이 포함되지 않습니다. 따라서 이 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "규정의 어떤 부분을 어떻게 위반/준수했는지 논리적으로 상세히 설명합니다.\n1. 결제 시간 위반 여부: 영수증에 날짜가 기재되어 있지 않아 정확한 결제 시간을 알 수 없습니다. 하지만 상호명이 '버거킹'이며, 품목명이 일반적인 음식 메뉴임을 감안할 때, 심야 및 새벽 결제로 의심할 만한 사유는 발견되지 않습니다.\n2. 업종 위반 여부: '네이버 검색 결과'에 '검색 결과 없음' 오류가 발생했습니다. 하지만 상호명이 '버거킹'인 패스트푸드점임을 알 수 있으며, 이는 규정에서 금지하는 업종(주점, 의류매장 등)이 아닙니다.\n3. 품목 위반 여부: 품목명에 '앱쿠폰'이라는 용어가 나타나지만, 이는 할인 쿠폰을 의미하는 것으로 판단됩니다. 따라서 규정에서 금지하는 품목(의류, 화장품 등)은 확인되지 않습니다.\n4. 결제 목적 위반 여부: 영수증에 대의원회의 승인을 득한 기안서가 존재하지 않지만, 상호명과 품목명을 고려할 때, 이는 공식적인 회의나 행사 준비 및 진행에 수반되는 식비로 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0041",
+    "store_name": "CU 행신훼미리점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 CU 행신훼미리점에서 발행되었으며, 가맹점 업종은 '생활,편의>편의점'으로 확인됩니다. 규정 제7조 제2항에 따르면 주류 판매를 주 목적으로 하는 가맹점(주점, 호프집, 유흥업소 등)에서의 결제는 금지되어 있으나, 편의점은 이에 해당하지 않습니다.\n\n영수증 내역에는 '홀스자몽', '홀스비타C라임향', '홀스아이스블루' 등 품목이 포함되어 있습니다. 규정 제7조 제1항 및 제3항에 따르면 주류(소주, 맥주, 양주, 와인, 막걸리 등)를 구매하거나 영수증 내역에 주류가 포함되어 있다면 위반으로 간주하지만, 해당 품목들은 주류로 확인되지 않으며 규정 위반에 해당하는 내용이 없습니다.\n\n따라서 위 영수증은 규정을 완벽히 준수하고 있으므로 'Pass'로 판정하며, 위반 점수는 0.0입니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.9,
+        "violations": [
+          {
+            "item_id": 0,
+            "reason": "오전 8시 이전(00:00) 결제 시간 위반",
+            "policy_reference": "제1장 지출의 원칙 ① 오전 8시 이전(00:00 포함)에 이루어진 심야 및 새벽 결제는 원칙적으로 전액 불인정 및 환수 조치한다."
+          }
+        ],
+        "reasoning": "해당 영수증은 오전 00:00에 결제된 것으로, 조직 규정에 따르면 오전 8시 이전(00:00 포함)에 이루어진 결제는 원칙적으로 전액 불인정 및 환수 조치한다. 예외적으로 야간 행사가 불가피하여 사전에 대의원회의 승인을 득한 기안서가 존재하는 경우에만 예외를 인정할 수 있으나, 이에 대한 증빙 자료가 영수증에 포함되어 있지 않습니다. 따라서 이는 명백한 규정 위반에 해당합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0042",
+    "store_name": "꽃누리들밥",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "결제 시각이 오전 8시 이후(13:49)이므로, 규정에서 명시하는 심야 및 새벽 결제에 해당하지 않습니다(규정 1조). 또한, 가맹점 업종이 음식점(한식)이며, 결제 품목이 상차림 정식, 어린이솔밥, 간장게장, 철판불고기 등 식사와 관련한 품목들로 확인되어 사적 목적 지출 및 물품 구매 금지(규정 6조)에도 위반되지 않습니다. 따라서, 본 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 꽃누리들밥에서 결제된 것으로, 네이버 검색 결과 한식 음식점임이 확인됩니다. 결제 시간은 오전 8시 이후인 13:49이므로 심야 및 새벽 결제 규정을 위반하지 않았습니다. 또한, 영수증에 기재된 품목들은 모두 음식으로, 규정에 명시된 금지 업종 및 물품에 해당하지 않습니다. 품목명에는 명백한 오타나 은어가 없으며, 문맥상 규정 금지 품목으로 강하게 의심되는 사항도 없습니다. 따라서 해당 영수증은 조직 규정을 완벽히 준수하고 있습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0043",
+    "store_name": "포비코",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 베트남음식점인 포비코에서 23,800원을 결제한 내역입니다. '네이버 검색 결과(가게 업종 및 설명)'에 따르면 음식점 카테고리에 속하며, 유흥업소나 주류 판매를 주 목적으로 하는 가맹점이 아닙니다. 영수증 내역에는 B세트 1인분(쌀국수M+스프링롤) 2개와 쌀국수 고수 1개가 기재되어 있으며, 주류는 포함되어 있지 않습니다. 따라서 제7조 주류 및 유흥 목적 지출의 전면 금지 조항을 위반한 사항이 없습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 '포비코'라는 상호명의 음식점에서 결제된 것으로, 네이버 API 검색 결과에 따르면 '베트남음식' 업종에 해당합니다. 조직 규정을 확인한 결과, 음식점에서의 식사는 명시적으로 금지된 업종이 아닙니다. 또한 영수증에 기재된 품목, 총액, 결제 날짜 정보가 없어 구체적인 위반 사항을 확인할 수 없지만, 업종 자체는 문제가 되지 않습니다. 따라서 현재 존재하는 데이터 내에서 규정 위반 사항이 확인되지 않아 'Pass'로 처리합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0044",
+    "store_name": "참숯닭갈비구이",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 1.0,
+        "violations": [
+          {
+            "item_id": 5,
+            "reason": "소주 구매",
+            "policy_reference": "제7조 1항 주류 금지"
+          },
+          {
+            "item_id": 6,
+            "reason": "맥주 구매",
+            "policy_reference": "제7조 1항 주류 금지"
+          }
+        ],
+        "reasoning": "영수증 데이터에 따르면 '참숯닭갈비구이'에서 2025년 9월 8일 20시 46분에 결제한 내역이 있습니다. 가맹점 업종 검색 결과에 따르면 해당 가게는 한식(닭갈비) 업종에 해당합니다. 규정상 한식 업종에서 식비를 결제한 경우라도 영수증 내역에 주류가 포함되어 있다면 해당 결제 건 전체를 위반으로 간주합니다.\n영수증 내역을 살펴보면, '소주'와 '맥주'가 구매 내역에 포함되어 있습니다. 이는 제7조 1항에 따라 학생회비 및 공적 지원금으로 소주, 맥주 등 모든 형태의 주류를 구매하는 것은 엄격히 금지되어 있습니다. 따라서 해당 결제 건은 규정 위반에 해당하며, 위반 점수는 1.0입니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.9,
+        "violations": [
+          {
+            "item_id": 3,
+            "reason": "주류 추론",
+            "policy_reference": "제7조 1항 주류 금지"
+          }
+        ],
+        "reasoning": "영수증을 검토한 결과, 규정 위반 사항이 발견되었습니다. 제7조 1항에 따르면 학생회비 및 공적 지원금으로 소주, 맥주, 양주, 와인, 막걸리 등 모든 형태의 주류를 구매하는 것이 엄격히 금지되어 있습니다. 영수증 내역 중 '숫술소맥구이'라는 품목이 존재하는데, 이는 '숫술'이라는 용어가 주류와 관련 있을 가능성이 높습니다. '숫술'이라는 용어는 일반적으로 소주와 맥주를 섞어 만든 '소맥'을 가리키는 경우가 많습니다. '구이'라는 용어가 붙어 있더라도, 주류 판매가 주된 목적인 주점이나 유흥업소에서 이루어진 결제는 아니라도, 주류 자체가 포함되어 있으므로 규정 위반으로 간주됩니다.\n\n가게 업종에 대한 네이버 검색 결과가 없으므로, 상호명과 품목명을 종합적으로 고려하여 판단했습니다. '참술닭갈비구이'라는 상호명과 '숫술소맥구이'라는 품목명에서 '술'이라는 단어가 반복적으로 나타나고 있어, 주류 판매와 관련이 있을 가능성이 높습니다. 또한, '숫술소맥구이'라는 품목명에서 '소맥'이라는 용어가 명확하게 드러나 있으므로, 이는 명백한 주류로 간주됩니다. 따라서, 이 결제 건은 규정 위반으로 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0045",
+    "store_name": "매우뿡쭈꾸미",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 1.0,
+        "violations": [
+          {
+            "item_id": 3,
+            "reason": "영수증 내역에 주류인 '진로이즈백'이 포함되어 있음",
+            "policy_reference": "제7조 1항 주류 금지"
+          }
+        ],
+        "reasoning": "주류 및 유흥 목적 지출의 전면 금지에 대한 규정(제7조)에 따라 학생회비 및 공적 지원금으로 모든 형태의 주류를 구매하는 것이 엄격히 금지되어 있습니다. 영수증 내역을 검토한 결과, '진로이즈백'이라는 주류가 포함되어 있습니다. 상호명 '매우뿡쭈꾸미'와 주소는 한식 주꾸미 음식점임을 시사하지만, 네이버 검색 결과가 없으며 '진로이즈백'이라는 명확한 주류 이름이 영수증에 기재되어 있어 이는 규정 위반으로 간주됩니다. 따라서 해당 영수증은 'Anomaly Detected'로 처리하며, 위반 점수는 1.0으로 부여합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 데이터에 따르면, 결제 시간은 오후 5시 57분으로 오전 8시 이전(00:00 포함)에 이루어진 심야 및 새벽 결제가 아니므로 전액 불인정 및 환수 조치 규정을 위반하지 않았습니다. 또한, 가맹점 업종에 대한 네이버 검색 결과가 없어 상호명 '매우홍꾸미'만으로 판단해야 하지만, 규정에서 명백히 금지된 업종(주점, 의류매장 등)에 해당하지 않고, 식비 지출로 추정됩니다. 영수증에 품목명, 총액이 존재하지 않아 결측치가 있으나, 이는 규정 위반 여부를 판단하는 데 직접적인 영향을 미치지 않습니다. 따라서 규정 위반 사항이 확인되지 않아 정상(Pass)으로 판정합니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0046",
+    "store_name": "롯데역사(주) 영등포점",
+    "expected_decision": "Anomaly Detected",
+    "test_on_ground_truth": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 데이터에 따르면, 결제 내역은 '러쉬 샴푸' 1개이며, 상호명은 '롯데역사(주) 영등포점'입니다. 네이버 검색 결과 '검색 결과 없음'으로, 구체적인 가맹점 업종을 확인할 수 없지만 상호명에서 유흥 관련 업종으로 추정되는 정보가 없습니다. 품목명에도 주류를 시사하는 내용이 없으며, 결제 시간(오후 5시 23분) 역시 규정된 시간 범위를 위반하지 않았습니다. 따라서 해당 영수증은 규정을 완벽히 준수하였으며 위반 사유를 발견할 수 없습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.8,
+        "violations": [
+          {
+            "item_id": 0,
+            "reason": "오전 8시 이전 심야 및 새벽 결제 위반",
+            "policy_reference": "제3장 지출 항목의 제한 제7조 1항 심야 및 새벽 결제 원칙적 불인정"
+          },
+          {
+            "item_id": 1,
+            "reason": "사적 목적 지출 및 물품 구매 금지 위반",
+            "policy_reference": "제3장 지출 항목의 제한 제6조 2항 1호 사적 목적 의류 및 잡화 구매 금지"
+          }
+        ],
+        "reasoning": "해당 영수증은 2024-11-17 17:23에 롯데마트에서 발생한 결제 내역입니다. 가맹점 업종은 '쇼핑,유통>슈퍼,마트'로 규정에서 금지하는 업종은 아닙니다. 그러나 영수증 결제 시간이 오전 8시 이전(00:00 포함)에 해당하지는 않지만, 규정에 따르면 원칙적으로 심야 및 새벽 결제는 전액 불인정 및 환수 조치하도록 되어 있습니다. 단, 예외 조항에 따라 사전에 대의원회의 승인을 득한 기안서가 존재해야 합니다. 이 영수증에는 그러한 기안서가 없으므로 심야 및 새벽 결제 원칙 위반으로 간주합니다. 또한, 영수증에 기재된 '러시 샴푸'는 규정 제6조 2항 1호에 따라 사적 목적 지출 및 물품 구매 금지 품목에 해당합니다. 따라서 이 영수증은 규정에 위반되는 것으로 판단됩니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0047",
+    "store_name": "카페쎄미",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증 내역 검토 결과 다음과 같은 사항이 확인되었습니다.\n1. 상호명 및 네이버 검색 결과: 상호명은 '카페쎄미'이며, 네이버 검색 결과에 따르면 카페쎄미는 '양식>샌드위치' 업종에 해당합니다. 이는 규정에 명시된 금지 업종(주점, 호프집, 유흥업소)에 해당하지 않습니다.\n2. 결제 품목: 영수증에는 '바질 치킨 누들', '스윗이탈리안 샌드위치', '(빵선택)그레인(곡물)빵', '미니스프', '(스프선택)양송이스프', '콤부차 말차&유자', '(추가옵션)아이스컵추가' 등 식사와 관련된 품목이 포함되어 있습니다. 품목명 중에 주류나 금지된 품목은 확인되지 않습니다.\n3. 결제 시간: 영수증에 결제 시간이 '2024-08-21 13:01'로 기록되어 있으며, 이는 제4조에서 규정한 시간 위반 사항(예: 새벽 시간대 결제)에 해당하지 않습니다.\n4. 규정의 어떤 부분도 위반하지 않았으며, 영수증 내역에 주류가 포함되어 있지 않습니다. 따라서 해당 영수증은 규정을 완벽히 준수하고 있습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 카페씨미에서 2024년 8월 21일 13:01에 결제된 것으로, 상호명 및 결제 시간으로 보아 규정에 위배되는 업종(주점, 유흥업소 등)은 아닌 것으로 판단됩니다. 또한, 영수증 내역에는 바질 치킨 누들, 스위트 이탈리안 샌드위치, 미니스프, 콤부차 말차&유자, 아이스컵 추가 등 식음료 및 옵션 품목만 기재되어 있으며, 주류나 유흥과 관련된 품목은 확인되지 않습니다. 따라서, 제7조 주류 금지 규정을 위반한 사항은 없습니다. 다만, 네이버 검색 결과가 없으므로 상호명만으로 업종을 확정할 수 없었던 점은 참고하시기 바랍니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0048",
+    "store_name": "이마트 의왕점",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "본 영수증은 2024년 6월 17일 18시 22분에 이마트 의왕점에서 발생한 결제 내역입니다. 가맹점 업종은 네이버 API 검색 결과 '쇼핑,유통'으로, 규정에서 금지하는 주점, 호프집, 유흥업소 등 주류 판매를 주 목적으로 하는 가맹점이 아니므로 제7조 2항 위반은 확인되지 않습니다.\n영수증 내역에는 농심 조청유과, 농심 오징어집, 신송 쌈장, CJ 비비고 치킨고수만두 등 식료품 및 가공식품만 포함되어 있으며, 주류나 유흥 목적 품목은 존재하지 않습니다. 따라서 제7조 1항 및 3항 위반도 확인되지 않습니다.\n결제 시간, 상호명, 주소 등 주요 정보는 모두 확인 가능하며, 규정에 명시된 시간 위반(제4조), 개인적 지출(제6조) 등 기타 위반 사항도 없습니다.\n결과적으로 본 영수증은 규정에 완벽히 준수하고 있으므로 'Pass'로 판단합니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "이 영수증은 이마트 의왕점에서 2024-06-17 18:22에 발생한 결제로, 상호명 및 업종 정보에 따라 쇼핑, 유통 매장에 해당합니다. 규정 위반 가능성을 검토하기 위해 다음과 같은 사항을 확인하였습니다.\n\n1. 결제 시간: 영수증의 결제 시간은 18시 22분으로, 오전 8시 이전(00:00 포함)의 심야 및 새벽 결제가 아니므로, 규정에 따른 전액 불인정 및 환수 대상이 아닙니다.\n2. 지출 항목: 구매 품목에는 농심 오징어집, 신송 쌈장, CJ 비비고 치킨고기만, 면 세 물, 세계 품품세계, 과자 모듬 등이 포함되어 있습니다. 이들은 규정에서 금지하는 의류, 잡화, 화장품, 미용 용품 등이 아니며, 식비 및 다과비에 해당하는 품목으로 판단됩니다.\n3. 규정 위반 없음: 구매 품목 중 규정에 명시된 금지 품목이나 업종이 없으며, 결제 시간 역시 위반 사항이 없습니다. 따라서 이 영수증은 조직의 재정 규정을 완벽히 준수하고 있습니다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0049",
+    "store_name": "만복국수(중앙역점)",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.9,
+        "violations": [
+          {
+            "item_id": 0,
+            "reason": "주류 판매를 주 목적으로 하는 가맹점 결제",
+            "policy_reference": "제7조 2항 주류 판매를 주 목적으로 하는 가맹점 결제 금지"
+          }
+        ],
+        "reasoning": "본 영수증의 상호명 '만복국수(중앙역점)'에 대해 네이버 지역 검색 API를 통해 조회한 결과, 가맹점은 '술집 > 요리주점'으로 분류되어 있습니다. 이는 제7조 2항에 명시된 '주류 판매를 주 목적으로 하는 가맹점'에 해당합니다. 따라서 학생회비 및 공적 지원금으로 해당 가맹점에서의 결제는 전면 금지됩니다. 영수증 내역에는 품목명이 기재되어 있지 않으나, 가게 업종 정보와 결제 시간(오후 1시 57분)을 고려할 때 주류 및 유흥 목적 지출의 가능성이 높습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": false,
+      "llm_raw_output": {
+        "audit_decision": "Anomaly Detected",
+        "violation_score": 0.8,
+        "violations": [
+          {
+            "item_id": 1,
+            "reason": "품목명 '송이버섯'의 오타로 인한 주류 의심",
+            "policy_reference": "제7조 1항 주류 금지"
+          }
+        ],
+        "reasoning": "영수증에 따르면 가맹점의 업종은 '술집>요리주점'으로 확인되어, 규정 제7조 2항에 따라 주류 판매를 주 목적으로 하는 가맹점에서의 결제는 전면 금지된다. 또한, 품목명 '송이버섯(송 인번호)'에서 '송 인번호'는 주류와 관련된 오타 또는 은어로 강하게 의심된다. 따라서 규정 제7조 1항에서 금지하는 주류가 영수증에 포함되어 있어 해당 결제 건 전체를 위반으로 간주한다."
+      }
+    }
+  },
+  {
+    "receipt_id": "uuid-0050",
+    "store_name": "다이소",
+    "expected_decision": "Pass",
+    "test_on_ground_truth": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "해당 영수증은 다이소라는 종합생활용품점에서 발생한 결제 내역입니다. 네이버 검색 결과를 통해 상호명 및 업종을 확인하였으며, 규정에서 금지하는 의류 및 잡화, 화장품, 미용 용품 등 개인 미용 목적의 물품이 아닌 전자제품 및 음료수 구매 내역이 포함되어 있습니다. 따라서 제6조(사적 목적 지출 및 물품 구매 금지) 위반사항이 없습니다. 또한, 결제 시간은 오전 8시 이후인 12:50으로 규정에서 금지하는 심야 및 새벽 결제가 아니므로 제1장 제3조에 위배되지 않습니다."
+      }
+    },
+    "test_on_corrected_ocr": {
+      "is_correct_match": true,
+      "llm_raw_output": {
+        "audit_decision": "Pass",
+        "violation_score": 0.0,
+        "violations": [],
+        "reasoning": "영수증에 기재된 상호명은 '1024371 전자상가'로, 전자제품 판매점으로 추정됩니다. 그러나 네이버 검색 결과에 '검색 결과 없음'이 표시되어 업종을 정확히 확인할 수 없습니다. 품목명은 '블루투스 동글', 'C타입 to 5핀', 'C타입 to 8핀', '토레타 (500ml)'로, 규정에서 금지하는 주류나 유흥 관련 품목은 포함되어 있지 않습니다. 따라서, 현행 영수증 데이터 내에서 규정 위반 사항을 발견할 수 없습니다."
+      }
+    }
+  }
+]
