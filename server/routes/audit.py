@@ -13,8 +13,8 @@ from core.rag_engine.embedder import RegulationEmbedder
 from core.rag_engine.vector_db import VectorDBManager
 
 _FALLBACK_RULES = [
-    {"title": "제3조 금지 품목", "content": "주류(참이슬, 소주, 맥주, 와인, 카스 등) 및 담배 구매 금지"},
-    {"title": "제4조 허용 시간", "content": "오전 08:00 이전 및 오후 22:00 이후 결제 금지"},
+    {"id": "fallback-1", "title": "제3조 금지 품목", "content": "주류(참이슬, 소주, 맥주, 와인, 카스 등) 및 담배 구매 금지"},
+    {"id": "fallback-2", "title": "제4조 허용 시간", "content": "오전 08:00 이전 및 오후 22:00 이후 결제 금지"},
 ]
 
 router = APIRouter(prefix="/api/v1/audit", tags=["audit"])
@@ -125,13 +125,41 @@ def get_rules() -> dict:
 
         results = db._collection.get(limit=20)
         docs = results.get("documents", [])
+        ids = results.get("ids", [])
         return {
             "mode": "rag",
             "total_chunks": count,
-            "rules": [{"title": f"조항 {i + 1}", "content": doc} for i, doc in enumerate(docs[:10])],
+            "rules": [
+                {"id": ids[i], "title": f"조항 {i + 1}", "content": doc}
+                for i, doc in enumerate(docs[:10])
+            ],
         }
     except Exception:
         return {"mode": "fallback", "rules": _FALLBACK_RULES}
+
+class RuleUpdateRequest(BaseModel):
+    content: str
+
+@router.delete("/rules/{rule_id}")
+def delete_rule(rule_id: str) -> dict:
+    embedder = RegulationEmbedder()
+    db_manager = VectorDBManager()
+    success = db_manager.delete_document(rule_id, embedder.get_embedding_model())
+    if success:
+        return {"status": "success", "message": f"Rule {rule_id} deleted"}
+    return {"status": "error", "message": "Failed to delete rule"}
+
+@router.put("/rules/{rule_id}")
+def update_rule(rule_id: str, payload: RuleUpdateRequest) -> dict:
+    from langchain_core.documents import Document
+    embedder = RegulationEmbedder()
+    db_manager = VectorDBManager()
+    
+    doc = Document(page_content=payload.content, metadata={"source": "manual_update"})
+    success = db_manager.update_document(rule_id, doc, embedder.get_embedding_model())
+    if success:
+        return {"status": "success", "message": f"Rule {rule_id} updated"}
+    return {"status": "error", "message": "Failed to update rule"}
 
 
 @router.post("/batch-confirm")

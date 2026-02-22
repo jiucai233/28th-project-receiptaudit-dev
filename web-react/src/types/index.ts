@@ -68,6 +68,7 @@ export interface APIError {
 }
 
 export interface RulesEntry {
+  id?: string;
   title: string;
   content: string;
 }

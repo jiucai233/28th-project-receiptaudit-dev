@@ -14,6 +14,7 @@ import {
 import { UploadStep } from './components/UploadStep';
 import { DataEditor } from './components/DataEditor';
 import { AuditResults } from './components/AuditResults';
+import { RuleEditorModal } from './components/RuleEditorModal';
 import { useReceipt } from './hooks/useReceipt';
 import { ocrAPI, auditAPI } from './services/api';
 import { MOCK_RECEIPTS } from './services/mockData';
@@ -55,34 +56,12 @@ function App() {
   const [activeTab, setActiveTab] = useState(0);
   const [dark, setDark] = useState(false);
   const [selectedReceiptId, setSelectedReceiptId] = useState<string | null>(null);
-  const [showRules, setShowRules] = useState(false);
-  const [rulesData, setRulesData] = useState<RulesResponse | null>(null);
-  const [rulesLoading, setRulesLoading] = useState(false);
+  const [isRuleModalOpen, setIsRuleModalOpen] = useState(false);
 
   // Dark mode toggle
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark);
   }, [dark]);
-
-  // Fetch rules when panel opens
-  const handleToggleRules = async () => {
-    const next = !showRules;
-    setShowRules(next);
-    if (next && !rulesData) {
-      setRulesLoading(true);
-      try {
-        const data = await auditAPI.getRules();
-        setRulesData(data);
-      } catch {
-        setRulesData({ mode: 'fallback', rules: [
-          { title: '제3조 금지 품목', content: '주류(참이슬, 소주, 맥주, 와인, 카스 등) 및 담배 구매 금지' },
-          { title: '제4조 허용 시간', content: '오전 08:00 이전 및 오후 22:00 이후 결제 금지' },
-        ]});
-      } finally {
-        setRulesLoading(false);
-      }
-    }
-  };
 
   // OCR Extract handler for a single file
   const handleExtract = useCallback(async (id: string, file: File): Promise<ReceiptData> => {
@@ -312,18 +291,13 @@ function App() {
 
             <div className="flex items-center gap-3">
               <button
-                onClick={handleToggleRules}
+                onClick={() => setIsRuleModalOpen(true)}
                 onMouseDown={createRipple}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all relative overflow-hidden border ${
-                  showRules
-                    ? 'bg-primary-600 text-white border-primary-600 shadow-md'
-                    : 'border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700'
-                }`}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all relative overflow-hidden border border-gray-200 dark:border-slate-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700"
                 aria-label="Toggle rules panel"
               >
                 <BookOpen className="w-4 h-4" />
                 현재 규칙
-                {showRules ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
               </button>
               <button
                 onClick={() => setDark(!dark)}
@@ -338,46 +312,7 @@ function App() {
         </div>
       </header>
 
-      {/* Rules Panel */}
-      {showRules && (
-        <div className="border-b border-primary-200/50 dark:border-slate-700/50 bg-primary-50/60 dark:bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-          <div className="max-w-[1600px] mx-auto px-8 py-5">
-            <div className="flex items-center gap-3 mb-4">
-              <ShieldAlert className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-              <h2 className="font-bold text-gray-800 dark:text-gray-200">현재 적용 중인 감사 규칙</h2>
-              {rulesData && (
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                  rulesData.mode === 'rag'
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
-                    : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400'
-                }`}>
-                  {rulesData.mode === 'rag'
-                    ? `RAG 모드 · ${rulesData.total_chunks}개 청크`
-                    : '기본 규칙 (폴백)'}
-                </span>
-              )}
-            </div>
-
-            {rulesLoading ? (
-              <div className="flex items-center gap-2 text-gray-500 py-4">
-                <Loader2 className="w-4 h-4 animate-spin" /> 규칙 불러오는 중...
-              </div>
-            ) : rulesData ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {rulesData.rules.map((rule, i) => (
-                  <div key={i} className="bg-white/70 dark:bg-slate-800/70 rounded-xl p-4 border border-primary-100 dark:border-slate-700 shadow-sm">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Database className="w-3.5 h-3.5 text-primary-500 flex-shrink-0" />
-                      <p className="text-xs font-bold text-primary-700 dark:text-primary-400 truncate">{rule.title}</p>
-                    </div>
-                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{rule.content}</p>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        </div>
-      )}
+      <RuleEditorModal isOpen={isRuleModalOpen} onClose={() => setIsRuleModalOpen(false)} />
 
       {error && (
         <div className="max-w-7xl mx-auto px-6 py-4">

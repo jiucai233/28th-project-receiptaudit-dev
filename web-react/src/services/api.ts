@@ -121,6 +121,24 @@ export const auditAPI = {
       return handleError(error);
     }
   },
+
+  deleteRule: async (ruleId: string): Promise<{ status: string; message: string }> => {
+    try {
+      const response = await api.delete<{ status: string; message: string }>(`/api/v1/audit/rules/${ruleId}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  updateRule: async (ruleId: string, content: string): Promise<{ status: string; message: string }> => {
+    try {
+      const response = await api.put<{ status: string; message: string }>(`/api/v1/audit/rules/${ruleId}`, { content });
+      return response.data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
 };
 
 /**
