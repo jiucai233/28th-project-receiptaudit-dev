@@ -2,7 +2,14 @@ from __future__ import annotations
 import os
 
 os.environ["PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK"] = "True"
-
+os.environ["OMP_NUM_THREADS"] = "4"
+os.environ["OPENBLAS_NUM_THREADS"] = "4"
+os.environ["MKL_NUM_THREADS"] = "4"
+os.environ["VECLIB_MAXIMUM_THREADS"] = "4"
+os.environ["NUMEXPR_NUM_THREADS"] = "4"
+os.environ['FLAGS_allocator_strategy'] = 'naive_best_fit' 
+os.environ['FLAGS_fraction_of_gpu_memory_to_use'] = '0.2' 
+os.environ['FLAGS_eager_delete_tensor_gb'] = '0.0'
 import cv2
 import numpy as np
 from paddleocr import PaddleOCR
@@ -25,7 +32,13 @@ class PaddleOCRWrapper:
             min_confidence: 최소 신뢰도 (이 값 미만인 텍스트는 제거)
             use_skew_correction: 기울기 보정 전처리 사용 여부
         """
-        self.ocr = PaddleOCR(lang=lang, use_doc_orientation_classify=False)
+        self.ocr = PaddleOCR(
+            lang=lang, 
+            use_doc_orientation_classify=False,
+            device="cpu",          # 강제로 CPU 전용 사용 (GPU/MPS 메모리 누수 방지)
+            enable_mkldnn=False,   # mkldnn 비활성화 (메모리 팽창 방지)
+            cpu_threads=4          # Medium 인스턴스(2vCPU) 및 로컬 환경 고려 (스레드 제한)
+        )
         self.min_confidence = min_confidence
         self.use_skew_correction = use_skew_correction
 
