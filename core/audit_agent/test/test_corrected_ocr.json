@@ -1,0 +1,1235 @@
+[
+  {
+    "receipt_id": "0d554c53-96cf-4e77-884b-a6b735ca00e0",
+    "store_name": "유니클로",
+    "store_address": "서울 강남구 영통대로 513 코엑스몰 D1",
+    "date": "2025-10-03 16:47",
+    "items": [
+      {
+        "id": 1,
+        "name": "폴라폴리스 야상",
+        "unit_price": 60000,
+        "count": 1,
+        "price": 60000
+      }
+    ],
+    "total_price": 60000
+  },
+  {
+    "receipt_id": "baed57f9-ec8f-454d-b076-758271b585f0",
+    "store_name": "에스터",
+    "store_address": "서울특별시 강남구 영대로5 821-87-0)17식회사델에이치맨코버터코엑",
+    "date": "2025-10-03 16:59",
+    "items": [
+      {
+        "id": 1,
+        "name": "DY1025001 001)아이팝가방에싹켓들물티슈8개입 SET",
+        "unit_price": 3900,
+        "count": 1,
+        "price": 3900
+      }
+    ],
+    "total_price": 3900
+  },
+  {
+    "receipt_id": "c0345f46-350a-48c7-a6cf-98421d12ec4a",
+    "store_name": "현*대백화점 무역센터점",
+    "store_address": "",
+    "date": "2025-10-03 15:26",
+    "items": [
+      {
+        "id": 1,
+        "name": "서*움집 칼국수",
+        "unit_price": 517,
+        "count": 1,
+        "price": 517
+      },
+      {
+        "id": 2,
+        "name": "회,멘밀국수 정식",
+        "unit_price": 17000,
+        "count": 1,
+        "price": 17000
+      },
+      {
+        "id": 3,
+        "name": "착,지증 톤까스",
+        "unit_price": 19000,
+        "count": 1,
+        "price": 19000
+      }
+    ],
+    "total_price": 36000
+  },
+  {
+    "receipt_id": "19f81b10-ca89-4a6b-9cbf-df32549eb740",
+    "store_name": "포케볼(기본) 1 0",
+    "store_address": "",
+    "date": "2025-10-02 18:18",
+    "items": [
+      {
+        "id": 1,
+        "name": "우삼겹포켓볼",
+        "unit_price": 9400,
+        "count": 1,
+        "price": 9400
+      },
+      {
+        "id": 2,
+        "name": "포케볼(기본)",
+        "unit_price": 0,
+        "count": 1,
+        "price": 0
+      },
+      {
+        "id": 3,
+        "name": "눈들볼",
+        "unit_price": 9300,
+        "count": 1,
+        "price": 9300
+      },
+      {
+        "id": 4,
+        "name": "튜나 참치 아바타,샌드위치",
+        "unit_price": 6900,
+        "count": 1,
+        "price": 6900
+      },
+      {
+        "id": 5,
+        "name": "단호박 에그베리",
+        "unit_price": 4900,
+        "count": 1,
+        "price": 4900
+      },
+      {
+        "id": 6,
+        "name": "포장비",
+        "unit_price": 100,
+        "count": 1,
+        "price": 100
+      }
+    ],
+    "total_price": 30600
+  },
+  {
+    "receipt_id": "10b16738-8981-4966-a419-690e31b14994",
+    "store_name": "SHINSEGAE",
+    "store_address": "서울특별시 강남구 도곡2동 467-32",
+    "date": "2025-10-02 13:46",
+    "items": [
+      {
+        "id": 1,
+        "name": "해인 꽃 농원",
+        "unit_price": 100000,
+        "count": 1,
+        "price": 100000
+      }
+    ],
+    "total_price": 100000
+  },
+  {
+    "receipt_id": "99e8d001-88ea-4e48-98d5-22d23cec3b5c",
+    "store_name": "청년다방(선릉역점)",
+    "store_address": "서울특별시 강남구 선릉로86길 31 1층",
+    "date": "2025-10-01 00:00",
+    "items": [
+      {
+        "id": 1,
+        "name": "불향차돌 떡볶이",
+        "unit_price": 17500,
+        "count": 1,
+        "price": 17500
+      },
+      {
+        "id": 2,
+        "name": "찰순대",
+        "unit_price": 4000,
+        "count": 1,
+        "price": 4000
+      },
+      {
+        "id": 3,
+        "name": "쫄면사리",
+        "unit_price": 2000,
+        "count": 1,
+        "price": 2000
+      },
+      {
+        "id": 4,
+        "name": "콜라",
+        "unit_price": 2000,
+        "count": 1,
+        "price": 2000
+      }
+    ],
+    "total_price": 25500
+  },
+  {
+    "receipt_id": "370ad706-29fc-46d2-a31c-11468e942af4",
+    "store_name": "공차 선릉중앙점",
+    "store_address": "서울특별시 강남구 선릉로86길 7",
+    "date": "2025-10-01 18:58",
+    "items": [
+      {
+        "id": 1,
+        "name": "굿당밀크+얼음많음",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      },
+      {
+        "id": 2,
+        "name": "미니펄 망고 밀크 + 리얼망고 L",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      }
+    ],
+    "total_price": 12000
+  },
+  {
+    "receipt_id": "7b8da9b4-dcbb-4bb0-86da-15ffa7556bf0",
+    "store_name": "공차 선릉중앙점",
+    "store_address": "서울특별시 강남구 선릉로86길 7",
+    "date": "2025-10-01 19:00",
+    "items": [
+      {
+        "id": 1,
+        "name": "미니 펄 망고 크러쉬",
+        "unit_price": 5700,
+        "count": 1,
+        "price": 5700
+      },
+      {
+        "id": 2,
+        "name": "미니 펄 망고 밀크 + 리얼 망고 L",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      }
+    ],
+    "total_price": 11700
+  },
+  {
+    "receipt_id": "e94ab0a7-de0e-4c29-83b5-a084d813bf16",
+    "store_name": "이마트 에브리데이 서초내곡점",
+    "store_address": "서울시 서초구 양재천로9길 70(내곡동,나국에스에이지플래닛)",
+    "date": "2025-10-04 16:54",
+    "items": [
+      {
+        "id": 1,
+        "name": "떡붕어싸만코",
+        "unit_price": 2000,
+        "count": 5,
+        "price": 10000
+      },
+      {
+        "id": 2,
+        "name": "샌드류 5개 5천",
+        "unit_price": -5000,
+        "count": 1,
+        "price": -5000
+      },
+      {
+        "id": 3,
+        "name": "롯데 월드콘 말차",
+        "unit_price": 2000,
+        "count": 1,
+        "price": 2000
+      }
+    ],
+    "total_price": 7000
+  },
+  {
+    "receipt_id": "2e28ea5e-03c0-4e0d-9eee-e10c2cb72660",
+    "store_name": "153구포국수(선릉역점)",
+    "store_address": "서울특별시 강남구 선릉로86길 8 (대치동)",
+    "date": "2025-10-04 20:59",
+    "items": [
+      {
+        "id": 1,
+        "name": "쫄면",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      }
+    ],
+    "total_price": 14500
+  },
+  {
+    "receipt_id": "13b8b77e-d4b3-4e53-ac93-df4ea0b128a7",
+    "store_name": "OLIVE YOUNG",
+    "store_address": "서울특별시 강남구 테헤란로87길 22",
+    "date": "2025-10-03 16:34",
+    "items": [
+      {
+        "id": 1,
+        "name": "바세린 립 테라피 오리지널 미니 립 듀오",
+        "unit_price": 7500,
+        "count": 1,
+        "price": 7500
+      }
+    ],
+    "total_price": 7500
+  },
+  {
+    "receipt_id": "71f60862-568b-4dc1-8f6a-e53b42f712fd",
+    "store_name": "호시타코야끼 대치점",
+    "store_address": "",
+    "date": "2025-10-05 21:40",
+    "items": [
+      {
+        "id": 1,
+        "name": "네기타코야끼 18",
+        "unit_price": 1,
+        "count": 2,
+        "price": 6000
+      },
+      {
+        "id": 2,
+        "name": "정통타코야끼8알",
+        "unit_price": 5500,
+        "count": 1,
+        "price": 5500
+      },
+      {
+        "id": 3,
+        "name": "까르보불닭볶음면(비조리컵)",
+        "unit_price": 2500,
+        "count": 1,
+        "price": 2500
+      }
+    ],
+    "total_price": 14000
+  },
+  {
+    "receipt_id": "b3b23389-2600-4f4b-90f5-9cc9a94baa69",
+    "store_name": "첫걸음산부인과의원",
+    "store_address": "서울 강남구 선릉로 431 에스케이허브오피스텔 306호",
+    "date": "2025-10-01 11:08",
+    "items": [],
+    "total_price": 17300
+  },
+  {
+    "receipt_id": "ba0b2d27-e203-46e7-9a9c-a89e0f36e522",
+    "store_name": "COS",
+    "store_address": "서울 강남구 테헤란로 517 현대백화점 무역센터점 5층",
+    "date": "2025-09-21 15:47",
+    "items": [],
+    "total_price": 157600
+  },
+  {
+    "receipt_id": "424e8a21-8173-4f78-b421-614be2df291d",
+    "store_name": "유니클로(UNI)",
+    "store_address": "서울시 강남구삼성동159 코엑스N12",
+    "date": "2025-10-03 16:47",
+    "items": [
+      {
+        "id": 1,
+        "name": "수플레 야앤스탠드 칼라 가디건",
+        "unit_price": 59900,
+        "count": 1,
+        "price": 59900
+      },
+      {
+        "id": 2,
+        "name": "쇼풍 백",
+        "unit_price": 100,
+        "count": 1,
+        "price": 100
+      }
+    ],
+    "total_price": 60000
+  },
+  {
+    "receipt_id": "671c9eba-8652-437c-b2b4-c2584cba80df",
+    "store_name": "현대백화점 5층",
+    "store_address": "서울 강남구 테헤란로 517, 현대백화점 5층",
+    "date": "2025-09-21 15:47",
+    "items": [
+      {
+        "id": 1,
+        "name": "스웻셔츠",
+        "unit_price": 135000,
+        "count": 1,
+        "price": 135000
+      },
+      {
+        "id": 2,
+        "name": "스웻셔츠",
+        "unit_price": 105000,
+        "count": 1,
+        "price": 105000
+      },
+      {
+        "id": 3,
+        "name": "COS 쇼핑백",
+        "unit_price": 100,
+        "count": 1,
+        "price": 100
+      }
+    ],
+    "total_price": 157600
+  },
+  {
+    "receipt_id": "f5bae183-57b8-44e5-b904-830c0c504c0d",
+    "store_name": "광화문점",
+    "store_address": "서울특별시 종로구 종로1길 5 0.A동 1층(중학동)",
+    "date": "2025-10-05 16:50",
+    "items": [
+      {
+        "id": 1,
+        "name": "리코타 샐러드",
+        "unit_price": 15800,
+        "count": 1,
+        "price": 15800
+      },
+      {
+        "id": 2,
+        "name": "케일청포도 주스",
+        "unit_price": 7800,
+        "count": 1,
+        "price": 7800
+      },
+      {
+        "id": 3,
+        "name": "케일바나나주스",
+        "unit_price": 7800,
+        "count": 1,
+        "price": 7800
+      }
+    ],
+    "total_price": 31400
+  },
+  {
+    "receipt_id": "2607e582-4376-45df-842c-29e33655711c",
+    "store_name": "THE 김남구알구정165 (주)점대액회철 압구정본점",
+    "store_address": "",
+    "date": "2025-10-05 18:20",
+    "items": [
+      {
+        "id": 1,
+        "name": "꼬마김밥A",
+        "unit_price": 3500,
+        "count": 1,
+        "price": 3500
+      },
+      {
+        "id": 2,
+        "name": "고추장 떡볶이",
+        "unit_price": 9500,
+        "count": 1,
+        "price": 9500
+      },
+      {
+        "id": 3,
+        "name": "관세후렴가",
+        "unit_price": 11818,
+        "count": 1,
+        "price": 11818
+      }
+    ],
+    "total_price": 13000
+  },
+  {
+    "receipt_id": "c7b9eca6-bd19-4ef4-b222-ca779b2522c9",
+    "store_name": "070-7450-1009",
+    "store_address": "서울 종로구 종로1길 50 케이트원타 빠르게 처리해 드리겠습니다. (불편/문의)",
+    "date": "2025-10-05 12:39",
+    "items": [
+      {
+        "id": 1,
+        "name": "메이플 페스타 6팩",
+        "unit_price": 20100,
+        "count": 1,
+        "price": 20100
+      },
+      {
+        "id": 2,
+        "name": "아이스 메이플 라떼",
+        "unit_price": 0,
+        "count": 1,
+        "price": 0
+      }
+    ],
+    "total_price": 23200
+  },
+  {
+    "receipt_id": "f0d40551-c097-415b-bf78-ea3efdfd942c",
+    "store_name": "버터",
+    "store_address": "서울 강남구 영동대로 513 코엑스몰 미1",
+    "date": "2025-10-03 17:04",
+    "items": [
+      {
+        "id": 1,
+        "name": "버터",
+        "unit_price": 3120,
+        "count": 1,
+        "price": 3120
+      }
+    ],
+    "total_price": 3120
+  },
+  {
+    "receipt_id": "5619aff4-0add-4728-b2a0-7fca52265ead",
+    "store_name": "노진민 밀 및 초계국수가산하이시티점/2",
+    "store_address": "",
+    "date": "2026-01-06 13:34",
+    "items": [
+      {
+        "id": 1,
+        "name": "들깨닭칼국수",
+        "unit_price": 11000,
+        "count": 1,
+        "price": 11000
+      },
+      {
+        "id": 2,
+        "name": "메밀 전병",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      }
+    ],
+    "total_price": 23000
+  },
+  {
+    "receipt_id": "23541893-003a-4e6f-a7aa-2c3290e89dca",
+    "store_name": "오토김밥 가산디지털점",
+    "store_address": "서울 발천구 가산디지털2로 101 (가산동) 1층 102호",
+    "date": "2026-01-07 13:58",
+    "items": [
+      {
+        "id": 1,
+        "name": "김밥 가쓰 콤비세트",
+        "unit_price": 11000,
+        "count": 1,
+        "price": 11000
+      }
+    ],
+    "total_price": 11000
+  },
+  {
+    "receipt_id": "1afbf27a-f6fe-4296-bb46-2ca27289c680",
+    "store_name": "노진민 밀빛초계국수 가산하이시티점",
+    "store_address": "",
+    "date": "2026-01-08 12:57",
+    "items": [
+      {
+        "id": 1,
+        "name": "얼큰칼국수",
+        "unit_price": 10000,
+        "count": 1,
+        "price": 10000
+      },
+      {
+        "id": 2,
+        "name": "왕만투반반",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      }
+    ],
+    "total_price": 16000
+  },
+  {
+    "receipt_id": "e8075a9f-5601-4198-86f2-e356cc90ae9e",
+    "store_name": "",
+    "store_address": "서울특별시 종로구 지봉로19 시즌빌딩12층",
+    "date": "2026-01-08 16:57",
+    "items": [
+      {
+        "id": 1,
+        "name": "매실차",
+        "unit_price": 4000,
+        "count": 1,
+        "price": 4000
+      },
+      {
+        "id": 2,
+        "name": "계란(2알)",
+        "unit_price": 2000,
+        "count": 1,
+        "price": 2000
+      },
+      {
+        "id": 3,
+        "name": "시리얼",
+        "unit_price": 5000,
+        "count": 1,
+        "price": 5000
+      }
+    ],
+    "total_price": 11000
+  },
+  {
+    "receipt_id": "5bb74b06-3c99-40e6-a06f-4a071f22c085",
+    "store_name": "롯데리아 가산IT점",
+    "store_address": "서울특별시 금천구 디지털로130,1층 101-2",
+    "date": "2026-01-12 12:44",
+    "items": [
+      {
+        "id": 1,
+        "name": "한우세트",
+        "unit_price": 10900,
+        "count": 1,
+        "price": 10900
+      },
+      {
+        "id": 2,
+        "name": "뉴치킨너겟",
+        "unit_price": 1100,
+        "count": 1,
+        "price": 1100
+      },
+      {
+        "id": 3,
+        "name": "사이다(R)",
+        "unit_price": 1,
+        "count": 1,
+        "price": 1
+      },
+      {
+        "id": 4,
+        "name": "내추럴치즈스틱",
+        "unit_price": 2800,
+        "count": 2,
+        "price": 5600
+      }
+    ],
+    "total_price": 17600
+  },
+  {
+    "receipt_id": "536dc2f8-7432-4611-825e-e26636e49462",
+    "store_name": "갓잇연남점",
+    "store_address": "서울 마포구 성미산로 161-13(연남동, K&L) 층",
+    "date": "2026-01-19 14:09",
+    "items": [
+      {
+        "id": 1,
+        "name": "스파이시 치킨 타코 1pc",
+        "unit_price": 5500,
+        "count": 1,
+        "price": 5500
+      },
+      {
+        "id": 2,
+        "name": "쉬림프 타코 1pc",
+        "unit_price": 5500,
+        "count": 1,
+        "price": 5500
+      },
+      {
+        "id": 3,
+        "name": "스파이시 포크 타코 1pc",
+        "unit_price": 5500,
+        "count": 1,
+        "price": 5500
+      },
+      {
+        "id": 4,
+        "name": "나초 집+감자 튀김",
+        "unit_price": 8900,
+        "count": 1,
+        "price": 8900
+      },
+      {
+        "id": 5,
+        "name": "고수 추가",
+        "unit_price": 0,
+        "count": 1,
+        "price": 0
+      },
+      {
+        "id": 6,
+        "name": "고수 많이",
+        "unit_price": 0,
+        "count": 7,
+        "price": 0
+      }
+    ],
+    "total_price": 25400
+  },
+  {
+    "receipt_id": "3e745eaa-d011-409d-9819-d5dc7294ba46",
+    "store_name": "요거프레소",
+    "store_address": "서울 마포구 망원로 84 1층 102호",
+    "date": "2026-01-22 14:43",
+    "items": [
+      {
+        "id": 1,
+        "name": "더블베리퐁당쿠키",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      }
+    ],
+    "total_price": 6000
+  },
+  {
+    "receipt_id": "926047ac-b43d-414b-a936-cd7ec0f5ed94",
+    "store_name": "카페게이트 망원역점",
+    "store_address": "서울특별시 마포구 월드컵로67,1층왼쪽끝 (망원농)",
+    "date": "2026-01-20 14:08",
+    "items": [
+      {
+        "id": 1,
+        "name": "제주말차라떼",
+        "unit_price": 3700,
+        "count": 1,
+        "price": 3700
+      },
+      {
+        "id": 2,
+        "name": "아이스아메리카노",
+        "unit_price": 1,
+        "count": 1,
+        "price": 0
+      }
+    ],
+    "total_price": 3700
+  },
+  {
+    "receipt_id": "8527e1c0-c20b-42b8-830b-58b16438ab72",
+    "store_name": "명동칼국수, 돈가스 (가산)",
+    "store_address": "서울특별시 금천구 가산디지털2로 108 지하1 층 B102호",
+    "date": "2026-01-21 12:51",
+    "items": [
+      {
+        "id": 1,
+        "name": "굴보쌈 정식",
+        "unit_price": 15500,
+        "count": 1,
+        "price": 15500
+      }
+    ],
+    "total_price": 15500
+  },
+  {
+    "receipt_id": "30830099-1b43-4c9c-bea3-68f5adaa083d",
+    "store_name": "코엑스",
+    "store_address": "서울 금천구 가산디지털2로 101 1동 1층 27호",
+    "date": "2026-01-22 12:49",
+    "items": [
+      {
+        "id": 1,
+        "name": "프리미엄 쌀국수",
+        "unit_price": 13900,
+        "count": 1,
+        "price": 13900
+      },
+      {
+        "id": 2,
+        "name": "고수 500",
+        "unit_price": 500,
+        "count": 1,
+        "price": 500
+      },
+      {
+        "id": 3,
+        "name": "짜조 (4개)",
+        "unit_price": 6900,
+        "count": 1,
+        "price": 6900
+      },
+      {
+        "id": 4,
+        "name": "사이다 335m",
+        "unit_price": 2000,
+        "count": 1,
+        "price": 2000
+      }
+    ],
+    "total_price": 23300
+  },
+  {
+    "receipt_id": "845e4bc7-ce82-40e1-9a07-9ff6b2533f2d",
+    "store_name": "박가부대 가산 BYC 하이시티점",
+    "store_address": "서울 금천구 가산디지털1로 131 B1 호 (가산동, BYC HIGHCITY)",
+    "date": "2026-01-26 12:52",
+    "items": [
+      {
+        "id": 1,
+        "name": "비빔밥 (오리지널 4인분)"
+      }
+    ],
+    "total_price": 40000
+  },
+  {
+    "receipt_id": "52f29cde-1468-471e-9cc1-aee132d60602",
+    "store_name": "아마스빈 가산디지털단지점",
+    "store_address": "서울 금천구 가산디지털1로168 C동1 04-B호",
+    "date": "2026-01-27 09:01",
+    "items": [
+      {
+        "id": 1,
+        "name": "토핑 추가",
+        "unit_price": 600,
+        "count": 1,
+        "price": 600
+      }
+    ],
+    "total_price": 4500
+  },
+  {
+    "receipt_id": "ea8c5845-57b2-4667-a19b-edf7fe64b1bc",
+    "store_name": "가산삼계탕",
+    "store_address": "서울 금천구 가산디지털1로131(가 산동, BYC HIGHCITY) B127호",
+    "date": "2026-01-28 13:32",
+    "items": [
+      {
+        "id": 1,
+        "name": "삼계탕",
+        "unit_price": 15000,
+        "count": 1,
+        "price": 15000
+      }
+    ],
+    "total_price": 15000
+  },
+  {
+    "receipt_id": "0b4786f0-47f6-41eb-8486-9220ab43e62b",
+    "store_name": "공차 압구정교보문고점 신동진",
+    "store_address": "서울특별시마포구월드컵로3길14지하1 층B137호(합정동, 마포한강 2차 푸르지오)",
+    "date": "2026-01-28 00:00",
+    "items": [],
+    "total_price": 6800
+  },
+  {
+    "receipt_id": "6ceb5cb6-0389-40dc-947d-80b2e1f314b9",
+    "store_name": "마더오프라인 한남",
+    "store_address": "서울특별시용산구 이태원로55나길6,1층(한남동)",
+    "date": "2026-01-29 15:21",
+    "items": [
+      {
+        "id": 1,
+        "name": "아이스 플랫 화이트 다크문",
+        "unit_price": 7500,
+        "count": 1,
+        "price": 7500
+      },
+      {
+        "id": 2,
+        "name": "핫 카페 라떼 다크문",
+        "unit_price": 7500,
+        "count": 1,
+        "price": 7500
+      }
+    ],
+    "total_price": 15000
+  },
+  {
+    "receipt_id": "0e2e430b-b395-4bd0-b04c-de4908b21b04",
+    "store_name": "",
+    "store_address": "영등포구 은행로 17(여의도동, 나이스1사옥)",
+    "date": "2023-07-11 16:44",
+    "items": [
+      {
+        "id": 1,
+        "name": "에스프레소",
+        "unit_price": 2500,
+        "count": 1,
+        "price": 2500
+      },
+      {
+        "id": 2,
+        "name": "HOT 아메리카노",
+        "unit_price": 3000,
+        "count": 1,
+        "price": 3000
+      }
+    ],
+    "total_price": 5500
+  },
+  {
+    "receipt_id": "0b69c6b1-a166-41b2-9190-584b049de8ee",
+    "store_name": "VIC",
+    "store_address": "",
+    "date": "2015-11-03 16:31",
+    "items": [
+      {
+        "id": 1,
+        "name": "001P 굿모닝우유 900ml [2.150",
+        "unit_price": 1350,
+        "count": 1,
+        "price": 1350
+      },
+      {
+        "id": 2,
+        "name": "005P 하선정 바로먹기 좋은 장아찌 150g",
+        "unit_price": 1380,
+        "count": 1,
+        "price": 1380
+      }
+    ],
+    "total_price": 8560
+  },
+  {
+    "receipt_id": "73391975-b24c-487a-97b2-d8ddf41bdfdb",
+    "store_name": "",
+    "store_address": "마포구 상암동 1601번지 KGIT센터1층 150호",
+    "date": "2023-05-19 19:19",
+    "items": [
+      {
+        "id": 1,
+        "name": "엠(E)치킨버거2개",
+        "unit_price": 5000,
+        "count": 1,
+        "price": 5000
+      }
+    ],
+    "total_price": 5000
+  },
+  {
+    "receipt_id": "d9902300-e025-4cd5-9771-74360c94f31c",
+    "store_name": "상호: 킹콩부대찌개(마포광홍점)",
+    "store_address": "서울 마포구 구수동 44-1",
+    "date": "",
+    "items": [
+      {
+        "id": 1,
+        "name": "킹콩부대 3인분 24,000 1",
+        "unit_price": 0,
+        "count": 24,
+        "price": 0
+      },
+      {
+        "id": 2,
+        "name": "돈까스 볶음밥",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      },
+      {
+        "id": 3,
+        "name": "팬 증정",
+        "unit_price": 30000,
+        "count": 1,
+        "price": 30000
+      }
+    ],
+    "total_price": 36000
+  },
+  {
+    "receipt_id": "2e45235f-3bd5-4958-837b-4164013e0aa6",
+    "store_name": "버거킹 다산진건DT점",
+    "store_address": "",
+    "date": "",
+    "items": [
+      {
+        "id": 1,
+        "name": "와퍼 세트 + 해쉬브라운",
+        "unit_price": 10900,
+        "count": 1,
+        "price": 10900
+      },
+      {
+        "id": 2,
+        "name": "앱쿠폰) 리커버리_세트",
+        "unit_price": -3900,
+        "count": 1,
+        "price": -3900
+      },
+      {
+        "id": 3,
+        "name": "통새우쥬시림프버거",
+        "unit_price": 6000,
+        "count": 1,
+        "price": 6000
+      }
+    ],
+    "total_price": 13100
+  },
+  {
+    "receipt_id": "98282349-5bfe-4fb3-a62e-45fa8ecd2840",
+    "store_name": "CU Again",
+    "store_address": "경기도 고양시 덕양구 중앙로 542 세신웨미리타운 (행신동) 세신웨미리타운",
+    "date": "2025-05-12 00:00",
+    "items": [
+      {
+        "id": 1,
+        "name": "홀스비타C 라임향",
+        "unit_price": 1000,
+        "count": 1,
+        "price": 1000
+      },
+      {
+        "id": 2,
+        "name": "홀스아이스 블루",
+        "unit_price": 1000,
+        "count": 1,
+        "price": 1000
+      }
+    ],
+    "total_price": 2000
+  },
+  {
+    "receipt_id": "0e535a96-2db1-404e-ba71-d22e2047fcf7",
+    "store_name": "꽃누리들밥",
+    "store_address": "경기도 하남시 검단로 71(하산곡동)",
+    "date": "2024-11-10 13:49",
+    "items": [
+      {
+        "id": 1,
+        "name": "상차림정식 4인",
+        "unit_price": 48000,
+        "count": 1,
+        "price": 48000
+      },
+      {
+        "id": 2,
+        "name": "어린이 솥밥(410세)",
+        "unit_price": 3000,
+        "count": 1,
+        "price": 3000
+      },
+      {
+        "id": 3,
+        "name": "황금 간장게장",
+        "unit_price": 25000,
+        "count": 1,
+        "price": 25000
+      },
+      {
+        "id": 4,
+        "name": "꽃누리 철판불고기",
+        "unit_price": 20000,
+        "count": 1,
+        "price": 20000
+      },
+      {
+        "id": 5,
+        "name": "소 순부",
+        "unit_price": 87272,
+        "count": 1,
+        "price": 87272
+      }
+    ],
+    "total_price": 96000
+  },
+  {
+    "receipt_id": "fa888c84-4a5a-4f48-99e6-a3fe54715176",
+    "store_name": "포비코",
+    "store_address": "",
+    "date": "",
+    "items": [],
+    "total_price": 0
+  },
+  {
+    "receipt_id": "0a05642c-6402-4e4f-8e3e-0527a2e6d1cd",
+    "store_name": "참술닭갈비구이",
+    "store_address": "부산\"동래구 안락로 27 (안락동) 1층",
+    "date": "2025-09-08 20:46",
+    "items": [
+      {
+        "id": 1,
+        "name": "속구이",
+        "unit_price": 10000,
+        "count": 1,
+        "price": 10000
+      },
+      {
+        "id": 2,
+        "name": "구이",
+        "unit_price": 10000,
+        "count": 1,
+        "price": 10000
+      },
+      {
+        "id": 3,
+        "name": "숫술소맥구이",
+        "unit_price": 10000,
+        "count": 5,
+        "price": 50000
+      },
+      {
+        "id": 4,
+        "name": "불막창 소금구이",
+        "unit_price": 11000,
+        "count": 1,
+        "price": 11000
+      },
+      {
+        "id": 5,
+        "name": "된장찌개",
+        "unit_price": 10000,
+        "count": 1,
+        "price": 10000
+      }
+    ],
+    "total_price": 121500
+  },
+  {
+    "receipt_id": "e33e3fd2-0d17-49f5-984a-a589b72bc1d5",
+    "store_name": "매우홍꾸미",
+    "store_address": "",
+    "date": "2025-04-26 17:57",
+    "items": [],
+    "total_price": 0
+  },
+  {
+    "receipt_id": "b950b585-0e43-48c1-9e28-9fd4d1a6ba1a",
+    "store_name": "롯데마트",
+    "store_address": "서울 특별시 영등포구 경인로 846(영등포동)",
+    "date": "2024-11-17 17:23",
+    "items": [
+      {
+        "id": 1,
+        "name": "러시 샴푸",
+        "unit_price": 198000,
+        "count": 1,
+        "price": 198000
+      }
+    ],
+    "total_price": 198000
+  },
+  {
+    "receipt_id": "ccfd766f-c0d4-49ac-8647-a608753f6976",
+    "store_name": "카페씨미",
+    "store_address": "서울 강남구 봉은사로 524",
+    "date": "2024-08-21 13:01",
+    "items": [
+      {
+        "id": 1,
+        "name": "바질 치킨 누들",
+        "unit_price": 10900,
+        "count": 1,
+        "price": 10900
+      },
+      {
+        "id": 2,
+        "name": "스위트 이탈리안 샌드위치",
+        "unit_price": 7900,
+        "count": 1,
+        "price": 7900
+      },
+      {
+        "id": 3,
+        "name": "미니스프",
+        "unit_price": 4000,
+        "count": 1,
+        "price": 4000
+      },
+      {
+        "id": 4,
+        "name": "콤부차 말차&유자",
+        "unit_price": 4500,
+        "count": 1,
+        "price": 4500
+      },
+      {
+        "id": 5,
+        "name": "(추가옵션)아이스컵 추가",
+        "unit_price": 500,
+        "count": 1,
+        "price": 500
+      }
+    ],
+    "total_price": 27800
+  },
+  {
+    "receipt_id": "17a347e2-264c-4bef-bc3a-810c27688c29",
+    "store_name": "이마트 의왕점(031)",
+    "store_address": "",
+    "date": "2024-06-17 18:22",
+    "items": [
+      {
+        "id": 1,
+        "name": "농심 오징어집 78g",
+        "unit_price": 1360,
+        "count": 1,
+        "price": 1360
+      },
+      {
+        "id": 2,
+        "name": "신송 쌈장 500g",
+        "unit_price": 2780,
+        "count": 1,
+        "price": 2780
+      },
+      {
+        "id": 3,
+        "name": "CJ 비비고 치킨고기만",
+        "unit_price": 3490,
+        "count": 1,
+        "price": 3490
+      },
+      {
+        "id": 4,
+        "name": "[]면 세 물",
+        "unit_price": 2780,
+        "count": 1,
+        "price": 2780
+      },
+      {
+        "id": 5,
+        "name": "세계 품품세계",
+        "unit_price": 5645,
+        "count": 1,
+        "price": 5645
+      },
+      {
+        "id": 6,
+        "name": "과자 모듬",
+        "unit_price": 565,
+        "count": 1,
+        "price": 565
+      }
+    ],
+    "total_price": 8990
+  },
+  {
+    "receipt_id": "9e1fb8da-8d08-4395-be5b-88d8e2b708d9",
+    "store_name": "만복국수(중앙역점)",
+    "store_address": "경기도안산시 단원구고잔2길 42,211,212호",
+    "date": "2024-04-23 13:57",
+    "items": [
+      {
+        "id": 1,
+        "name": "송이버섯(송 인번호)",
+        "unit_price": 7705800,
+        "count": 1,
+        "price": 7705800
+      }
+    ],
+    "total_price": 134000
+  },
+  {
+    "receipt_id": "28be5130-f958-44b6-8134-80aeaed8acf6",
+    "store_name": "1024371 전자상가",
+    "store_address": "",
+    "date": "2020-09-08 12:50",
+    "items": [
+      {
+        "id": 1,
+        "name": "블루투스 동글",
+        "unit_price": 5000,
+        "count": 1,
+        "price": 5000
+      },
+      {
+        "id": 2,
+        "name": "C타입 to 5핀",
+        "unit_price": 1000,
+        "count": 1,
+        "price": 1000
+      },
+      {
+        "id": 3,
+        "name": "C타입 to 8핀",
+        "unit_price": 1000,
+        "count": 1,
+        "price": 1000
+      },
+      {
+        "id": 4,
+        "name": "토레타 (500ml)",
+        "unit_price": 1000,
+        "count": 1,
+        "price": 1000
+      }
+    ],
+    "total_price": 8000
+  }
+]

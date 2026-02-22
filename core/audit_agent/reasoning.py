@@ -22,38 +22,38 @@ class AuditReasoning:
             client_secret=os.getenv("NAVER_CLIENT_SECRET", "")
         )
 
-    def _correct_store_name(self, store_name):
-        if not store_name:
-            return ""
-            
-        correction_prompt = ChatPromptTemplate.from_messages([
-            ("system", """
-            당신은 한국어 영수증 OCR 오타 교정기입니다. 
-            주어진 상호명과 상품명을 고려하여 상호명이 유명 프랜차이즈나 널리 알려진 브랜드의 명백한 오타로 판단되는 경우에만 올바르게 수정하세요.
-            동네 개인 가게 이름이거나 확신할 수 없다면 절대 원본을 수정하지 마세요. (과교정 금지)
-            출력은 오직 '교정된 상호명' 문자열만 반환해야 하며, 다른 설명은 절대 붙이지 마세요.
-            """),
-            ("human", "상호명: {store_name}")
-        ])
-        
-        chain = correction_prompt | self.llm | StrOutputParser()
-        
+    def correct_receipt(self, receipt_data: dict) -> dict:
         try:
-            corrected_name = chain.invoke({"store_name": store_name}).strip()
-            return corrected_name
+            parser = JsonOutputParser()
+            prompt = ChatPromptTemplate.from_messages([
+                ("system", """
+                당신은 영수증 OCR 오타 교정 전문가입니다.
+                다음 JSON 형태의 영수증 데이터에서 '상호명(store_name)'과 '품목명(items의 name)'의 OCR 오타임이 명백한 경우(글자 사이에 특수문자, 글자 오인식 등)에만 문맥에 맞게 교정하세요.
+                오타를 확신할 수 없는 개인 가게 이름이나 품목명은 수정하지 마세요. 숫자(가격, 수량, 날짜 등)는 절대 건드리지 마세요.
+                상호명이나 품목명에 아무 내용도 존재하지 않는 경우에는 절대 건드리지 마세요.
+                """),
+                ("human", "{receipt_json}")
+            ])
+            
+            chain = prompt | self.llm | parser
+            corrected_data = chain.invoke({"receipt_json": json.dumps(receipt_data, ensure_ascii=False)})
+            
+            # receipt_id 유실 방지
+            corrected_data["receipt_id"] = receipt_data["receipt_id"]
+            return corrected_data
         except Exception as e:
-            print(f"상호명 교정 중 오류 발생: {e}")
-            return store_name
+            print(f"교정 오류 (원본 반환): {e}")
+            return receipt_data
 
     def analyze(self, receipt_json, retrieved_rules=None):
-        raw_store_name = receipt_json.get('store_name', '')
+        store_name = receipt_json.get('store_name', '') # 원래는 store_name -> raw_store_name
         store_address = receipt_json.get('store_address', '')
         items = receipt_json.get('items', [])
 
-        print(f"1차 LLM: 상호명 오타 점검 중... 원본[{raw_store_name}]")
-        store_name = self._correct_store_name(raw_store_name)
-        if raw_store_name != store_name:
-            print(f"교정 완료: [{raw_store_name}] ➡️ [{store_name}]")
+        # print(f"1차 LLM: 상호명 오타 점검 중... 원본[{raw_store_name}]")
+        # store_name = self.correct_receipt(raw_store_name)
+        # if raw_store_name != store_name:
+        #     print(f"교정 완료: [{raw_store_name}] ➡️ [{store_name}]")
 
         print(f"네이버 가맹점 검증 중: [{store_name}]")
         store_info = self.verifier.get_store_category(store_name, store_address)

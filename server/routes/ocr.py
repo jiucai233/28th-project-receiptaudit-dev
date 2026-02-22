@@ -5,6 +5,8 @@ from pathlib import Path
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field
 
+from core.audit_agent.reasoning import AuditReasoning
+
 from server.services import DBService, OCRService, StorageService
 
 import logging
@@ -72,6 +74,10 @@ async def extract(file: UploadFile = File(...)) -> OCRExtractResponse:
 
         # Call OCR service
         receipt = ocr_service.extract(image_path, receipt_id)
+
+        # Proofread OCR results using LLM
+        agent = AuditReasoning()
+        receipt = agent.correct_receipt(receipt)
         
         # Add image_url for frontend preview
         receipt["image_url"] = image_s3_url or f"/data/raw/{image_path.name}"
