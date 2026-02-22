@@ -2,7 +2,7 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   Build_and_Push_Docker_Images:
@@ -64,23 +64,28 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
-          envs: DOCKER_USERNAME,UPSTAGE_API_KEY,DATABASE_URL,FRONTEND_URL
           script: |
             # Set Environment Variables for docker-compose
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
-            
-            # Add other secrets to .env if needed (assuming they are in GitHub Secrets)
-            # You should populate these secrets in your GitHub Repo Settings
+
+            # Basic Configuration
             echo "UPSTAGE_API_KEY=${{ secrets.UPSTAGE_API_KEY }}" >> .env
-            # FRONTEND_URL is for Backend CORS (e.g. your EC2 IP/Domain)
             echo "FRONTEND_URL=${{ secrets.FRONTEND_URL_PROD }}" >> .env
-            
-            # API_URL is used by Frontend Build, but here we run the pre-built image.
-            # However, docker-compose.yml uses ${API_URL} default? 
-            # Actually, since we use 'image:', the 'build:' section is ignored by 'docker compose up',
-            # so API_URL env var here doesn't affect the running container's code (baked in).
-            # But we might need it to suppress warnings if docker-compose tries to validate config.
             echo "API_URL=${{ secrets.PROD_API_URL }}" >> .env
+
+            # Database Configuration (RDS)
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+            echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+            echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+
+            # S3 Configuration
+            echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+            echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+            echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
+            echo "AWS_S3_BUCKET_NAME=${{ secrets.AWS_S3_BUCKET_NAME }}" >> .env
 
             # Pull latest images
             docker compose pull
