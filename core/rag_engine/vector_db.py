@@ -26,6 +26,30 @@ class VectorDBManager:
         db.add_documents(documents)
         return db
 
+    def delete_document(self, doc_id, embedding_model):
+        if not os.path.exists(self.persist_path) or not os.listdir(self.persist_path):
+            return False
+            
+        db = Chroma(
+            persist_directory=self.persist_path,
+            embedding_function=embedding_model
+        )
+        db.delete(ids=[doc_id])
+        return True
+
+    def update_document(self, doc_id, document, embedding_model):
+        if not os.path.exists(self.persist_path) or not os.listdir(self.persist_path):
+            return False
+            
+        db = Chroma(
+            persist_directory=self.persist_path,
+            embedding_function=embedding_model
+        )
+        # Delete the old document and add the new one with the same ID
+        db.delete(ids=[doc_id])
+        db.add_documents([document], ids=[doc_id])
+        return True
+
     # query를 통해 영수증 JSON을 입력받고, embedding_model(규정집 벡터화 시 사용한 모델과 동일해야함!)을 통해 벡터화하고, 영수증과 유사한 규정 탐색
     # TODO k: 끌어올 유사 조항 개수(여러 번 해보면서 조정해보면 될 것 같아요!)
     def search_rules(self, query, embedding_model, k=3, agent_llm=None):
