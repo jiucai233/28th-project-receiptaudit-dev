@@ -16,7 +16,7 @@ import { DataEditor } from './components/DataEditor';
 import { AuditResults } from './components/AuditResults';
 import { RuleEditorModal } from './components/RuleEditorModal';
 import { useReceipt } from './hooks/useReceipt';
-import { ocrAPI, auditAPI } from './services/api';
+import { ocrAPI, auditAPI, demoAPI } from './services/api';
 import { MOCK_RECEIPTS } from './services/mockData';
 import type { ReceiptData, ReceiptItemState, RulesResponse } from './types';
 
@@ -241,21 +241,39 @@ function App() {
     }
   };
 
-  // Quick demo scenario loader
-  const loadScenario = (scenarioName: string) => {
-    const data = MOCK_RECEIPTS[scenarioName];
-    if (data) {
-      const id = Math.random().toString(36).substring(2, 9);
-      setReceipts(prev => [...prev, {
-        id,
-        receiptData: data,
-        auditResult: null,
-        status: 'extracted',
-        error: null,
-      }]);
-      setSelectedReceiptId(id);
-      setCurrentStep(2);
-      setActiveTab(1);
+  // Quick demo scenario loader (Automated E2E Pipeline)
+  const loadScenario = async (scenarioId: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const result = await demoAPI.runScenario(scenarioId);
+      if (result.status === 'success') {
+        const id = Math.random().toString(36).substring(2, 9);
+        // Clear previous and show only the demo
+        setReceipts([
+          {
+            id,
+            receiptData: result.receipt_data,
+            auditResult: result.audit_result,
+            status: 'audited',
+            error: null,
+            // Pre-load the local image for preview
+            preview: scenarioId === 'normal' 
+              ? '/receipt-0140302be513.jpg' 
+              : '/Alcho_001.jpg' 
+          }
+        ]);
+        setSelectedReceiptId(id);
+        setCurrentStep(3);
+        setActiveTab(2);
+      } else {
+        throw new Error(result.status || 'Failed to load demo scenario');
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '데모 실행 실패';
+      setError(message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -407,14 +425,19 @@ function App() {
                 <Target className="w-4 h-4" /> Quick Demo
               </h3>
               <div className="space-y-2">
-                {Object.keys(MOCK_RECEIPTS).map((scenario) => (
+                {[
+                  { id: 'normal', label: '1 (정상 영수증)' },
+                  { id: 'alcohol', label: '2 (규정 위반 - 주류)' }
+                ].map((scenario) => (
                   <button
-                    key={scenario}
-                    onClick={() => loadScenario(scenario)}
+                    key={scenario.id}
+                    onClick={() => loadScenario(scenario.id)}
                     onMouseDown={createRipple}
-                    className="w-full text-left text-sm px-4 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-200 dark:border-slate-600 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200 text-gray-700 dark:text-gray-300 hover:text-primary-700 dark:hover:text-primary-400 relative overflow-hidden"
+                    disabled={isLoading}
+                    className="w-full text-left text-sm px-4 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 border border-gray-200 dark:border-slate-600 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200 text-gray-700 dark:text-gray-300 hover:text-primary-700 dark:hover:text-primary-400 flex items-center gap-2 relative overflow-hidden disabled:opacity-50 disabled:cursor-wait"
                   >
-                    {scenario.replace('Scenario ', '')}
+                    {isLoading && <Loader2 className="w-3 h-3 animate-spin" />}
+                    {scenario.label}
                   </button>
                 ))}
               </div>
