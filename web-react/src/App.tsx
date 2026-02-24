@@ -247,7 +247,6 @@ function App() {
     setError(null);
     try {
       const newReceipts = [];
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
       if (scenarioId === 'normal') {
         const images = [
@@ -256,7 +255,7 @@ function App() {
         ];
 
         for (const img of images) {
-          const response = await fetch(`${apiBaseUrl}${img.path}`);
+          const response = await fetch(img.path);
           if (!response.ok) throw new Error(`Failed to load demo image: ${img.name}`);
           const blob = await response.blob();
           const file = new File([blob], img.name, { type: blob.type });
@@ -276,7 +275,7 @@ function App() {
         const imgPath = '/data/demo/receipt-alcohol.jpg';
         const fileName = 'receipt-alcohol.jpg';
         
-        const response = await fetch(`${apiBaseUrl}${imgPath}`);
+        const response = await fetch(imgPath);
         if (!response.ok) throw new Error('Failed to load demo image');
         const blob = await response.blob();
         const file = new File([blob], fileName, { type: blob.type });
