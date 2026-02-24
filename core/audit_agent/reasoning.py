@@ -45,18 +45,16 @@ class AuditReasoning:
             print(f"교정 오류 (원본 반환): {e}")
             return receipt_data
 
-    def analyze(self, receipt_json, retrieved_rules=None):
+    def analyze(self, receipt_json, retrieved_rules=None, use_naver=True):
         store_name = receipt_json.get('store_name', '') # 원래는 store_name -> raw_store_name
         store_address = receipt_json.get('store_address', '')
         items = receipt_json.get('items', [])
 
-        # print(f"1차 LLM: 상호명 오타 점검 중... 원본[{raw_store_name}]")
-        # store_name = self.correct_receipt(raw_store_name)
-        # if raw_store_name != store_name:
-        #     print(f"교정 완료: [{raw_store_name}] ➡️ [{store_name}]")
-
-        print(f"네이버 가맹점 검증 중: [{store_name}]")
-        store_info = self.verifier.get_store_category(store_name, store_address)
+        if use_naver:
+            # print(f"네이버 가맹점 검증 중: [{store_name}]")
+            store_info = self.verifier.get_store_category(store_name, store_address)
+        else:
+            store_info = {"notice": "네이버 검증 생략됨"}
 
         if retrieved_rules is None:
             all_relevant_docs = []
