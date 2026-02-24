@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./data:/app/data/demo
+      - ./data:/app/data
     restart: always
     networks:
       - audit-network
