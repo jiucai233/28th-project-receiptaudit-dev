@@ -25,10 +25,10 @@ chromadb
 python-multipart
 
 # OCR Engine
-paddlepaddle==3.2.1
-paddleocr
+rapidocr-onnxruntime
 shapely
 pyclipper
 imgaug
 lmdb
+opencv-python
 opencv-python

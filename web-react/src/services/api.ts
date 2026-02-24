@@ -154,3 +154,18 @@ export const healthAPI = {
     }
   },
 };
+
+/**
+ * Demo API (Automated E2E Pipeline)
+ */
+export const demoAPI = {
+  runScenario: async (scenario: string): Promise<{ status: string; receipt_data: ReceiptData; audit_result: AuditResult }> => {
+    try {
+      const response = await api.post<{ status: string; receipt_data: ReceiptData; audit_result: AuditResult }>(`/api/v1/audit/demo/${scenario}`);
+      return response.data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+};
+
