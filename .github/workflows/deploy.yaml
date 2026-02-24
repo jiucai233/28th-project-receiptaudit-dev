@@ -70,6 +70,8 @@ jobs:
 
             # Basic Configuration
             echo "UPSTAGE_API_KEY=${{ secrets.UPSTAGE_API_KEY }}" >> .env
+            echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> .env
+            echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> .env
             echo "FRONTEND_URL=${{ secrets.FRONTEND_URL_PROD }}" >> .env
             echo "API_URL=${{ secrets.PROD_API_URL }}" >> .env
 

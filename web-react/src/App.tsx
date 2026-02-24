@@ -246,20 +246,42 @@ function App() {
     setIsLoading(true);
     setError(null);
     try {
-      const imgPath = scenarioId === 'normal' ? '/receipt-0140302be513.jpg' : '/Alcho_001.jpg';
-      const fileName = scenarioId === 'normal' ? 'receipt-original.jpg' : 'receipt-alcohol.jpg';
-      
-      // Fetch image to create a File object for OCR
-      const response = await fetch(imgPath);
-      if (!response.ok) throw new Error('Failed to load demo image');
-      const blob = await response.blob();
-      const file = new File([blob], fileName, { type: blob.type });
-      
-      const id = Math.random().toString(36).substring(2, 9);
-      
-      // Clear previous and show only the demo at the upload step
-      setReceipts([
-        {
+      const newReceipts = [];
+
+      if (scenarioId === 'normal') {
+        const images = [
+          { path: '/receipt-demo-1.png', name: 'receipt-demo-1.png' },
+          { path: '/receipt-demo-2.jpeg', name: 'receipt-demo-2.jpeg' }
+        ];
+
+        for (const img of images) {
+          const response = await fetch(img.path);
+          if (!response.ok) throw new Error(`Failed to load demo image: ${img.name}`);
+          const blob = await response.blob();
+          const file = new File([blob], img.name, { type: blob.type });
+          const id = Math.random().toString(36).substring(2, 9);
+          
+          newReceipts.push({
+            id,
+            file,
+            preview: img.path,
+            receiptData: null,
+            auditResult: null,
+            status: 'pending',
+            error: null,
+          });
+        }
+      } else {
+        const imgPath = '/Alcho_001.jpg';
+        const fileName = 'receipt-alcohol.jpg';
+        
+        const response = await fetch(imgPath);
+        if (!response.ok) throw new Error('Failed to load demo image');
+        const blob = await response.blob();
+        const file = new File([blob], fileName, { type: blob.type });
+        const id = Math.random().toString(36).substring(2, 9);
+        
+        newReceipts.push({
           id,
           file,
           preview: imgPath,
@@ -267,9 +289,13 @@ function App() {
           auditResult: null,
           status: 'pending',
           error: null,
-        }
-      ]);
-      setSelectedReceiptId(id);
+        });
+      }
+      
+      // Clear previous and show the demo receipts at the upload step
+      // @ts-ignore
+      setReceipts(newReceipts);
+      setSelectedReceiptId(newReceipts[0].id);
       setCurrentStep(1); // Step 1 is Upload
       setActiveTab(0);   // Tab 0 is Upload
     } catch (err) {
