@@ -50,7 +50,7 @@ class OCRService:
             queue = ctx.Queue()
             p = ctx.Process(target=_run_ocr_subprocess, args=(str(image_path), queue))
             p.start()
-            p.join(timeout=60) # 60 seconds timeout for OCR
+            p.join(timeout=600) # 60 seconds timeout for OCR
             
             if p.is_alive():
                 p.terminate()
