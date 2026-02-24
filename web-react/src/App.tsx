@@ -16,7 +16,7 @@ import { DataEditor } from './components/DataEditor';
 import { AuditResults } from './components/AuditResults';
 import { RuleEditorModal } from './components/RuleEditorModal';
 import { useReceipt } from './hooks/useReceipt';
-import { ocrAPI, auditAPI, demoAPI } from './services/api';
+import { ocrAPI, auditAPI } from './services/api';
 import { MOCK_RECEIPTS } from './services/mockData';
 import type { ReceiptData, ReceiptItemState, RulesResponse } from './types';
 
@@ -241,34 +241,37 @@ function App() {
     }
   };
 
-  // Quick demo scenario loader (Automated E2E Pipeline)
+  // Quick demo scenario loader (Manual input flow)
   const loadScenario = async (scenarioId: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await demoAPI.runScenario(scenarioId);
-      if (result.status === 'success') {
-        const id = Math.random().toString(36).substring(2, 9);
-        // Clear previous and show only the demo
-        setReceipts([
-          {
-            id,
-            receiptData: result.receipt_data,
-            auditResult: result.audit_result,
-            status: 'audited',
-            error: null,
-            // Pre-load the local image for preview
-            preview: scenarioId === 'normal' 
-              ? '/receipt-0140302be513.jpg' 
-              : '/Alcho_001.jpg' 
-          }
-        ]);
-        setSelectedReceiptId(id);
-        setCurrentStep(3);
-        setActiveTab(2);
-      } else {
-        throw new Error(result.status || 'Failed to load demo scenario');
-      }
+      const imgPath = scenarioId === 'normal' ? '/receipt-0140302be513.jpg' : '/Alcho_001.jpg';
+      const fileName = scenarioId === 'normal' ? 'receipt-original.jpg' : 'receipt-alcohol.jpg';
+      
+      // Fetch image to create a File object for OCR
+      const response = await fetch(imgPath);
+      if (!response.ok) throw new Error('Failed to load demo image');
+      const blob = await response.blob();
+      const file = new File([blob], fileName, { type: blob.type });
+      
+      const id = Math.random().toString(36).substring(2, 9);
+      
+      // Clear previous and show only the demo at the upload step
+      setReceipts([
+        {
+          id,
+          file,
+          preview: imgPath,
+          receiptData: null,
+          auditResult: null,
+          status: 'pending',
+          error: null,
+        }
+      ]);
+      setSelectedReceiptId(id);
+      setCurrentStep(1); // Step 1 is Upload
+      setActiveTab(0);   // Tab 0 is Upload
     } catch (err) {
       const message = err instanceof Error ? err.message : '데모 실행 실패';
       setError(message);
