@@ -1,5 +1,6 @@
 from langchain_chroma import Chroma
 import os
+import re
 
 class VectorDBManager:
     def __init__(self, persist_path="./data/vector_store"):
@@ -65,9 +66,10 @@ class VectorDBManager:
                 다음 [영수증 품목]과 [후보 규정]들의 연관성을 단계별로 생각하여 가장 적합한 규정 순서대로 나열하세요.
 
                 [분석 단계]
-                1. 영수증 품목의 잠재적 의미(오타, 동의어, 상위 카테고리 등)를 파악하세요. (예: 참미술 -> 참이슬 -> 주류)
+                1. 영수증 품목의 잠재적 의미(오타, 동의어, 상위 카테고리 등)를 파악하세요.
                 2. 각 규정 조항이 해당 품목을 금지하거나 제한하는지 논리적으로 따져보세요.
-                3. 가장 직접적으로 연관된 규정부터 내림차순으로 정렬하세요.
+                3. 규정 조항에서 요구하는 영수증 사항이 모두 포함되어 있는지 확인하세요.(예시: 상호명, 품목명, 구매 시간, 가격 등 영수증에서 요구하는 사항들)
+                4. 가장 직접적으로 연관된 규정부터 내림차순으로 정렬하세요.
 
                 영수증 품목: {query}
                 후보 규정:
@@ -76,8 +78,19 @@ class VectorDBManager:
                 최종 결과는 반드시 조항 번호만 쉼표로 구분하여 출력하세요 (예: 2, 1, 4).
                 """
                 response = agent_llm.invoke(rerank_prompt)
-                indices = [int(idx.strip()) - 1 for idx in response.content.split(',') if idx.strip().isdigit()]
-                return [initial_docs[i] for i in indices if i < len(initial_docs)][:k]
+                numbers = re.findall(r'\d+', response.content)
+                indices = [int(num) - 1 for num in numbers]
+
+                valid_indices = []
+                for i in indices:
+                    if 0 <= i < len(initial_docs) and i is not valid_indices:
+                        valid_indices.append(i)
+
+                if valid_indices:
+                    return [initial_docs[i] for i in valid_indices][:k]
+                else:
+                    return initial_docs[:k]
+            
             except Exception as e:
                 print(f"Reranking failed, returning base results: {e}")
                 return initial_docs[:k]

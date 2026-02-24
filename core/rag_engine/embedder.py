@@ -12,7 +12,14 @@ class RegulationEmbedder:
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=600,
             chunk_overlap=100,
-            separators=["\n\n", "\n", "제", "."]
+            separators=[
+                r"\n(?=제\s*[0-9]+\s*(?:조|장))",
+                r"(?=제\s*[0-9]+\s*(?:조|장))",
+                r"\n\n",                     
+                r"\n",                       
+                r"(?<=\.) "
+            ],
+            is_separator_regex=True
         )
 
     def get_chunks(self, text: str):
