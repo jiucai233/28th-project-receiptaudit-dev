@@ -32,11 +32,11 @@ app.mount("/data/raw", StaticFiles(directory=str(data_raw_path)), name="raw_data
 # CORS configuration
 frontend_url = os.getenv("FRONTEND_URL", "*")
 origins = [url.strip() for url in frontend_url.split(",")]
-
+allow_creds = False if "*" in origins else True
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
+    allow_credentials=allow_creds,
     allow_methods=["*"],
     allow_headers=["*"],
 )

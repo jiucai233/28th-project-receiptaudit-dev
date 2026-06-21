@@ -11,21 +11,22 @@ from psycopg2.extras import RealDictCursor
 class DBService:
     def __init__(self, dsn: str | None = None):
         self.dsn = dsn or os.getenv("DATABASE_URL", "").strip()
-        if not self.dsn:
-            raise ValueError("DATABASE_URL is required for PostgreSQL DBService")
 
     def _conn(self):
+        if not self.dsn:
+            raise ConnectionError("DATABASE_URL is not set")
         return psycopg2.connect(self.dsn, cursor_factory=RealDictCursor)
 
     def _now(self) -> datetime:
         return datetime.now(timezone.utc)
 
     def init_db(self) -> None:
-        with self._conn() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    CREATE TABLE IF NOT EXISTS receipts (
+        try:
+            with self._conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        CREATE TABLE IF NOT EXISTS receipts (
                         receipt_id TEXT PRIMARY KEY,
                         payload_json TEXT NOT NULL,
                         image_path TEXT,
@@ -56,13 +57,15 @@ class DBService:
                         FOREIGN KEY(receipt_id) REFERENCES receipts(receipt_id)
                     );
                     """
-                )
-            self._ensure_column(conn, "receipts", "image_blob", "BYTEA")
-            self._ensure_column(conn, "receipts", "image_s3_key", "TEXT")
-            self._ensure_column(conn, "receipts", "image_s3_url", "TEXT")
-            self._ensure_column(conn, "reports", "pdf_blob", "BYTEA")
-            self._ensure_column(conn, "reports", "pdf_s3_key", "TEXT")
-            self._ensure_column(conn, "reports", "pdf_s3_url", "TEXT")
+                    )
+                self._ensure_column(conn, "receipts", "image_blob", "BYTEA")
+                self._ensure_column(conn, "receipts", "image_s3_key", "TEXT")
+                self._ensure_column(conn, "receipts", "image_s3_url", "TEXT")
+                self._ensure_column(conn, "reports", "pdf_blob", "BYTEA")
+                self._ensure_column(conn, "reports", "pdf_s3_key", "TEXT")
+                self._ensure_column(conn, "reports", "pdf_s3_url", "TEXT")
+        except Exception as e:
+            print(f"⚠️ Warning: PostgreSQL DB initialization failed: {e}. Running in memory/offline mode.")
 
     def _ensure_column(self, conn, table: str, column: str, column_type: str) -> None:
         with conn.cursor() as cur:
@@ -89,58 +92,64 @@ class DBService:
         image_s3_key: str | None = None,
         image_s3_url: str | None = None,
     ) -> None:
-        self._ensure()
-        now = self._now()
-        with self._conn() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO receipts (
-                        receipt_id,
-                        payload_json,
-                        image_path,
-                        image_blob,
-                        image_s3_key,
-                        image_s3_url,
-                        created_at,
-                        updated_at
+        try:
+            self._ensure()
+            now = self._now()
+            with self._conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        INSERT INTO receipts (
+                            receipt_id,
+                            payload_json,
+                            image_path,
+                            image_blob,
+                            image_s3_key,
+                            image_s3_url,
+                            created_at,
+                            updated_at
+                        )
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT(receipt_id) DO UPDATE SET
+                            payload_json=EXCLUDED.payload_json,
+                            image_path=EXCLUDED.image_path,
+                            image_blob=EXCLUDED.image_blob,
+                            image_s3_key=EXCLUDED.image_s3_key,
+                            image_s3_url=EXCLUDED.image_s3_url,
+                            updated_at=EXCLUDED.updated_at
+                        """,
+                        (
+                            receipt_id,
+                            json.dumps(payload, ensure_ascii=False),
+                            image_path,
+                            image_blob,
+                            image_s3_key,
+                            image_s3_url,
+                            now,
+                            now,
+                        ),
                     )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT(receipt_id) DO UPDATE SET
-                        payload_json=EXCLUDED.payload_json,
-                        image_path=EXCLUDED.image_path,
-                        image_blob=EXCLUDED.image_blob,
-                        image_s3_key=EXCLUDED.image_s3_key,
-                        image_s3_url=EXCLUDED.image_s3_url,
-                        updated_at=EXCLUDED.updated_at
-                    """,
-                    (
-                        receipt_id,
-                        json.dumps(payload, ensure_ascii=False),
-                        image_path,
-                        image_blob,
-                        image_s3_key,
-                        image_s3_url,
-                        now,
-                        now,
-                    ),
-                )
+        except Exception as e:
+            print(f"⚠️ Warning: Failed to save receipt to PostgreSQL: {e}")
 
     def upsert_audit(self, receipt_id: str, payload: dict) -> None:
-        self._ensure()
-        now = self._now()
-        with self._conn() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO audits (receipt_id, payload_json, created_at, updated_at)
-                    VALUES (%s, %s, %s, %s)
-                    ON CONFLICT(receipt_id) DO UPDATE SET
-                        payload_json=EXCLUDED.payload_json,
-                        updated_at=EXCLUDED.updated_at
-                    """,
-                    (receipt_id, json.dumps(payload, ensure_ascii=False), now, now),
-                )
+        try:
+            self._ensure()
+            now = self._now()
+            with self._conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        INSERT INTO audits (receipt_id, payload_json, created_at, updated_at)
+                        VALUES (%s, %s, %s, %s)
+                        ON CONFLICT(receipt_id) DO UPDATE SET
+                            payload_json=EXCLUDED.payload_json,
+                            updated_at=EXCLUDED.updated_at
+                        """,
+                        (receipt_id, json.dumps(payload, ensure_ascii=False), now, now),
+                    )
+        except Exception as e:
+            print(f"⚠️ Warning: Failed to save audit to PostgreSQL: {e}")
 
     def upsert_report(
         self,
@@ -151,39 +160,42 @@ class DBService:
         pdf_s3_key: str | None = None,
         pdf_s3_url: str | None = None,
     ) -> None:
-        self._ensure()
-        now = self._now()
-        with self._conn() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO reports (
-                        receipt_id,
-                        pdf_path,
-                        pdf_blob,
-                        pdf_s3_key,
-                        pdf_s3_url,
-                        payload_json,
-                        created_at,
-                        updated_at
+        try:
+            self._ensure()
+            now = self._now()
+            with self._conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        INSERT INTO reports (
+                            receipt_id,
+                            pdf_path,
+                            pdf_blob,
+                            pdf_s3_key,
+                            pdf_s3_url,
+                            payload_json,
+                            created_at,
+                            updated_at
+                        )
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT(receipt_id) DO UPDATE SET
+                            pdf_path=EXCLUDED.pdf_path,
+                            pdf_blob=EXCLUDED.pdf_blob,
+                            pdf_s3_key=EXCLUDED.pdf_s3_key,
+                            pdf_s3_url=EXCLUDED.pdf_s3_url,
+                            payload_json=EXCLUDED.payload_json,
+                            updated_at=EXCLUDED.updated_at
+                        """,
+                        (
+                            receipt_id,
+                            pdf_path,
+                            pdf_blob,
+                            pdf_s3_key,
+                            pdf_s3_url,
+                            json.dumps(payload, ensure_ascii=False),
+                            now,
+                            now,
+                        ),
                     )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT(receipt_id) DO UPDATE SET
-                        pdf_path=EXCLUDED.pdf_path,
-                        pdf_blob=EXCLUDED.pdf_blob,
-                        pdf_s3_key=EXCLUDED.pdf_s3_key,
-                        pdf_s3_url=EXCLUDED.pdf_s3_url,
-                        payload_json=EXCLUDED.payload_json,
-                        updated_at=EXCLUDED.updated_at
-                    """,
-                    (
-                        receipt_id,
-                        pdf_path,
-                        pdf_blob,
-                        pdf_s3_key,
-                        pdf_s3_url,
-                        json.dumps(payload, ensure_ascii=False),
-                        now,
-                        now,
-                    ),
-                )
+        except Exception as e:
+            print(f"⚠️ Warning: Failed to save report to PostgreSQL: {e}")
