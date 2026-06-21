@@ -148,6 +148,7 @@ web-react/.env.local
 # Project Specific
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/ui_screenshot.png
 data/intermediate/*
 !data/intermediate/__init__.py
 data/output/*
